@@ -1,0 +1,35 @@
+%SECT%SPIELER
+Neuer
+Manuel
+0
+0
+1
+35 -> Alter
+11 -> Stärke
+14 -> MannschaftsId
+1 -> Rückennummer
+0
+0
+524
+0
+4
+514
+0
+
+1
+1
+1
+2
+27.03.1986 -> Geburtsdatum
+0
+0
+1
+0
+0
+0
+1
+65536 -> SpielerId
+0
+0
+0
+%ENDSECT%SPIELER

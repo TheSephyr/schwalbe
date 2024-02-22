@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3f0r7ertumd5"]
+
+[ext_resource type="Script" path="res://scenes/lineup/player_line_up.gd" id="1_aphm5"]
+[ext_resource type="Texture2D" uid="uid://qrw1006kspoc" path="res://icon.svg" id="1_eof22"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h8b4x"]
+size = Vector2(83, 24)
+
+[node name="PlayerLineUp" type="StaticBody2D"]
+input_pickable = true
+script = ExtResource("1_aphm5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1.5, 4.5)
+scale = Vector2(0.648438, 0.195313)
+texture = ExtResource("1_eof22")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, 4)
+shape = SubResource("RectangleShape2D_h8b4x")
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]

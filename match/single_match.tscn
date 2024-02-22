@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://00bfwo358gc7"]
+
+[ext_resource type="Script" path="res://match/single_match.gd" id="1_3timl"]
+
+[node name="SingleMatch" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3timl")
+
+[node name="HomeTeam" type="Label" parent="."]
+layout_mode = 0
+offset_left = 251.0
+offset_top = 165.0
+offset_right = 345.0
+offset_bottom = 188.0
+text = "Home Team"
+
+[node name="AwayTeam" type="Label" parent="."]
+layout_mode = 0
+offset_left = 547.0
+offset_top = 169.0
+offset_right = 636.0
+offset_bottom = 192.0
+text = "Away Team"
+
+[node name="Simulate" type="Button" parent="."]
+layout_mode = 0
+offset_left = 622.0
+offset_top = 302.0
+offset_right = 714.0
+offset_bottom = 333.0
+text = "Simulieren"
+
+[node name="HomeScore" type="Label" parent="."]
+layout_mode = 0
+offset_left = 376.0
+offset_top = 165.0
+offset_right = 416.0
+offset_bottom = 188.0
+text = "0
+"
+
+[node name="AwayScore" type="Label" parent="."]
+layout_mode = 0
+offset_left = 499.0
+offset_top = 166.0
+offset_right = 539.0
+offset_bottom = 189.0
+text = "0"
+
+[connection signal="button_down" from="Simulate" to="." method="_on_simulate_button_down"]

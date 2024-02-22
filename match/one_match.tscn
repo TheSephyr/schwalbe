@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://psb027xpq56s"]
+
+[ext_resource type="Script" path="res://match/one_match.gd" id="1_5la00"]
+
+[node name="OneMatch" type="HBoxContainer"]
+script = ExtResource("1_5la00")
+
+[node name="HomeTeamLabel" type="Label" parent="."]
+layout_mode = 2
+text = "HomeTeam"
+
+[node name="HomeScoreLabel" type="Label" parent="."]
+layout_mode = 2
+text = "0"
+
+[node name="AwayScoreLabel" type="Label" parent="."]
+layout_mode = 2
+text = "0"
+
+[node name="AwayTeamLabel" type="Label" parent="."]
+layout_mode = 2
+text = "AwayTeam"

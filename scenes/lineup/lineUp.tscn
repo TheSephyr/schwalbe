@@ -1,0 +1,91 @@
+[gd_scene load_steps=6 format=3 uid="uid://w1ufir0imwtu"]
+
+[ext_resource type="Script" path="res://scenes/lineup/lineUpScene.gd" id="1_jkbo1"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/ui.tscn" id="2_6mytl"]
+[ext_resource type="PackedScene" uid="uid://c3f0r7ertumd5" path="res://scenes/lineup/player_line_up.tscn" id="3_3tn4x"]
+[ext_resource type="Texture2D" uid="uid://qrw1006kspoc" path="res://icon.svg" id="3_6qgm8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q7hfx"]
+size = Vector2(766, 432)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_jkbo1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 766.0
+offset_top = 2.0
+offset_right = 1139.0
+offset_bottom = 56.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PlayerList" type="VBoxContainer" parent="."]
+offset_left = -1.0
+offset_top = 452.0
+offset_right = 137.0
+offset_bottom = 475.0
+size_flags_horizontal = 0
+
+[node name="SinglePlayer" type="Label" parent="PlayerList"]
+layout_mode = 2
+text = "Max Mustermann"
+
+[node name="UI" parent="." instance=ExtResource("2_6mytl")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 408.0
+offset_top = 643.0
+offset_right = 408.0
+offset_bottom = 643.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(383, 216)
+shape = SubResource("RectangleShape2D_q7hfx")
+debug_color = Color(0, 0.65098, 0.129412, 0.419608)
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+modulate = Color(0.262745, 0.505882, 0.231373, 1)
+position = Vector2(386, 219.5)
+scale = Vector2(5.96875, 3.38281)
+texture = ExtResource("3_6qgm8")
+
+[node name="Control" type="Node2D" parent="."]
+position = Vector2(1, 1)
+
+[node name="StaticBody2D" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(87, 269)
+
+[node name="StaticBody2D2" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(379, 389)
+
+[node name="StaticBody2D3" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(460, 288)
+
+[node name="StaticBody2D6" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(290, 294)
+
+[node name="StaticBody2D7" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(100, 143)
+
+[node name="StaticBody2D5" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(626, 238)
+
+[node name="StaticBody2D8" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(348, 219)
+
+[node name="StaticBody2D4" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(617, 128)
+
+[node name="StaticBody2D10" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(359, 128)
+
+[node name="StaticBody2D9" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(256, 43)
+
+[node name="StaticBody2D11" parent="Control" instance=ExtResource("3_3tn4x")]
+position = Vector2(487, 45)

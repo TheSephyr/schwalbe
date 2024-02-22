@@ -1,0 +1,6 @@
+# Godot 4+ specific ignores
+.godot/
+.git/
+.idea/
+dbfiles/
+docs/

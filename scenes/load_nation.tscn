@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=3 uid="uid://cok3x167dssa6"]
+
+[ext_resource type="Script" path="res://scenes/LoadNation.gd" id="1_khwoj"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/ui.tscn" id="2_ho5go"]
+
+[node name="LoadNation" type="Node2D"]
+script = ExtResource("1_khwoj")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ClubList" type="ItemList" parent="CanvasLayer"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 217.0
+offset_bottom = -65.0
+grow_vertical = 2
+
+[node name="PlayerList" type="ItemList" parent="CanvasLayer"]
+visible = false
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -938.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -934.0
+offset_bottom = -68.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="AllPlayerGridContainer" type="GridContainer" parent="CanvasLayer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 6
+
+[node name="LastName" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Nachname
+"
+horizontal_alignment = 1
+
+[node name="FirstName" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vorname"
+horizontal_alignment = 1
+
+[node name="Birthdate" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Geburtstag"
+horizontal_alignment = 1
+
+[node name="Talent" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Talent"
+horizontal_alignment = 1
+
+[node name="CurrentAbility" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Stärke"
+horizontal_alignment = 1
+
+[node name="Position" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Position"
+horizontal_alignment = 1
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("2_ho5go")]
+
+[connection signal="item_selected" from="CanvasLayer/ClubList" to="." method="_on_club_list_item_selected"]

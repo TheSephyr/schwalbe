@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4e6l2uyxf8h"]
+
+[ext_resource type="Script" path="res://scenes/table/table_scene.gd" id="1_fpuse"]
+[ext_resource type="PackedScene" uid="uid://dh0uqr1y6avdk" path="res://scenes/table/single_table_entry_scene.tscn" id="2_l8snh"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/ui.tscn" id="3_d6km6"]
+
+[node name="TableScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fpuse")
+
+[node name="HBoxContainerHeader" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Positon" type="Label" parent="HBoxContainerHeader"]
+layout_mode = 2
+text = "Position
+"
+
+[node name="Name" type="Label" parent="HBoxContainerHeader"]
+layout_mode = 2
+text = "Name"
+
+[node name="Points" type="Label" parent="HBoxContainerHeader"]
+layout_mode = 2
+text = "Points"
+
+[node name="Wins" type="Label" parent="HBoxContainerHeader"]
+layout_mode = 2
+text = "Wins"
+
+[node name="Draws" type="Label" parent="HBoxContainerHeader"]
+layout_mode = 2
+text = "Draws"
+
+[node name="Looses" type="Label" parent="HBoxContainerHeader"]
+layout_mode = 2
+text = "Looses
+"
+
+[node name="VBoxContainerRankings" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 40.0
+offset_right = 1151.0
+offset_bottom = 430.0
+
+[node name="SingleTableEntry" parent="VBoxContainerRankings" instance=ExtResource("2_l8snh")]
+visible = false
+layout_mode = 2
+
+[node name="SingleTableEntry2" parent="VBoxContainerRankings" instance=ExtResource("2_l8snh")]
+visible = false
+layout_mode = 2
+
+[node name="UI" parent="." instance=ExtResource("3_d6km6")]
+layout_mode = 1
+
+[connection signal="nextMatchday" from="UI" to="." method="_on_ui_next_matchday"]
