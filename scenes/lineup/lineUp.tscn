@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q7hfx"]
 size = Vector2(766, 432)
 
-[node name="Node2D" type="Node2D"]
+[node name="LineUp" type="Node2D"]
 script = ExtResource("1_jkbo1")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

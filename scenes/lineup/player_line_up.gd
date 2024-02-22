@@ -1,5 +1,7 @@
 extends StaticBody2D
 
+@onready var nameLabel: Label = $NameLabel
+@onready var strengthLabel: Label = $StrengthLabel
 var dragging: bool = false
 
 # Called when the node enters the scene tree for the first time.
@@ -10,6 +12,10 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+	
+func setPlayer(player: Player) -> void:
+	nameLabel.text = player.lastname
+	strengthLabel.text = player.currentAbility
 
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int):

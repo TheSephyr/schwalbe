@@ -4,19 +4,33 @@
 [ext_resource type="Texture2D" uid="uid://qrw1006kspoc" path="res://icon.svg" id="1_eof22"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h8b4x"]
-size = Vector2(83, 24)
+size = Vector2(227, 47)
 
 [node name="PlayerLineUp" type="StaticBody2D"]
 input_pickable = true
 script = ExtResource("1_aphm5")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(1.5, 4.5)
-scale = Vector2(0.648438, 0.195313)
+position = Vector2(-82, 1)
+scale = Vector2(0.414063, 0.289063)
 texture = ExtResource("1_eof22")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1.5, 4)
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_h8b4x")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_left = -51.0
+offset_top = -16.0
+offset_right = 110.0
+offset_bottom = 15.0
+
+[node name="NameLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Max Mustermann"
+
+[node name="StrengthLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "10"
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
