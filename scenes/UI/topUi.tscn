@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxsni6lwvqdvp"]
+
+[ext_resource type="Script" uid="uid://cc2ciu8xao46h" path="res://scenes/UI/top_ui.gd" id="1_6f4gc"]
+
+[node name="TopUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_right = -1.0
+offset_bottom = -586.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6f4gc")
+
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 1141.0
+offset_bottom = -38.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Week"
+
+[node name="WeekValue" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "12"
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Current Club"

@@ -14,6 +14,7 @@ func _process(delta):
 
 func _on_main_menu_button_button_down():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	  
 	pass # Replace with function body.
 
 
@@ -54,4 +55,9 @@ func _on_simulate_season_button_button_down():
 
 func _on_line_up_button_down():
 	get_tree().change_scene_to_file("res://scenes/lineup/lineUp.tscn")
+	pass # Replace with function body.
+
+
+func _on_club_button_down() -> void:
+	get_tree().change_scene_to_file("res://scenes/club/club.tscn")
 	pass # Replace with function body.

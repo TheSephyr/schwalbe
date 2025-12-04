@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://00bfwo358gc7"]
 
-[ext_resource type="Script" path="res://match/single_match.gd" id="1_3timl"]
+[ext_resource type="Script" uid="uid://o2t4gkfwwo1b" path="res://match/single_match.gd" id="1_3timl"]
 
 [node name="SingleMatch" type="Control"]
 layout_mode = 3

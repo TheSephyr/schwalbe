@@ -16,7 +16,7 @@ func initialLoad():
 		club.defaultLineUp()
 		print(club.currentLineUp)
 	var singleMatch: Match = Match.new(allClubs[0], allClubs[1])
-	var secondMatch: Match = Match.new(allClubs[2], allClubs[3])
+	var _secondMatch: Match = Match.new(allClubs[2], allClubs[3])
 	print(singleMatch.awayTeam.name)
 	
 	playerClub = firstDivisionClubs[0]

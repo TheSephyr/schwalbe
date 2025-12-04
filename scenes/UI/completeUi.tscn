@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6byknjbo41cw"]
+
+[ext_resource type="Script" uid="uid://bdk4g5ij5dkpv" path="res://scenes/UI/complete_ui.gd" id="1_ioklh"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="1_niefd"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_63777"]
+
+[node name="CompleteUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.00146, 0.997672)
+script = ExtResource("1_ioklh")
+
+[node name="BottomUi" parent="." instance=ExtResource("1_niefd")]
+layout_mode = 1
+
+[node name="MainUi" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -1.0
+offset_top = 24.0
+offset_right = 39.0
+offset_bottom = 64.0
+scale = Vector2(28.7367, 13.9514)
+
+[node name="TopUi" parent="." instance=ExtResource("2_63777")]
+layout_mode = 1
+offset_bottom = -621.93933

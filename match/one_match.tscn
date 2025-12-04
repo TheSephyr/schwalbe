@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://psb027xpq56s"]
 
-[ext_resource type="Script" path="res://match/one_match.gd" id="1_5la00"]
+[ext_resource type="Script" uid="uid://bs365bu67q7u8" path="res://match/one_match.gd" id="1_5la00"]
 
 [node name="OneMatch" type="HBoxContainer"]
 script = ExtResource("1_5la00")

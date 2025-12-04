@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://52g2xs0mgyh7"]
 
-[ext_resource type="Script" path="res://match/matchdayScene.gd" id="1_1imyh"]
-[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/ui.tscn" id="2_nw1fn"]
+[ext_resource type="Script" uid="uid://c1admlwuxk0gq" path="res://match/matchdayScene.gd" id="1_1imyh"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_nw1fn"]
 
 [node name="Matchday" type="Control"]
 layout_mode = 3

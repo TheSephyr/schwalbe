@@ -1,32 +1,40 @@
 [gd_scene load_steps=2 format=3 uid="uid://dh0uqr1y6avdk"]
 
-[ext_resource type="Script" path="res://scenes/table/single_table_entry_scene.gd" id="1_rfxo2"]
+[ext_resource type="Script" uid="uid://sd62flib2wa0" path="res://scenes/table/single_table_entry_scene.gd" id="1_rfxo2"]
 
 [node name="HBoxContainer" type="HBoxContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
 script = ExtResource("1_rfxo2")
 
 [node name="Position" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "12."
 
 [node name="Name" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "1.FC Musterhausen 1860"
 
 [node name="Points" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "12"
 
 [node name="Wins" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "12"
 
 [node name="Draws" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "12"
 
 [node name="Looses" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "12"

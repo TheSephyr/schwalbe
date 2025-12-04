@@ -7,6 +7,7 @@ var currentMatchDay: int = 1
 var matchdays: Array[Matchday] = []
 var table: Table
 
+
 func _init(clubs: Array[Club]):
 	var num_teams: int = clubs.size()
 	print(num_teams)

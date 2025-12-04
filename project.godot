@@ -12,12 +12,16 @@ config_version=5
 
 config/name="Schwalbe"
 run/main_scene="res://scenes/starting_game.tscn"
-config/features=PackedStringArray("4.2", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Game="*res://code/game.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdLinter/plugin.cfg")
 
 [rendering]
 
