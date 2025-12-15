@@ -1,15 +1,13 @@
-@tool
 class_name TopUi
 extends Control
 
-#@onready var weekValue: Label = $VBoxContainer/WeekValue
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void: 
-	#weekValue.text = Game.playerClub.name
-	pass # Replace with function body.
+@onready var week_value: Label = $VBoxContainer/WeekValue
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _ready() -> void:
+	EventBus.update_ui.connect(_on_update_ui)
+	week_value.text = str(Game.current_week)
+
+
+func _on_update_ui() -> void:
+	week_value.text = str(Game.current_week)
