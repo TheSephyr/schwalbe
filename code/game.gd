@@ -6,7 +6,7 @@ var currentMatchday: Matchday
 var currentMatches: Array[Match]
 var singleMatches: Array[SingleMatch]
 var currentSeason: Season
-var playerClub: Club
+var player_club: Club
 var current_week: int = 1
 
 func _ready() -> void: 
@@ -24,7 +24,7 @@ func initial_load():
 	var _secondMatch: Match = Match.new(allClubs[2], allClubs[3])
 	print(singleMatch.awayTeam.name)
 
-	playerClub = firstDivisionClubs[0]
+	player_club = firstDivisionClubs[0]
 
 	var season = Season.new(firstDivisionClubs)
 	currentSeason = season
