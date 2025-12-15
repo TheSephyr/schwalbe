@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4e6l2uyxf8h"]
+[gd_scene load_steps=5 format=3 uid="uid://d4e6l2uyxf8h"]
 
 [ext_resource type="Script" uid="uid://52qosjv120n7" path="res://scenes/table/table_scene.gd" id="1_fpuse"]
 [ext_resource type="PackedScene" uid="uid://dh0uqr1y6avdk" path="res://scenes/table/single_table_entry_scene.tscn" id="2_l8snh"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_yuypp"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_d6km6"]
 
 [node name="TableScene" type="Control"]
@@ -13,6 +14,12 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
 script = ExtResource("1_fpuse")
+
+[node name="TopUi" parent="." instance=ExtResource("2_yuypp")]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 0.062000003
+offset_bottom = -0.1760025
 
 [node name="VBoxContainerRankings" type="VBoxContainer" parent="."]
 layout_mode = 0

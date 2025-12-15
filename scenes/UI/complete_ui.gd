@@ -1,4 +1,5 @@
 @tool
+class_name CompleteUi
 extends Control
 
 @export var mainUi: Control

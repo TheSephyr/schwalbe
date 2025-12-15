@@ -1,3 +1,4 @@
+class_name BottomUi
 extends Control
 
 signal nextMatchday
