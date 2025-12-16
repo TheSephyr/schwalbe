@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7jcql")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,53 +20,66 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ClubsButton" type="Button" parent="VBoxContainer"]
+[node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="ClubsButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Clubs"
 
-[node name="MatchdayButton" type="Button" parent="VBoxContainer"]
+[node name="MatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Matchday
 "
 
-[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Main Menu"
 
-[node name="SingleMatch" type="Button" parent="VBoxContainer"]
+[node name="SingleMatch" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Single Match"
 
-[node name="TableButton" type="Button" parent="VBoxContainer"]
+[node name="TableButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Table
 "
 
-[node name="PreviousMatchdayButton" type="Button" parent="VBoxContainer"]
+[node name="PreviousMatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Previous Matchday"
 
-[node name="NextMatchdayButton" type="Button" parent="VBoxContainer"]
+[node name="NextMatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Next Matchday"
 
-[node name="SimulateSeasonButton" type="Button" parent="VBoxContainer"]
+[node name="SimulateSeasonButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Simulate Season"
 
-[node name="LineUp" type="Button" parent="VBoxContainer"]
+[node name="LineUp" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Line-Up"
 
-[node name="Club" type="Button" parent="VBoxContainer"]
+[node name="Club" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Club"
 
-[connection signal="button_down" from="VBoxContainer/MatchdayButton" to="." method="_on_matchday_button_button_down"]
-[connection signal="button_down" from="VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_button_down"]
-[connection signal="button_down" from="VBoxContainer/SingleMatch" to="." method="_on_single_match_button_down"]
-[connection signal="button_down" from="VBoxContainer/TableButton" to="." method="_on_table_button_button_down"]
-[connection signal="button_down" from="VBoxContainer/NextMatchdayButton" to="." method="_on_next_matchday_button_button_down"]
-[connection signal="button_down" from="VBoxContainer/SimulateSeasonButton" to="." method="_on_simulate_season_button_button_down"]
-[connection signal="button_down" from="VBoxContainer/LineUp" to="." method="_on_line_up_button_down"]
-[connection signal="button_down" from="VBoxContainer/Club" to="." method="_on_club_button_down"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="NextButton" type="Button" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "NEXT"
+
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/MatchdayButton" to="." method="_on_matchday_button_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/SingleMatch" to="." method="_on_single_match_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/TableButton" to="." method="_on_table_button_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/NextMatchdayButton" to="." method="_on_next_matchday_button_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/SimulateSeasonButton" to="." method="_on_simulate_season_button_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/LineUp" to="." method="_on_line_up_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/Club" to="." method="_on_club_button_down"]
+[connection signal="button_up" from="HBoxContainer/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]

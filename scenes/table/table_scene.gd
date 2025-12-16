@@ -16,7 +16,7 @@ func _process(delta):
 func updateTable() -> void:
 	for entryScene in singleTableEntriesScenes:
 		tableStandings.remove_child(entryScene)
-	for n in Game.currentSeason.table.teamStandings:
+	for n in Game.current_season.table.teamStandings:
 		var oneMatch: OneMatch = preload("res://match/one_match.tscn").instantiate()
 		var singleEntry: SingleTableEntryScene = preload("res://scenes/table/single_table_entry_scene.tscn").instantiate()
 		singleTableEntriesScenes.append(singleEntry)

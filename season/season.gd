@@ -3,7 +3,7 @@ class_name Season
 
 const POINTS_FOR_WIN = 3
 const POINTS_FOR_DRAW = 1
-var currentMatchDay: int = 1
+var current_matchday: int = 1
 var matchdays: Array[Matchday] = []
 var table: Table
 
@@ -61,23 +61,23 @@ func updateTable() -> void:
 	table.update()
 	
 func nextMatchday() -> Matchday:
-	if(currentMatchDay < matchdays.size()):
-		currentMatchDay = currentMatchDay + 1
+	if(current_matchday < matchdays.size()):
+		current_matchday = current_matchday + 1
 	else:
-		currentMatchDay = 1
-	print_debug("Current Matchday:" + str(currentMatchDay))
-	return matchdays[currentMatchDay - 1]
+		current_matchday = 1
+	print_debug("Current Matchday:" + str(current_matchday))
+	return matchdays[current_matchday - 1]
 	
 	
 func previousMatchday() -> Matchday:
-	if(currentMatchDay > 0):
-		currentMatchDay = currentMatchDay - 1
+	if(current_matchday > 0):
+		current_matchday = current_matchday - 1
 	else:
-		currentMatchDay = matchdays.size()
-	print_debug("Current Matchday: " + str(currentMatchDay))
-	return matchdays[currentMatchDay - 1]
+		current_matchday = matchdays.size()
+	print_debug("Current Matchday: " + str(current_matchday))
+	return matchdays[current_matchday - 1]
 	
 	
 func simulateSeason() -> void:
-	for singleMatchday in matchdays:
+	for singleMatchday: Matchday in matchdays:
 		singleMatchday.simulateMatches()

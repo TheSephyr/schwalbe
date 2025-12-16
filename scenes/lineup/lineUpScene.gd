@@ -4,7 +4,7 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	for player:Player in Game.playerClub.players:
+	for player:Player in Game.player_club.players:
 		var playerLabel: Label = Label.new()
 		playerLabel.text = player.lastname + ", " + player.firstname
 		playerList.add_child(playerLabel)

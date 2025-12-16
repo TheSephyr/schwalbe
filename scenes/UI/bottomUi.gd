@@ -32,7 +32,7 @@ func _on_next_matchday_button_button_down():
 
 
 func _on_simulate_season_button_button_down():
-	Game.currentSeason.simulateSeason()
+	Game.current_season.simulateSeason()
 
 
 func _on_line_up_button_down():
@@ -41,3 +41,8 @@ func _on_line_up_button_down():
 
 func _on_club_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/club/club.tscn")
+
+
+func _on_next_button_button_up() -> void:
+	EventBus.emit_next()
+	pass # Replace with function body.

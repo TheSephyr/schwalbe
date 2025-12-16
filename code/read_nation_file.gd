@@ -22,7 +22,7 @@ const STADION_MARKER_END: String = "%ENDSECT%STADION"
 #"res://LandDeutAllNeu.sav"
 static func loadNationFile(nationFile: String) -> Array[Club]:
 	var allPlayer: Array[Player]
-	var allClubs: Array[Club]
+	var all_clubs: Array[Club]
 	var player_instance: Player
 	var file = FileAccess.open(nationFile, FileAccess.READ)
 	var fileContent = file.get_as_text()
@@ -58,7 +58,7 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 					readingClub = false
 					newClub.players = allPlayer
 					lineCounterClub = 1
-					allClubs.append(newClub)
+					all_clubs.append(newClub)
 				COACH_MARKER_START:
 					readingCoach = true
 				COACH_MARKER_END:
@@ -99,5 +99,5 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 				#player_instance = Player.new("John", "Doe", "2000-01-01", "Football", "Forward")
 	file.close()
 	#print(allPlayer)
-	print(allClubs)
-	return allClubs
+	print(all_clubs)
+	return all_clubs

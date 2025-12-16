@@ -1,9 +1,13 @@
 extends Node
 
+signal next
+
 signal next_matchday
 
 signal update_ui
 
+func emit_next() -> void:
+	next.emit()
 
 func emit_next_matchday() -> void:
 	next_matchday.emit()
