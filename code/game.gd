@@ -30,5 +30,5 @@ func _on_next_matchday():
 
 func _on_next():
 	current_week = current_week + 1
-	
+	current_season.simulate_next_matchday()
 	EventBus.emit_update_ui()

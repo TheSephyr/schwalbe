@@ -12,10 +12,7 @@ func _on_single_match_button_down():
 	var testScene: SingleMatch = preload("res://match/single_match.tscn").instantiate()
 	testScene.setMatch(test)
 	print(testScene.singleMatch)
-	#get_node("/root/Game").free()
 	get_tree().root.add_child(testScene)
-	#get_tree().change_scene_to_packed(test)
-	#get_tree().change_scene_to_file("res://single_match.tscn")
 
 
 func _on_matchday_button_button_down():
@@ -32,7 +29,7 @@ func _on_next_matchday_button_button_down():
 
 
 func _on_simulate_season_button_button_down():
-	Game.current_season.simulateSeason()
+	Game.current_season.simulate_season()
 
 
 func _on_line_up_button_down():
@@ -45,4 +42,3 @@ func _on_club_button_down() -> void:
 
 func _on_next_button_button_up() -> void:
 	EventBus.emit_next()
-	pass # Replace with function body.

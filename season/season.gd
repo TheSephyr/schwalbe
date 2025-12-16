@@ -6,6 +6,7 @@ const POINTS_FOR_DRAW = 1
 var current_matchday: int = 1
 var matchdays: Array[Matchday] = []
 var table: Table
+var finished: bool
 
 
 func _init(clubs: Array[Club]):
@@ -33,14 +34,16 @@ func _init(clubs: Array[Club]):
 	#print(schedule)
 	table = Table.new(clubs)
 
+
 func rotate_array(arr, shift):
 	var shifted = []
 	var size = arr.size()
 	for i in range(size):
 		shifted.append(arr[(i + shift) % size])
 	return shifted
-	
-func updateTable() -> void:
+
+
+func update_table() -> void:
 	table.initTable()
 	for matchday: Matchday in matchdays:
 		for singleMatch: Match in matchday.matches:
@@ -59,25 +62,39 @@ func updateTable() -> void:
 					teamstandingHome.loose(scoreHome, scoreAway)
 					teamstandingAway.win(scoreAway, scoreHome)
 	table.update()
-	
-func nextMatchday() -> Matchday:
+
+
+func next_matchday() -> Matchday:
 	if(current_matchday < matchdays.size()):
 		current_matchday = current_matchday + 1
 	else:
 		current_matchday = 1
 	print_debug("Current Matchday:" + str(current_matchday))
 	return matchdays[current_matchday - 1]
-	
-	
-func previousMatchday() -> Matchday:
+
+
+func previous_matchday() -> Matchday:
 	if(current_matchday > 0):
 		current_matchday = current_matchday - 1
 	else:
 		current_matchday = matchdays.size()
 	print_debug("Current Matchday: " + str(current_matchday))
 	return matchdays[current_matchday - 1]
-	
-	
-func simulateSeason() -> void:
+
+
+func get_current_matchday() -> Matchday:
+	return matchdays[current_matchday - 1]
+
+
+func simulate_next_matchday() -> void:
+	var matchday: Matchday = get_current_matchday()
+	matchday.simulateMatches()
+	if current_matchday < matchdays.size():
+		current_matchday = current_matchday + 1
+	else:
+		finished = true
+
+
+func simulate_season() -> void:
 	for singleMatchday: Matchday in matchdays:
 		singleMatchday.simulateMatches()

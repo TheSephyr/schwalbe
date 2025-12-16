@@ -17,9 +17,11 @@ script = ExtResource("1_fpuse")
 
 [node name="TopUi" parent="." instance=ExtResource("2_yuypp")]
 layout_mode = 1
-anchors_preset = -1
 anchor_bottom = 0.062000003
 offset_bottom = -0.1760025
+
+[node name="BottomUi" parent="." instance=ExtResource("3_d6km6")]
+layout_mode = 1
 
 [node name="VBoxContainerRankings" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -71,8 +73,3 @@ layout_mode = 2
 [node name="SingleTableEntry2" parent="VBoxContainerRankings" instance=ExtResource("2_l8snh")]
 visible = false
 layout_mode = 2
-
-[node name="UI" parent="." instance=ExtResource("3_d6km6")]
-layout_mode = 1
-
-[connection signal="nextMatchday" from="UI" to="." method="_on_ui_next_matchday"]
