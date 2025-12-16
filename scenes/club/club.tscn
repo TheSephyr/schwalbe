@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8pgs1qytiwuh"]
+[gd_scene load_steps=3 format=3 uid="uid://b8pgs1qytiwuh"]
 
-[ext_resource type="PackedScene" uid="uid://b6byknjbo41cw" path="res://scenes/UI/completeUi.tscn" id="1_m1qme"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="1_tipiq"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_u4nwx"]
 
 [node name="Club" type="Control"]
 layout_mode = 3
@@ -10,5 +11,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CompleteUi" parent="." instance=ExtResource("1_m1qme")]
+[node name="TopUi" parent="." instance=ExtResource("1_tipiq")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("2_u4nwx")]
 layout_mode = 1

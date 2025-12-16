@@ -17,8 +17,6 @@ script = ExtResource("1_fpuse")
 
 [node name="TopUi" parent="." instance=ExtResource("2_yuypp")]
 layout_mode = 1
-anchor_bottom = 0.062000003
-offset_bottom = -0.1760025
 
 [node name="BottomUi" parent="." instance=ExtResource("3_d6km6")]
 layout_mode = 1

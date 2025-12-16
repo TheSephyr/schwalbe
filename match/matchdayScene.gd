@@ -16,7 +16,7 @@ func _process(delta):
 	pass
 
 func update() -> void:
-	matches = Game.current_matchday.matches
+	matches = Game.current_season.get_current_matchday().matches
 	for m:OneMatch in oneMatchScenes:
 		matchesHBox.remove_child(m)
 		m.queue_free()
@@ -31,7 +31,7 @@ func update() -> void:
 
 
 func simulateMatchday():
-	Game.current_matchday.simulateMatches()	
+	Game.current_matchday.simulateMatches()
 
 
 func _on_button_button_down():

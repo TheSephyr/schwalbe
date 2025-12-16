@@ -1,22 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://cok3x167dssa6"]
+[gd_scene load_steps=4 format=3 uid="uid://cok3x167dssa6"]
 
 [ext_resource type="Script" uid="uid://c8dl4xr2ev054" path="res://scenes/LoadNation.gd" id="1_khwoj"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_ho5go"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_m6sys"]
 
-[node name="LoadNation" type="Node2D"]
+[node name="LoadNation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_khwoj")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ClubList" type="ItemList" parent="CanvasLayer"]
+[node name="ClubList" type="ItemList" parent="."]
+layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 217.0
-offset_bottom = -65.0
+offset_left = -2.0
+offset_top = 31.0
+offset_right = 215.0
+offset_bottom = -34.0
 grow_vertical = 2
 
-[node name="PlayerList" type="ItemList" parent="CanvasLayer"]
+[node name="PlayerList" type="ItemList" parent="."]
 visible = false
+layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
@@ -25,60 +34,67 @@ offset_left = -938.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -934.0
-offset_bottom = -68.0
+offset_left = -936.0
+offset_top = 31.0
+offset_right = -2.0
+offset_bottom = -37.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="AllPlayerGridContainer" type="GridContainer" parent="CanvasLayer/ScrollContainer"]
+[node name="AllPlayerGridContainer" type="GridContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 6
 
-[node name="LastName" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+[node name="LastName" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Nachname
 "
 horizontal_alignment = 1
 
-[node name="FirstName" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+[node name="FirstName" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Vorname"
 horizontal_alignment = 1
 
-[node name="Birthdate" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+[node name="Birthdate" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Geburtstag"
 horizontal_alignment = 1
 
-[node name="Talent" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+[node name="Talent" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Talent"
 horizontal_alignment = 1
 
-[node name="CurrentAbility" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+[node name="CurrentAbility" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Stärke"
 horizontal_alignment = 1
 
-[node name="Position" type="Label" parent="CanvasLayer/ScrollContainer/AllPlayerGridContainer"]
+[node name="Position" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Position"
 horizontal_alignment = 1
 
-[node name="UI" parent="CanvasLayer" instance=ExtResource("2_ho5go")]
+[node name="TopUi" parent="." instance=ExtResource("2_m6sys")]
+layout_mode = 1
 
-[connection signal="item_selected" from="CanvasLayer/ClubList" to="." method="_on_club_list_item_selected"]
+[node name="BottomUi" parent="." instance=ExtResource("2_ho5go")]
+layout_mode = 1
+
+[connection signal="item_selected" from="ClubList" to="." method="_on_club_list_item_selected"]

@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 const PLAYER_MARKER_START: String = "%SECT%SPIELER"
 const PLAYER_MARKER_END: String = "%ENDSECT%SPIELER"
@@ -19,9 +19,9 @@ const STADION_MARKER_END: String = "%ENDSECT%STADION"
 
 var allPlayer: Array[Player]
 var all_clubs: Array[Club]
-@onready var clubList: ItemList = get_node("CanvasLayer/ClubList")
-@onready var playerList: ItemList = get_node("CanvasLayer/PlayerList")
-@onready var allPlayerGridContainer: GridContainer = get_node("CanvasLayer/ScrollContainer/AllPlayerGridContainer")
+@onready var clubList: ItemList = get_node("ClubList")
+@onready var playerList: ItemList = get_node("PlayerList")
+@onready var allPlayerGridContainer: GridContainer = get_node("ScrollContainer/AllPlayerGridContainer")
 var player_instance: Player
 
 

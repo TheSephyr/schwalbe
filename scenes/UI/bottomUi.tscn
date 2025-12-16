@@ -33,30 +33,10 @@ layout_mode = 2
 text = "Matchday
 "
 
-[node name="MainMenuButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Main Menu"
-
-[node name="SingleMatch" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Single Match"
-
 [node name="TableButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Table
 "
-
-[node name="PreviousMatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Previous Matchday"
-
-[node name="NextMatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Next Matchday"
-
-[node name="SimulateSeasonButton" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "Simulate Season"
 
 [node name="LineUp" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -75,11 +55,7 @@ layout_mode = 2
 text = "NEXT"
 
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/MatchdayButton" to="." method="_on_matchday_button_button_down"]
-[connection signal="button_down" from="HBoxContainer/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_button_down"]
-[connection signal="button_down" from="HBoxContainer/VBoxContainer/SingleMatch" to="." method="_on_single_match_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TableButton" to="." method="_on_table_button_button_down"]
-[connection signal="button_down" from="HBoxContainer/VBoxContainer/NextMatchdayButton" to="." method="_on_next_matchday_button_button_down"]
-[connection signal="button_down" from="HBoxContainer/VBoxContainer/SimulateSeasonButton" to="." method="_on_simulate_season_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/LineUp" to="." method="_on_line_up_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/Club" to="." method="_on_club_button_down"]
 [connection signal="button_up" from="HBoxContainer/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]

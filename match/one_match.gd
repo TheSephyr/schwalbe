@@ -26,4 +26,3 @@ func initMatch(oneMatch: Match):
 	awayTeamLabel.text = currentMatch.awayTeam.name
 	homeScoreLabel.text = str(currentMatch.scoreHome)
 	awayScoreLabel.text = str(currentMatch.scoreAway)
-
