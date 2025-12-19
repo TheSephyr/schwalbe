@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://ch717w1jnkty0"]
+
+[ext_resource type="Script" uid="uid://cwilw5of32fgc" path="res://scenes/single_player_in_club.gd" id="1_8y2np"]
+
+[node name="SinglePlayerInClub" type="HBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+script = ExtResource("1_8y2np")
+
+[node name="LastName" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Michael"
+horizontal_alignment = 1
+
+[node name="FirstName" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Kasd"
+horizontal_alignment = 1
+
+[node name="Birthday" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10.10.1992"
+horizontal_alignment = 1
+
+[node name="Talent" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "10"
+horizontal_alignment = 1
+
+[node name="CurrentAbility" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "LM"
+horizontal_alignment = 1
+
+[node name="Postion" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test"
+horizontal_alignment = 1
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cok3x167dssa6"]
+[gd_scene load_steps=5 format=3 uid="uid://cok3x167dssa6"]
 
 [ext_resource type="Script" uid="uid://c8dl4xr2ev054" path="res://scenes/LoadNation.gd" id="1_khwoj"]
+[ext_resource type="PackedScene" uid="uid://ch717w1jnkty0" path="res://scenes/single_player_in_club.tscn" id="2_3fcg4"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_ho5go"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_m6sys"]
 
@@ -23,73 +24,87 @@ offset_right = 215.0
 offset_bottom = -34.0
 grow_vertical = 2
 
-[node name="PlayerList" type="ItemList" parent="."]
-visible = false
+[node name="Control" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
+anchor_left = 0.18800001
+anchor_top = 0.054
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -938.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -936.0
-offset_top = 31.0
+anchor_bottom = 0.89400005
+offset_left = 0.42399597
+offset_top = 0.00799942
 offset_right = -2.0
-offset_bottom = -37.0
-grow_horizontal = 0
-grow_vertical = 2
+offset_bottom = -0.31201172
 
-[node name="AllPlayerGridContainer" type="GridContainer" parent="ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 6
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.005
+anchor_bottom = 0.11000001
+offset_right = 0.33502197
+offset_bottom = 0.15999603
 
-[node name="LastName" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
+[node name="LastName" type="Label" parent="Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Nachname
 "
 horizontal_alignment = 1
 
-[node name="FirstName" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
+[node name="FirstName" type="Label" parent="Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Vorname"
 horizontal_alignment = 1
 
-[node name="Birthdate" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
+[node name="Birthdate" type="Label" parent="Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Geburtstag"
 horizontal_alignment = 1
 
-[node name="Talent" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
+[node name="Talent" type="Label" parent="Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Talent"
 horizontal_alignment = 1
 
-[node name="CurrentAbility" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
+[node name="CurrentAbility" type="Label" parent="Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Stärke"
 horizontal_alignment = 1
 
-[node name="Position" type="Label" parent="ScrollContainer/AllPlayerGridContainer"]
+[node name="Position" type="Label" parent="Control/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Position"
 horizontal_alignment = 1
+
+[node name="VScrollBar" type="ScrollContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.011000001
+anchor_top = 0.105000004
+anchor_right = 1.0
+anchor_bottom = 0.85400003
+offset_left = -0.2630005
+offset_top = -0.12000275
+offset_right = 1.0
+offset_bottom = 13.423981
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/VScrollBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" parent="Control/VScrollBar/VBoxContainer" instance=ExtResource("2_3fcg4")]
+layout_mode = 2
+
+[node name="HBoxContainer3" parent="Control/VScrollBar/VBoxContainer" instance=ExtResource("2_3fcg4")]
+layout_mode = 2
+
+[node name="HBoxContainer" parent="Control/VScrollBar/VBoxContainer" instance=ExtResource("2_3fcg4")]
+layout_mode = 2
 
 [node name="TopUi" parent="." instance=ExtResource("2_m6sys")]
 layout_mode = 1

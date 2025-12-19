@@ -1,0 +1,90 @@
+[gd_scene load_steps=4 format=3 uid="uid://cew7vutl6lfd2"]
+
+[ext_resource type="Script" uid="uid://dpbec75rd7jc7" path="res://scenes/player/player_scene.gd" id="1_jqc4g"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="1_vltva"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_jqc4g"]
+
+[node name="PlayerScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jqc4g")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_top = 107.0
+offset_right = 163.0
+offset_bottom = 292.0
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Firstname"
+
+[node name="Firstname" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Joseph"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Lastname"
+
+[node name="Lastname" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Meier"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Birthdate"
+
+[node name="Birthdate" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "12.12.1990"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Talent"
+
+[node name="Talent" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "mittel"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Current Ability"
+
+[node name="CurrentAbility" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Position"
+
+[node name="Position" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "ZM"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Played Matches"
+
+[node name="PlayedMatches" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "300"
+horizontal_alignment = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("1_vltva")]
+layout_mode = 1
+
+[node name="TopUi" parent="." instance=ExtResource("2_jqc4g")]
+layout_mode = 1

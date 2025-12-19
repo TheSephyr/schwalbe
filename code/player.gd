@@ -1,21 +1,17 @@
 class_name Player
-	
-# Player attributes
+
 var firstname : String
 var lastname : String
 var birthdate : String
 var talent : String
 var currentAbility: String
 var position : String
+var played_matches: Array[Match]
 
 
 func _to_string():
 	return "(" + lastname + ", " + firstname + ")"
 
-# Constructor
-#func _init(firstname, lastname, birthdate, talent, position):
-#	self.firstname = firstname
-#	self.lastname = lastname
-#	self.birthdate = birthdate
-#	self.talent = talent
-#	self.position = position
+
+func add_match(current_match: Match) -> void:
+	played_matches.append(current_match)
