@@ -16,5 +16,5 @@ func _on_quit_game_button_button_down():
 
 
 func _on_start_button_button_down():
-	get_tree().change_scene_to_file("res://scenes/load_nation.tscn")
+	get_tree().change_scene_to_file("res://scenes/team_selection.tscn")
 	pass # Replace with function body.

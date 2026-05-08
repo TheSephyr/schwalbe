@@ -29,6 +29,8 @@ func _on_next_matchday():
 	EventBus.emit_update_ui()
 
 func _on_next():
+	if current_season.finished:
+		return
 	current_week = current_week + 1
 	current_season.simulate_next_matchday()
 	EventBus.emit_update_ui()

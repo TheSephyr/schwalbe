@@ -24,7 +24,8 @@ func findByTeam(team: Club) -> TeamStanding:
 		
 func update() -> void:
 	teamStandings.sort_custom(sortTeamStanding)
-	pass
+	for i: int in teamStandings.size():
+		teamStandings[i].currentPosition = i + 1
 	
 	
 func sortTeamStanding(a: TeamStanding, b: TeamStanding) -> bool:

@@ -35,4 +35,3 @@ func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int):
 		position = event.position
 	pass # Replace with function body.
 	
-

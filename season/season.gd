@@ -11,36 +11,29 @@ var finished: bool
 
 func _init(clubs: Array[Club]):
 	var num_teams: int = clubs.size()
-	print(num_teams)
-	var schedule = []
-	for matchday in range(num_teams):
-		print(clubs[matchday])
+	var num_rounds: int = num_teams - 1
+
+	# First half: each pair meets once
+	for round in range(num_rounds):
 		var matches: Array[Match] = []
-		for i in range(clubs.size() / 2):
-			var home_index = (matchday + i) % (num_teams - 1)
-			var away_index = (num_teams - 1 - i + matchday) % (num_teams - 1)
+		for i in range(num_teams / 2):
+			var home_index = (round + i) % (num_teams - 1)
+			var away_index = (num_teams - 1 - i + round) % (num_teams - 1)
 			var home_team = clubs[home_index]
 			var away_team = clubs[away_index]
 			if i == 0:
 				away_team = clubs[num_teams - 1]
-			var singleMatch = Match.new(home_team, away_team)
-			matches.append(singleMatch)
-		var singleMatchday = Matchday.new(matches, matchday)
-		matchdays.append(singleMatchday)
-		print(matchdays.size())
-		#print(matchdays[matchday].size())
-		rotate_array(clubs, 1)
-		schedule.append(matches)
-	#print(schedule)
+			matches.append(Match.new(home_team, away_team))
+		matchdays.append(Matchday.new(matches, round + 1))
+
+	# Second half: same fixtures with home/away swapped
+	for round in range(num_rounds):
+		var matches: Array[Match] = []
+		for m: Match in matchdays[round].matches:
+			matches.append(Match.new(m.awayTeam, m.homeTeam))
+		matchdays.append(Matchday.new(matches, num_rounds + round + 1))
+
 	table = Table.new(clubs)
-
-
-func rotate_array(arr, shift):
-	var shifted = []
-	var size = arr.size()
-	for i in range(size):
-		shifted.append(arr[(i + shift) % size])
-	return shifted
 
 
 func update_table() -> void:

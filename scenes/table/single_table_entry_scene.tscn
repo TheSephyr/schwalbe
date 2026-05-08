@@ -1,40 +1,40 @@
-[gd_scene load_steps=2 format=3 uid="uid://dh0uqr1y6avdk"]
+[gd_scene format=3 uid="uid://dh0uqr1y6avdk"]
 
 [ext_resource type="Script" uid="uid://sd62flib2wa0" path="res://scenes/table/single_table_entry_scene.gd" id="1_rfxo2"]
 
-[node name="HBoxContainer" type="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" unique_id=526184377]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
 script = ExtResource("1_rfxo2")
 
-[node name="Position" type="Label" parent="."]
+[node name="Position" type="Label" parent="." unique_id=445977623]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "12."
 
-[node name="Name" type="Label" parent="."]
+[node name="Name" type="Label" parent="." unique_id=823591716]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "1.FC Musterhausen 1860"
 
-[node name="Points" type="Label" parent="."]
+[node name="Points" type="Label" parent="." unique_id=990123586]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "12"
 
-[node name="Wins" type="Label" parent="."]
+[node name="Wins" type="Label" parent="." unique_id=1708602616]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "12"
 
-[node name="Draws" type="Label" parent="."]
+[node name="Draws" type="Label" parent="." unique_id=779711048]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "12"
 
-[node name="Looses" type="Label" parent="."]
+[node name="Looses" type="Label" parent="." unique_id=2014286031]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "12"
