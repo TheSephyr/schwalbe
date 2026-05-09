@@ -19,7 +19,7 @@ func init(player_update: Player):
 	birthday.text = player.birthdate
 	talent.text = player.talent
 	current_ability.text = player.currentAbility
-	postion.text = player.position
+	postion.text = player.position_label()
 
 
 func _on_gui_input(event: InputEvent) -> void:

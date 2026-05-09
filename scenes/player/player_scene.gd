@@ -16,5 +16,5 @@ func _ready() -> void:
 	birthdate.text = player.birthdate
 	talent.text = player.talent
 	current_ability.text = player.currentAbility
-	player_position.text = player.position
-	played_matches.text = str(player.played_matches.size())
+	player_position.text = player.position_label()
+	played_matches.text = str(player.matches_played)

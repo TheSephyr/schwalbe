@@ -1,13 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://w1ufir0imwtu"]
+[gd_scene load_steps=4 format=3 uid="uid://w1ufir0imwtu"]
 
 [ext_resource type="Script" uid="uid://bpcij3lcdk85m" path="res://scenes/lineup/lineUpScene.gd" id="1_jkbo1"]
-[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_6mytl"]
-[ext_resource type="PackedScene" uid="uid://c3f0r7ertumd5" path="res://scenes/lineup/player_line_up.tscn" id="3_3tn4x"]
-[ext_resource type="Texture2D" uid="uid://qrw1006kspoc" path="res://icon.svg" id="3_6qgm8"]
-[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="5_wqrd0"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q7hfx"]
-size = Vector2(766, 432)
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_wqrd0"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_6mytl"]
 
 [node name="LineUp" type="Control"]
 layout_mode = 3
@@ -18,79 +13,88 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jkbo1")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 766.0
-offset_top = 2.0
-offset_right = 1139.0
-offset_bottom = 56.0
-grow_horizontal = 0
+[node name="TopUi" parent="." instance=ExtResource("2_wqrd0")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("3_6mytl")]
+layout_mode = 1
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_top = 0.047
+anchor_bottom = 0.9
+grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 4
 
-[node name="PlayerList" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 452.0
-offset_right = 329.0
-offset_bottom = 578.0
-size_flags_horizontal = 0
-
-[node name="SinglePlayer" type="Label" parent="PlayerList"]
+[node name="FormationRow" type="HBoxContainer" parent="Content"]
 layout_mode = 2
-text = "Max Mustermann"
+theme_override_constants/separation = 8
 
-[node name="Area2D" type="Area2D" parent="."]
-position = Vector2(12, 42)
+[node name="Label" type="Label" parent="Content/FormationRow"]
+layout_mode = 2
+text = "Formation:"
+vertical_alignment = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(383, 216)
-shape = SubResource("RectangleShape2D_q7hfx")
-debug_color = Color(0, 0.65098, 0.129412, 0.419608)
+[node name="Btn442" type="Button" parent="Content/FormationRow"]
+layout_mode = 2
+text = "4-4-2"
 
-[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
-modulate = Color(0.262745, 0.505882, 0.231373, 1)
-position = Vector2(386, 219.5)
-scale = Vector2(5.96875, 3.38281)
-texture = ExtResource("3_6qgm8")
+[node name="Btn532" type="Button" parent="Content/FormationRow"]
+layout_mode = 2
+text = "5-3-2"
 
-[node name="Control" type="Node2D" parent="."]
-position = Vector2(37, 45)
+[node name="Btn433" type="Button" parent="Content/FormationRow"]
+layout_mode = 2
+text = "4-3-3"
 
-[node name="StaticBody2D" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(87, 269)
+[node name="ListsRow" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
 
-[node name="StaticBody2D2" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(379, 389)
+[node name="LineupPanel" type="VBoxContainer" parent="Content/ListsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
-[node name="StaticBody2D3" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(460, 288)
+[node name="LineupHeader" type="Label" parent="Content/ListsRow/LineupPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Aufstellung"
+horizontal_alignment = 1
 
-[node name="StaticBody2D6" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(290, 294)
+[node name="Scroll" type="ScrollContainer" parent="Content/ListsRow/LineupPanel"]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="StaticBody2D7" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(100, 143)
+[node name="LineupList" type="VBoxContainer" parent="Content/ListsRow/LineupPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="StaticBody2D5" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(626, 238)
+[node name="VSep" type="VSeparator" parent="Content/ListsRow"]
+layout_mode = 2
 
-[node name="StaticBody2D8" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(348, 219)
+[node name="BenchPanel" type="VBoxContainer" parent="Content/ListsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
-[node name="StaticBody2D4" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(617, 128)
+[node name="BenchHeader" type="Label" parent="Content/ListsRow/BenchPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Kader"
+horizontal_alignment = 1
 
-[node name="StaticBody2D10" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(359, 128)
+[node name="Scroll" type="ScrollContainer" parent="Content/ListsRow/BenchPanel"]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="StaticBody2D9" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(256, 43)
+[node name="BenchList" type="VBoxContainer" parent="Content/ListsRow/BenchPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="StaticBody2D11" parent="Control" instance=ExtResource("3_3tn4x")]
-position = Vector2(487, 45)
-
-[node name="TopUi" parent="." instance=ExtResource("5_wqrd0")]
-layout_mode = 1
-
-[node name="BottomUi" parent="." instance=ExtResource("2_6mytl")]
-layout_mode = 1
+[connection signal="pressed" from="Content/FormationRow/Btn442" to="." method="_on_formation_pressed" binds=["4-4-2"]]
+[connection signal="pressed" from="Content/FormationRow/Btn532" to="." method="_on_formation_pressed" binds=["5-3-2"]]
+[connection signal="pressed" from="Content/FormationRow/Btn433" to="." method="_on_formation_pressed" binds=["4-3-3"]]

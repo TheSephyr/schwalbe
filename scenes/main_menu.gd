@@ -1,20 +1,20 @@
 extends Control
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+@onready var continue_button: Button = $ContinueButton
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _ready() -> void:
+	continue_button.visible = Game.has_save()
 
 
-func _on_quit_game_button_button_down():
-	print("quit")
+func _on_quit_game_button_button_down() -> void:
 	get_tree().quit()
 
 
-func _on_start_button_button_down():
+func _on_start_button_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/team_selection.tscn")
-	pass # Replace with function body.
+
+
+func _on_continue_button_pressed() -> void:
+	Game.load_game()
+	get_tree().change_scene_to_file("res://scenes/club_overview.tscn")

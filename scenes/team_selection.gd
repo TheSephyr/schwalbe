@@ -18,4 +18,4 @@ func _on_team_list_item_selected(index: int) -> void:
 
 func _on_select_button_pressed() -> void:
 	Game.player_club = Game.first_division_clubs[_selected_index]
-	get_tree().change_scene_to_file("res://scenes/table/table_scene.tscn")
+	get_tree().change_scene_to_file("res://scenes/club_overview.tscn")

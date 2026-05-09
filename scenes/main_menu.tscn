@@ -25,18 +25,28 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Start"
 
+[node name="ContinueButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.457
+anchor_top = 0.48
+anchor_right = 0.537
+anchor_bottom = 0.536
+offset_left = 0.536011
+offset_right = 0.496033
+text = "Continue"
+
 [node name="QuitGameButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.457
-anchor_top = 0.5
+anchor_top = 0.55
 anchor_right = 0.537
-anchor_bottom = 0.555
+anchor_bottom = 0.606
 offset_left = 0.536011
 offset_right = 0.496033
-offset_bottom = -0.13501
-text = "Quit
-"
+text = "Quit"
 
 [connection signal="button_down" from="StartButton" to="." method="_on_start_button_button_down"]
+[connection signal="button_down" from="ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="button_down" from="QuitGameButton" to="." method="_on_quit_game_button_button_down"]
