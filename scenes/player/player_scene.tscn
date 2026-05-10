@@ -1,8 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://cew7vutl6lfd2"]
+[gd_scene load_steps=6 format=3 uid="uid://cew7vutl6lfd2"]
 
 [ext_resource type="Script" uid="uid://dpbec75rd7jc7" path="res://scenes/player/player_scene.gd" id="1_jqc4g"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="1_vltva"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_jqc4g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
 
 [node name="PlayerScene" type="Control"]
 layout_mode = 3
@@ -13,75 +28,360 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jqc4g")
 
-[node name="GridContainer" type="GridContainer" parent="."]
-layout_mode = 0
-offset_top = 107.0
-offset_right = 163.0
-offset_bottom = 292.0
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+grow_horizontal = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="PanelContainer" parent="Content/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="HMargin" type="MarginContainer" parent="Content/VBox/Header"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="Content/VBox/Header/HMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameLeft" type="VBoxContainer" parent="Content/VBox/Header/HMargin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FullName" type="Label" parent="Content/VBox/Header/HMargin/HBox/NameLeft"]
+layout_mode = 2
+text = "Vorname Nachname"
+theme_override_font_sizes/font_size = 20
+
+[node name="SubRow" type="HBoxContainer" parent="Content/VBox/Header/HMargin/HBox/NameLeft"]
+layout_mode = 2
+
+[node name="AgeDate" type="Label" parent="Content/VBox/Header/HMargin/HBox/NameLeft/SubRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "30 Jahre (15.6.1969)"
+theme_override_font_sizes/font_size = 13
+
+[node name="StRow" type="HBoxContainer" parent="Content/VBox/Header/HMargin/HBox/NameLeft/SubRow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="StLabel" type="Label" parent="Content/VBox/Header/HMargin/HBox/NameLeft/SubRow/StRow"]
+layout_mode = 2
+text = "Stärke: "
+theme_override_font_sizes/font_size = 13
+
+[node name="Ability" type="Label" parent="Content/VBox/Header/HMargin/HBox/NameLeft/SubRow/StRow"]
+layout_mode = 2
+text = "11"
+theme_override_font_sizes/font_size = 13
+
+[node name="EigBox" type="VBoxContainer" parent="Content/VBox/Header/HMargin/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+
+[node name="EigHeader" type="PanelContainer" parent="Content/VBox/Header/HMargin/HBox/EigBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="EigTitle" type="Label" parent="Content/VBox/Header/HMargin/HBox/EigBox/EigHeader"]
+layout_mode = 2
+text = "Eigenschaften"
+theme_override_font_sizes/font_size = 12
+
+[node name="EigContent" type="MarginContainer" parent="Content/VBox/Header/HMargin/HBox/EigBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="EigList" type="Label" parent="Content/VBox/Header/HMargin/HBox/EigBox/EigContent"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 11
+
+[node name="Middle" type="HBoxContainer" parent="Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="LeftVBox" type="VBoxContainer" parent="Content/VBox/Middle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="AllgPanel" type="PanelContainer" parent="Content/VBox/Middle/LeftVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="AllgVBox" type="VBoxContainer" parent="Content/VBox/Middle/LeftVBox/AllgPanel"]
+layout_mode = 2
+
+[node name="AllgHdr" type="PanelContainer" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="AllgTitle" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgHdr"]
+layout_mode = 2
+text = "Allgemeines"
+theme_override_font_sizes/font_size = 12
+
+[node name="AllgMargin" type="MarginContainer" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="AllgGrid" type="GridContainer" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin"]
+layout_mode = 2
 columns = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 4
 
-[node name="Label" type="Label" parent="GridContainer"]
+[node name="PosL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
 layout_mode = 2
-text = "Firstname"
+text = "Hauptposition"
+theme_override_font_sizes/font_size = 12
 
-[node name="Firstname" type="Label" parent="GridContainer"]
+[node name="Position" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
 layout_mode = 2
-text = "Joseph"
+text = "Torwart"
+theme_override_font_sizes/font_size = 12
+
+[node name="NebL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "Nebenpositionen"
+theme_override_font_sizes/font_size = 12
+
+[node name="NebPos" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 12
+
+[node name="FussL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "Starker Fuß"
+theme_override_font_sizes/font_size = 12
+
+[node name="FussVal" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "rechts"
+theme_override_font_sizes/font_size = 12
+
+[node name="VerletzL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "Verletzungsanf."
+theme_override_font_sizes/font_size = 12
+
+[node name="VerletzVal" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 12
+
+[node name="FormL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "Form"
+theme_override_font_sizes/font_size = 12
+
+[node name="FormVal" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "12"
+theme_override_font_sizes/font_size = 12
+
+[node name="RightVBox" type="VBoxContainer" parent="Content/VBox/Middle"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
+theme_override_constants/separation = 5
+
+[node name="VeinPanel" type="PanelContainer" parent="Content/VBox/Middle/RightVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="VeinVBox" type="VBoxContainer" parent="Content/VBox/Middle/RightVBox/VeinPanel"]
+layout_mode = 2
+
+[node name="VeinHdr" type="PanelContainer" parent="Content/VBox/Middle/RightVBox/VeinPanel/VeinVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="VeinTitle" type="Label" parent="Content/VBox/Middle/RightVBox/VeinPanel/VeinVBox/VeinHdr"]
+layout_mode = 2
+text = "Aktueller Verein"
+theme_override_font_sizes/font_size = 12
+
+[node name="VeinMargin" type="MarginContainer" parent="Content/VBox/Middle/RightVBox/VeinPanel/VeinVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="ClubName" type="Label" parent="Content/VBox/Middle/RightVBox/VeinPanel/VeinVBox/VeinMargin"]
+layout_mode = 2
+text = "1FV München"
+theme_override_font_sizes/font_size = 12
+
+[node name="TalentPanel" type="PanelContainer" parent="Content/VBox/Middle/RightVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="TalentVBox" type="VBoxContainer" parent="Content/VBox/Middle/RightVBox/TalentPanel"]
+layout_mode = 2
+
+[node name="TalentHdr" type="PanelContainer" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="TalentTitle" type="Label" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentHdr"]
+layout_mode = 2
+text = "Spielberechtigung"
+theme_override_font_sizes/font_size = 12
+
+[node name="TalentMargin" type="MarginContainer" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="TalentInner" type="VBoxContainer" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TalentValue" type="Label" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner"]
+layout_mode = 2
+text = "riesig"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
 
-[node name="Label2" type="Label" parent="GridContainer"]
+[node name="MatchesLbl" type="Label" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner"]
 layout_mode = 2
-text = "Lastname"
+text = "Gespielte Spiele"
+theme_override_font_sizes/font_size = 11
 
-[node name="Lastname" type="Label" parent="GridContainer"]
+[node name="MatchesVal" type="Label" parent="Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner"]
 layout_mode = 2
-text = "Meier"
+text = "0"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
 
-[node name="Label3" type="Label" parent="GridContainer"]
+[node name="Bottom" type="HBoxContainer" parent="Content/VBox"]
 layout_mode = 2
-text = "Birthdate"
+theme_override_constants/separation = 5
 
-[node name="Birthdate" type="Label" parent="GridContainer"]
+[node name="NatPanel" type="PanelContainer" parent="Content/VBox/Bottom"]
 layout_mode = 2
-text = "12.12.1990"
-horizontal_alignment = 1
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
 
-[node name="Label4" type="Label" parent="GridContainer"]
+[node name="NatVBox" type="VBoxContainer" parent="Content/VBox/Bottom/NatPanel"]
 layout_mode = 2
-text = "Talent"
 
-[node name="Talent" type="Label" parent="GridContainer"]
+[node name="NatHdr" type="PanelContainer" parent="Content/VBox/Bottom/NatPanel/NatVBox"]
 layout_mode = 2
-text = "mittel"
-horizontal_alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
 
-[node name="Label5" type="Label" parent="GridContainer"]
+[node name="NatTitle" type="Label" parent="Content/VBox/Bottom/NatPanel/NatVBox/NatHdr"]
 layout_mode = 2
-text = "Current Ability"
+text = "Nationalität"
+theme_override_font_sizes/font_size = 12
 
-[node name="CurrentAbility" type="Label" parent="GridContainer"]
+[node name="NatMargin" type="MarginContainer" parent="Content/VBox/Bottom/NatPanel/NatVBox"]
 layout_mode = 2
-text = "10"
-horizontal_alignment = 1
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
 
-[node name="Label6" type="Label" parent="GridContainer"]
+[node name="NatValue" type="Label" parent="Content/VBox/Bottom/NatPanel/NatVBox/NatMargin"]
 layout_mode = 2
-text = "Position"
+text = "Deutschland"
+theme_override_font_sizes/font_size = 12
 
-[node name="Position" type="Label" parent="GridContainer"]
+[node name="FaehPanel" type="PanelContainer" parent="Content/VBox/Bottom"]
 layout_mode = 2
-text = "ZM"
-horizontal_alignment = 1
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
 
-[node name="Label7" type="Label" parent="GridContainer"]
+[node name="FaehVBox" type="VBoxContainer" parent="Content/VBox/Bottom/FaehPanel"]
 layout_mode = 2
-text = "Played Matches"
 
-[node name="PlayedMatches" type="Label" parent="GridContainer"]
+[node name="FaehHdr" type="PanelContainer" parent="Content/VBox/Bottom/FaehPanel/FaehVBox"]
 layout_mode = 2
-text = "300"
-horizontal_alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="FaehTitle" type="Label" parent="Content/VBox/Bottom/FaehPanel/FaehVBox/FaehHdr"]
+layout_mode = 2
+text = "Fähigkeiten"
+theme_override_font_sizes/font_size = 12
+
+[node name="FaehMargin" type="MarginContainer" parent="Content/VBox/Bottom/FaehPanel/FaehVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="FaehValue" type="Label" parent="Content/VBox/Bottom/FaehPanel/FaehVBox/FaehMargin"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 12
+
+[node name="VerlPanel" type="PanelContainer" parent="Content/VBox/Bottom"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="VerlVBox" type="VBoxContainer" parent="Content/VBox/Bottom/VerlPanel"]
+layout_mode = 2
+
+[node name="VerlHdr" type="PanelContainer" parent="Content/VBox/Bottom/VerlPanel/VerlVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="VerlTitle" type="Label" parent="Content/VBox/Bottom/VerlPanel/VerlVBox/VerlHdr"]
+layout_mode = 2
+text = "Verletzung"
+theme_override_font_sizes/font_size = 12
+
+[node name="VerlMargin" type="MarginContainer" parent="Content/VBox/Bottom/VerlPanel/VerlVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="VerlValue" type="Label" parent="Content/VBox/Bottom/VerlPanel/VerlVBox/VerlMargin"]
+layout_mode = 2
+text = "Er ist gesund."
+theme_override_font_sizes/font_size = 12
 
 [node name="BottomUi" parent="." instance=ExtResource("1_vltva")]
 layout_mode = 1

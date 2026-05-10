@@ -38,6 +38,10 @@ show_debug_window={
 ]
 }
 
+[gui]
+
+theme/custom="res://theme.tres"
+
 [rendering]
 
 renderer/rendering_method="mobile"

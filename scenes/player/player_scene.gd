@@ -2,19 +2,42 @@ extends Control
 
 var player: Player
 
-@onready var lastname: Label = $GridContainer/Lastname
-@onready var birthdate: Label = $GridContainer/Birthdate
-@onready var talent: Label = $GridContainer/Talent
-@onready var current_ability: Label = $GridContainer/CurrentAbility
-@onready var player_position: Label = $GridContainer/Position
-@onready var played_matches: Label = $GridContainer/PlayedMatches
+@onready var full_name: Label = $Content/VBox/Header/HMargin/HBox/NameLeft/FullName
+@onready var age_date: Label = $Content/VBox/Header/HMargin/HBox/NameLeft/SubRow/AgeDate
+@onready var ability: Label = $Content/VBox/Header/HMargin/HBox/NameLeft/SubRow/StRow/Ability
+@onready var player_postion: Label = $Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid/Position
+@onready var form_val: Label = $Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid/FormVal
+@onready var club_name: Label = $Content/VBox/Middle/RightVBox/VeinPanel/VeinVBox/VeinMargin/ClubName
+@onready var talent_value: Label = $Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner/TalentValue
+@onready var matches_val: Label = $Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner/MatchesVal
 
 
 func _ready() -> void:
 	player = GameState.selected_player
-	lastname.text = player.lastname
-	birthdate.text = player.birthdate
-	talent.text = player.talent
-	current_ability.text = player.currentAbility
-	player_position.text = player.position_label()
-	played_matches.text = str(player.matches_played)
+	full_name.text = player.firstname + " " + player.lastname
+	age_date.text = _format_age_and_date(player.birthdate)
+	ability.text = player.currentAbility
+	player_postion.text = player.position_label()
+	form_val.text = player.currentAbility
+	talent_value.text = player.talent
+	matches_val.text = str(player.matches_played)
+	club_name.text = _find_player_club()
+
+
+func _format_age_and_date(birthdate: String) -> String:
+	var parts := birthdate.split(".")
+	if parts.size() < 3:
+		return birthdate
+	var birth_year := parts[2].to_int()
+	if birth_year == 0:
+		return birthdate
+	var age := 1999 - birth_year
+	return str(age) + " Jahre (" + birthdate + ")"
+
+
+func _find_player_club() -> String:
+	for club: Club in Game.all_clubs:
+		for p: Player in club.players:
+			if p == player:
+				return club.name
+	return ""
