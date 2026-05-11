@@ -9,6 +9,12 @@ var position : String
 var played_matches: Array[Match]
 var matches_played: int = 0
 
+var salary: int = 500000
+var auflauf_praemie: int = 10000
+var tor_praemie: int = 0
+var market_value: int = 5000000
+var contract_end: String = "30.06.2003"
+
 
 static var POSITION_LABELS: Dictionary = {
 	"1": "GK", "3": "CB", "4": "LB", "5": "RB",

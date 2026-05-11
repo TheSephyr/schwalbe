@@ -46,6 +46,10 @@ text = "Line-Up"
 layout_mode = 2
 text = "Club"
 
+[node name="BalanceButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Balance"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
@@ -58,4 +62,5 @@ text = "NEXT"
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TableButton" to="." method="_on_table_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/LineUp" to="." method="_on_line_up_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/Club" to="." method="_on_club_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/BalanceButton" to="." method="_on_balance_button_down"]
 [connection signal="button_up" from="HBoxContainer/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]

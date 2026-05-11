@@ -292,6 +292,100 @@ text = "0"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 14
 
+[node name="VertragPanel" type="PanelContainer" parent="Content/VBox/Middle/RightVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="VertragVBox" type="VBoxContainer" parent="Content/VBox/Middle/RightVBox/VertragPanel"]
+layout_mode = 2
+
+[node name="VertragHdr" type="PanelContainer" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="VertragTitle" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragHdr"]
+layout_mode = 2
+text = "Vertrag"
+theme_override_font_sizes/font_size = 12
+
+[node name="VertragMargin" type="MarginContainer" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VertragGrid" type="GridContainer" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 3
+
+[node name="FestgehaltL" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Festgehalt"
+theme_override_font_sizes/font_size = 11
+
+[node name="FestgehaltVal" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+text = "0 DM"
+theme_override_font_sizes/font_size = 11
+
+[node name="AuflaufL" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Auflaufprämie"
+theme_override_font_sizes/font_size = 11
+
+[node name="AuflaufVal" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+text = "0 DM"
+theme_override_font_sizes/font_size = 11
+
+[node name="TorL" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Torprämie"
+theme_override_font_sizes/font_size = 11
+
+[node name="TorVal" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+text = "0 DM"
+theme_override_font_sizes/font_size = 11
+
+[node name="MarktL" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Marktwert"
+theme_override_font_sizes/font_size = 11
+
+[node name="MarktVal" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+text = "0 DM"
+theme_override_font_sizes/font_size = 11
+
+[node name="VertragBisL" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vertrag bis"
+theme_override_font_sizes/font_size = 11
+
+[node name="VertragBisVal" type="Label" parent="Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 2
+text = "---"
+theme_override_font_sizes/font_size = 11
+
 [node name="Bottom" type="HBoxContainer" parent="Content/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 5
