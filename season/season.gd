@@ -1,15 +1,15 @@
 class_name Season
 
 
-const POINTS_FOR_WIN = 3
-const POINTS_FOR_DRAW = 1
 var current_matchday: int = 1
 var matchdays: Array[Matchday] = []
 var table: Table
 var finished: bool
+var start_year: int = GameConfig.SEASON_START_YEAR
 
 
-func _init(clubs: Array[Club]):
+func _init(clubs: Array[Club], year: int = GameConfig.SEASON_START_YEAR) -> void:
+	start_year = year
 	var num_teams: int = clubs.size()
 	var num_rounds: int = num_teams - 1
 
@@ -24,16 +24,28 @@ func _init(clubs: Array[Club]):
 			if i == 0:
 				away_team = clubs[num_teams - 1]
 			matches.append(Match.new(home_team, away_team))
-		matchdays.append(Matchday.new(matches, round + 1))
+		var md_num: int = round + 1
+		matchdays.append(Matchday.new(matches, md_num, _matchday_date(md_num, year)))
 
 	# Second half: same fixtures with home/away swapped
 	for round in range(num_rounds):
 		var matches: Array[Match] = []
 		for m: Match in matchdays[round].matches:
 			matches.append(Match.new(m.awayTeam, m.homeTeam))
-		matchdays.append(Matchday.new(matches, num_rounds + round + 1))
+		var md_num: int = num_rounds + round + 1
+		matchdays.append(Matchday.new(matches, md_num, _matchday_date(md_num, year)))
 
 	table = Table.new(clubs)
+
+
+# Bundesliga-style schedule: MD1=Aug 7, winter break after MD17, MD34=May 27 next year
+static func _matchday_date(md_num: int, year: int) -> Date:
+	var first := Date.new(GameConfig.SEASON_FIRST_MD_DAY, GameConfig.SEASON_FIRST_MD_MONTH, year)
+	if md_num <= GameConfig.WINTER_BREAK_AFTER_MD:
+		return first.add_days((md_num - 1) * GameConfig.MATCHDAY_INTERVAL_DAYS)
+	var md_wb := first.add_days((GameConfig.WINTER_BREAK_AFTER_MD - 1) * GameConfig.MATCHDAY_INTERVAL_DAYS)
+	var md_after := md_wb.add_days(GameConfig.WINTER_BREAK_DAYS)
+	return md_after.add_days((md_num - GameConfig.WINTER_BREAK_AFTER_MD - 1) * GameConfig.MATCHDAY_INTERVAL_DAYS)
 
 
 func update_table() -> void:

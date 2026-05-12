@@ -1,0 +1,244 @@
+[gd_scene load_steps=4 format=3 uid="uid://dsnendscene01"]
+
+[ext_resource type="Script" uid="uid://csnendscript1" path="res://scenes/season_end/season_end.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdr"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="SeasonEndScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 16
+
+[node name="Content" type="VBoxContainer" parent="Scroll/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitlePanel" type="PanelContainer" parent="Scroll/Margin/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdr")
+
+[node name="SeasonTitle" type="Label" parent="Scroll/Margin/Content/TitlePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+text = "Saisonende"
+theme_override_font_sizes/font_size = 20
+
+[node name="ChampionPanel" type="PanelContainer" parent="Scroll/Margin/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ChampionVBox" type="VBoxContainer" parent="Scroll/Margin/Content/ChampionPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ChampionHdr" type="PanelContainer" parent="Scroll/Margin/Content/ChampionPanel/ChampionVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdr")
+
+[node name="ChampionHdrLabel" type="Label" parent="Scroll/Margin/Content/ChampionPanel/ChampionVBox/ChampionHdr"]
+layout_mode = 2
+text = "Meister"
+theme_override_font_sizes/font_size = 12
+
+[node name="ChampionMargin" type="MarginContainer" parent="Scroll/Margin/Content/ChampionPanel/ChampionVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="ChampionContent" type="VBoxContainer" parent="Scroll/Margin/Content/ChampionPanel/ChampionVBox/ChampionMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ChampionName" type="Label" parent="Scroll/Margin/Content/ChampionPanel/ChampionVBox/ChampionMargin/ChampionContent"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+text = "Vereinsname"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.804, 0.706, 0.29, 1)
+
+[node name="ChampionStats" type="Label" parent="Scroll/Margin/Content/ChampionPanel/ChampionVBox/ChampionMargin/ChampionContent"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+text = "0 Pkt"
+theme_override_font_sizes/font_size = 12
+
+[node name="PlayerPanel" type="PanelContainer" parent="Scroll/Margin/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="PlayerVBox" type="VBoxContainer" parent="Scroll/Margin/Content/PlayerPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PlayerHdr" type="PanelContainer" parent="Scroll/Margin/Content/PlayerPanel/PlayerVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdr")
+
+[node name="PlayerHdrLabel" type="Label" parent="Scroll/Margin/Content/PlayerPanel/PlayerVBox/PlayerHdr"]
+layout_mode = 2
+text = "Deine Saison"
+theme_override_font_sizes/font_size = 12
+
+[node name="PlayerMargin" type="MarginContainer" parent="Scroll/Margin/Content/PlayerPanel/PlayerVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="PlayerResult" type="Label" parent="Scroll/Margin/Content/PlayerPanel/PlayerVBox/PlayerMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Platz ?"
+theme_override_font_sizes/font_size = 14
+
+[node name="TablePanel" type="PanelContainer" parent="Scroll/Margin/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="TableVBox" type="VBoxContainer" parent="Scroll/Margin/Content/TablePanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TableHdr" type="PanelContainer" parent="Scroll/Margin/Content/TablePanel/TableVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdr")
+
+[node name="TableHdrLabel" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableHdr"]
+layout_mode = 2
+text = "Abschlusstabelle"
+theme_override_font_sizes/font_size = 12
+
+[node name="TableMargin" type="MarginContainer" parent="Scroll/Margin/Content/TablePanel/TableVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="TableContent" type="VBoxContainer" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TableHeaderRow" type="HBoxContainer" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HdrPos" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+text = "Pl."
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrName" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Verein"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrSp" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(22, 0)
+text = "Sp"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrW" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(20, 0)
+text = "S"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrD" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(20, 0)
+text = "U"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrL" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(20, 0)
+text = "N"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrGoals" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 0)
+text = "Tore"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="HdrPts" type="Label" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent/TableHeaderRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(28, 0)
+text = "Pkt"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="TableRows" type="VBoxContainer" parent="Scroll/Margin/Content/TablePanel/TableVBox/TableMargin/TableContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="NewSeasonButton" type="Button" parent="Scroll/Margin/Content"]
+layout_mode = 2
+text = "Neue Saison starten"
+
+[node name="MainMenuButton" type="Button" parent="Scroll/Margin/Content"]
+layout_mode = 2
+text = "Zurueck zum Hauptmenue"
+
+[connection signal="pressed" from="Scroll/Margin/Content/NewSeasonButton" to="." method="_on_new_season_pressed"]
+[connection signal="pressed" from="Scroll/Margin/Content/MainMenuButton" to="." method="_on_main_menu_pressed"]

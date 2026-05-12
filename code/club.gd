@@ -5,7 +5,18 @@ var nation: String
 var name: String
 var players: Array[Player]
 var currentLineUp: Array[Player]
-var money: int
+var money: int = GameConfig.STARTING_CLUB_MONEY
+
+func total_daily_wages() -> int:
+	var yearly_total: int = 0
+	for player: Player in players:
+		yearly_total += player.salary
+	return yearly_total / 365
+
+
+func pay_wages(days: int) -> void:
+	money -= total_daily_wages() * days
+
 
 func _to_string() -> String:
 	return "(" + name + ")"

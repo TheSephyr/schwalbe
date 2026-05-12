@@ -36,6 +36,5 @@ func updateGoals(goalsForUpdate: int, goalsAgainstUpdate: int) -> void:
 	goalsAgainst = goalsAgainst + goalsAgainstUpdate
 	
 func updatePoints() -> void:
-	points = wins * 3 + draws
+	points = wins * GameConfig.POINTS_FOR_WIN + draws * GameConfig.POINTS_FOR_DRAW
 	goalsDifference = goalsFor - goalsAgainst
-	pass

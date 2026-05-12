@@ -4,22 +4,56 @@ var homeTeam: Club
 var awayTeam: Club
 var scoreHome: int = 0
 var scoreAway: int = 0
-var played: bool   = false
+var played: bool = false
 
-func _init(homeTeamThis: Club, awayTeamThis: Club):
+
+
+func _init(homeTeamThis: Club, awayTeamThis: Club) -> void:
 	homeTeam = homeTeamThis
 	awayTeam = awayTeamThis
 
 
-func simulateMatch():
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	scoreHome = rng.randi_range(0,3)
-	scoreAway = rng.randi_range(0,3)
-	add_match_to_Player(homeTeam)
-	add_match_to_Player(awayTeam)
+func simulateMatch() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+
+	var home_str := _lineup_strength(homeTeam) * GameConfig.HOME_ADVANTAGE
+	var away_str := _lineup_strength(awayTeam)
+	var total := home_str + away_str
+
+	var home_lambda := GameConfig.MATCH_BASE_LAMBDA + GameConfig.MATCH_SCALE * (home_str / total)
+	var away_lambda := GameConfig.MATCH_BASE_LAMBDA + GameConfig.MATCH_SCALE * (away_str / total)
+
+	scoreHome = _poisson(home_lambda, rng)
+	scoreAway = _poisson(away_lambda, rng)
+
+	add_match_to_player(homeTeam)
+	add_match_to_player(awayTeam)
 	played = true
 
-func add_match_to_Player(team: Club) -> void:
+
+func _lineup_strength(club: Club) -> float:
+	if club.currentLineUp.is_empty():
+		return 1.0
+	var total := 0
+	for player: Player in club.currentLineUp:
+		total += player.currentAbility.to_int()
+	return float(total) / club.currentLineUp.size()
+
+
+# Knuth's algorithm: returns a Poisson-distributed integer with the given mean.
+func _poisson(lambda: float, rng: RandomNumberGenerator) -> int:
+	var threshold := exp(-lambda)
+	var k := 0
+	var p := 1.0
+	while true:
+		k += 1
+		p *= rng.randf()
+		if p <= threshold:
+			break
+	return k - 1
+
+
+func add_match_to_player(team: Club) -> void:
 	for player: Player in team.currentLineUp:
-		print_debug("%s Played the game." % player.lastname)
 		player.add_match(self)

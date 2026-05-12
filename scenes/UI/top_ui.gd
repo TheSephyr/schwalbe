@@ -7,9 +7,9 @@ extends Control
 
 func _ready() -> void:
 	EventBus.update_ui.connect(_on_update_ui)
-	week_value.text = str(Game.current_week)
+	week_value.text = Game.current_date._to_string()
 	current_club.text = Game.player_club.name
 
 
 func _on_update_ui() -> void:
-	week_value.text = str(Game.current_week)
+	week_value.text = Game.current_date._to_string()

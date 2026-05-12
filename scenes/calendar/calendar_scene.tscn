@@ -1,0 +1,62 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkalendscene1"]
+
+[ext_resource type="Script" uid="uid://ckalendscript" path="res://scenes/calendar/calendar_scene.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_topui"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_btmui"]
+
+[node name="CalendarScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="TopUi" parent="." instance=ExtResource("2_topui")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("3_btmui")]
+layout_mode = 1
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.047
+anchor_right = 1.0
+anchor_bottom = 0.9
+offset_left = 8.0
+offset_top = 4.0
+offset_right = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PrevButton" type="Button" parent="Content/Header"]
+layout_mode = 2
+text = "<"
+
+[node name="MonthLabel" type="Label" parent="Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_alignment = 1
+text = "August 1999"
+theme_override_font_sizes/font_size = 16
+
+[node name="NextButton" type="Button" parent="Content/Header"]
+layout_mode = 2
+text = ">"
+
+[node name="DaysGrid" type="GridContainer" parent="Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 7
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+
+[connection signal="pressed" from="Content/Header/PrevButton" to="." method="_on_prev_button_pressed"]
+[connection signal="pressed" from="Content/Header/NextButton" to="." method="_on_next_button_pressed"]

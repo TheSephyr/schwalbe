@@ -19,11 +19,11 @@ alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Week"
+text = "Datum"
 
 [node name="WeekValue" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "12"
+text = "01.07.1999"
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
