@@ -1,0 +1,115 @@
+[gd_scene load_steps=3 format=3 uid="uid://dloadgame001"]
+
+[ext_resource type="Script" path="res://scenes/load_game/load_game_scene.gd" id="1_load"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="LoadGameScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_load")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitlePanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/TitlePanel"]
+layout_mode = 2
+text = "Spielstand laden"
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+
+[node name="MainHBox" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="LeftPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_constants/separation = 4
+
+[node name="LeftPanelBg" type="PanelContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="LeftMargin" type="MarginContainer" parent="Content/MainHBox/LeftPanel/LeftPanelBg"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="LeftVBox" type="VBoxContainer" parent="Content/MainHBox/LeftPanel/LeftPanelBg/LeftMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BackButton" type="Button" parent="Content/MainHBox/LeftPanel/LeftPanelBg/LeftMargin/LeftVBox"]
+layout_mode = 2
+text = "← Zurück"
+
+[node name="VSep" type="VSeparator" parent="Content/MainHBox"]
+layout_mode = 2
+
+[node name="RightPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NoSavesLabel" type="Label" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+text = "Keine Spielstände vorhanden."
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SaveList" type="VBoxContainer" parent="Content/MainHBox/RightPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[connection signal="pressed" from="Content/MainHBox/LeftPanel/LeftPanelBg/LeftMargin/LeftVBox/BackButton" to="." method="_on_back_pressed"]

@@ -1,10 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8pgs1qytiwuh"]
+[gd_scene format=3 uid="uid://b8pgs1qytiwuh"]
 
-[ext_resource type="Script" path="res://scenes/club/club.gd" id="1_club"]
+[ext_resource type="Script" uid="uid://1kxflmt612yn" path="res://scenes/club/club.gd" id="1_club"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_tipiq"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_u4nwx"]
 
-[node name="Club" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.96, 0.8, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="Club" type="Control" unique_id=593681364]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,63 +28,128 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_club")
 
-[node name="TopUi" parent="." instance=ExtResource("2_tipiq")]
+[node name="Background" type="ColorRect" parent="." unique_id=49716386]
 layout_mode = 1
-
-[node name="BottomUi" parent="." instance=ExtResource("3_u4nwx")]
-layout_mode = 1
-
-[node name="Content" type="VBoxContainer" parent="."]
-layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
-anchor_top = 0.047
-anchor_bottom = 0.9
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
 
-[node name="Header" type="HBoxContainer" parent="Content"]
+[node name="TopUi" parent="." unique_id=1195993587 instance=ExtResource("2_tipiq")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." unique_id=1546963797 instance=ExtResource("3_u4nwx")]
+layout_mode = 1
+
+[node name="Content" type="VBoxContainer" parent="." unique_id=1760787312]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.05
+anchor_right = 1.0
+anchor_bottom = 0.9
+offset_left = 6.0
+offset_top = 4.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitlePanel" type="PanelContainer" parent="Content" unique_id=2079141915]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
 
-[node name="LastName" type="Label" parent="Content/Header"]
+[node name="TitleLabel" type="Label" parent="Content/TitlePanel" unique_id=1972099153]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Mein Verein"
+
+[node name="ViewToggle" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="CurrentButton" type="Button" parent="Content/ViewToggle"]
 layout_mode = 2
 size_flags_horizontal = 3
+text = "Aktuell"
+disabled = true
+
+[node name="NextSeasonButton" type="Button" parent="Content/ViewToggle"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Nächste Saison"
+
+[node name="ColHeaderPanel" type="PanelContainer" parent="Content" unique_id=1551974891]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Header" type="HBoxContainer" parent="Content/ColHeaderPanel" unique_id=640032716]
+layout_mode = 2
+
+[node name="LastName" type="Label" parent="Content/ColHeaderPanel/Header" unique_id=1432250574]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
 text = "Nachname"
 horizontal_alignment = 1
 
-[node name="FirstName" type="Label" parent="Content/Header"]
+[node name="FirstName" type="Label" parent="Content/ColHeaderPanel/Header" unique_id=377573561]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
 text = "Vorname"
 horizontal_alignment = 1
 
-[node name="Birthday" type="Label" parent="Content/Header"]
+[node name="Birthday" type="Label" parent="Content/ColHeaderPanel/Header" unique_id=215853846]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
 text = "Geburtstag"
 horizontal_alignment = 1
 
-[node name="Talent" type="Label" parent="Content/Header"]
+[node name="Talent" type="Label" parent="Content/ColHeaderPanel/Header" unique_id=302334236]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
 text = "Talent"
 horizontal_alignment = 1
 
-[node name="Ability" type="Label" parent="Content/Header"]
+[node name="Ability" type="Label" parent="Content/ColHeaderPanel/Header" unique_id=2140806320]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
 text = "Stärke"
 horizontal_alignment = 1
 
-[node name="Position" type="Label" parent="Content/Header"]
+[node name="Position" type="Label" parent="Content/ColHeaderPanel/Header" unique_id=883933530]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
 text = "Position"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Content"]
+[node name="ContractEnd" type="Label" parent="Content/ColHeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Vertrag bis"
+horizontal_alignment = 1
+
+[node name="Salary" type="Label" parent="Content/ColHeaderPanel/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Gehalt"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Content" unique_id=873093490]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PlayerList" type="VBoxContainer" parent="Content/ScrollContainer"]
+[node name="PlayerList" type="VBoxContainer" parent="Content/ScrollContainer" unique_id=1654898792]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[connection signal="pressed" from="Content/ViewToggle/CurrentButton" to="." method="_on_current_pressed"]
+[connection signal="pressed" from="Content/ViewToggle/NextSeasonButton" to="." method="_on_next_season_pressed"]

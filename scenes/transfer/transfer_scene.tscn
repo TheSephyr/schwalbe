@@ -1,0 +1,145 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtransfer001"]
+
+[ext_resource type="Script" path="res://scenes/transfer/transfer_scene.gd" id="1_trans"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_topui"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_botui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="TransferScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_trans")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="TopUi" parent="." instance=ExtResource("2_topui")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("3_botui")]
+layout_mode = 1
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.05
+anchor_right = 1.0
+anchor_bottom = 0.9
+offset_left = 6.0
+offset_top = 4.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitlePanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/TitlePanel"]
+layout_mode = 2
+text = "Transferverhandlung"
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+
+[node name="InfoPanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="InfoMargin" type="MarginContainer" parent="Content/InfoPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="InfoContent" type="VBoxContainer" parent="Content/InfoPanel/InfoMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="OfferPanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="OfferMargin" type="MarginContainer" parent="Content/OfferPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="OfferVBox" type="VBoxContainer" parent="Content/OfferPanel/OfferMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="OfferHeaderLabel" type="Label" parent="Content/OfferPanel/OfferMargin/OfferVBox"]
+layout_mode = 2
+text = "Ablösesumme anbieten:"
+theme_override_font_sizes/font_size = 12
+
+[node name="OfferRow" type="HBoxContainer" parent="Content/OfferPanel/OfferMargin/OfferVBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="MinusButton" type="Button" parent="Content/OfferPanel/OfferMargin/OfferVBox/OfferRow"]
+layout_mode = 2
+text = "-"
+
+[node name="OfferLabel" type="Label" parent="Content/OfferPanel/OfferMargin/OfferVBox/OfferRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 0)
+text = "0 DM"
+horizontal_alignment = 1
+
+[node name="PlusButton" type="Button" parent="Content/OfferPanel/OfferMargin/OfferVBox/OfferRow"]
+layout_mode = 2
+text = "+"
+
+[node name="StatusLabel" type="Label" parent="Content"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+
+[node name="ButtonRow" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="OfferButton" type="Button" parent="Content/ButtonRow"]
+layout_mode = 2
+text = "Angebot unterbreiten"
+
+[node name="BackButton" type="Button" parent="Content/ButtonRow"]
+layout_mode = 2
+text = "Zurück"
+
+[connection signal="pressed" from="Content/OfferPanel/OfferMargin/OfferVBox/OfferRow/MinusButton" to="." method="_on_minus_pressed"]
+[connection signal="pressed" from="Content/OfferPanel/OfferMargin/OfferVBox/OfferRow/PlusButton" to="." method="_on_plus_pressed"]
+[connection signal="pressed" from="Content/ButtonRow/OfferButton" to="." method="_on_offer_pressed"]
+[connection signal="pressed" from="Content/ButtonRow/BackButton" to="." method="_on_back_pressed"]

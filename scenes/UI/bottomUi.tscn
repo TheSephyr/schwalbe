@@ -54,6 +54,26 @@ text = "Balance"
 layout_mode = 2
 text = "Kalender"
 
+[node name="TrainingButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Training"
+
+[node name="SucheButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Suche"
+
+[node name="StadionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Stadion"
+
+[node name="AusgabenButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Ausgaben"
+
+[node name="MenuButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Menü"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
@@ -62,10 +82,16 @@ size_flags_horizontal = 10
 layout_mode = 2
 text = "NEXT"
 
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/ClubsButton" to="." method="_on_clubs_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/MatchdayButton" to="." method="_on_matchday_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TableButton" to="." method="_on_table_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/LineUp" to="." method="_on_line_up_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/Club" to="." method="_on_club_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/BalanceButton" to="." method="_on_balance_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/KalenderButton" to="." method="_on_kalender_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/TrainingButton" to="." method="_on_training_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/SucheButton" to="." method="_on_suche_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/StadionButton" to="." method="_on_stadion_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/AusgabenButton" to="." method="_on_ausgaben_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_down"]
 [connection signal="button_up" from="HBoxContainer/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]

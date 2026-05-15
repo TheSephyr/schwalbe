@@ -1,9 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4e6l2uyxf8h"]
+[gd_scene load_steps=6 format=3 uid="uid://d4e6l2uyxf8h"]
 
 [ext_resource type="Script" uid="uid://52qosjv120n7" path="res://scenes/table/table_scene.gd" id="1_fpuse"]
 [ext_resource type="PackedScene" uid="uid://dh0uqr1y6avdk" path="res://scenes/table/single_table_entry_scene.tscn" id="2_l8snh"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_yuypp"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_d6km6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
 
 [node name="TableScene" type="Control"]
 layout_mode = 3
@@ -12,8 +27,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 0
 script = ExtResource("1_fpuse")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
 
 [node name="TopUi" parent="." instance=ExtResource("2_yuypp")]
 layout_mode = 1
@@ -21,53 +44,81 @@ layout_mode = 1
 [node name="BottomUi" parent="." instance=ExtResource("3_d6km6")]
 layout_mode = 1
 
-[node name="VBoxContainerRankings" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 40.0
-offset_right = 1151.0
-offset_bottom = 430.0
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+offset_left = 6.0
+offset_top = 4.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
 
-[node name="HBoxContainerHeader" type="HBoxContainer" parent="VBoxContainerRankings"]
+[node name="TitlePanel" type="PanelContainer" parent="Content"]
 layout_mode = 2
-metadata/_edit_use_anchors_ = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
 
-[node name="Positon" type="Label" parent="VBoxContainerRankings/HBoxContainerHeader"]
+[node name="TitleLabel" type="Label" parent="Content/TitlePanel"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Position
-"
+text = "Tabelle"
+theme_override_font_sizes/font_size = 13
 
-[node name="Name" type="Label" parent="VBoxContainerRankings/HBoxContainerHeader"]
+[node name="ColHeaderPanel" type="PanelContainer" parent="Content"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Name"
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Points" type="Label" parent="VBoxContainerRankings/HBoxContainerHeader"]
+[node name="ColHBox" type="HBoxContainer" parent="Content/ColHeaderPanel"]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Points"
 
-[node name="Wins" type="Label" parent="VBoxContainerRankings/HBoxContainerHeader"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Wins"
-
-[node name="Draws" type="Label" parent="VBoxContainerRankings/HBoxContainerHeader"]
+[node name="Pos" type="Label" parent="Content/ColHeaderPanel/ColHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Draws"
+text = "Pl."
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="Looses" type="Label" parent="VBoxContainerRankings/HBoxContainerHeader"]
+[node name="Name" type="Label" parent="Content/ColHeaderPanel/ColHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Looses
-"
+text = "Verein"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="SingleTableEntry" parent="VBoxContainerRankings" instance=ExtResource("2_l8snh")]
-visible = false
+[node name="Points" type="Label" parent="Content/ColHeaderPanel/ColHBox"]
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Pkt."
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="SingleTableEntry2" parent="VBoxContainerRankings" instance=ExtResource("2_l8snh")]
-visible = false
+[node name="Wins" type="Label" parent="Content/ColHeaderPanel/ColHBox"]
 layout_mode = 2
+size_flags_horizontal = 3
+text = "S"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+
+[node name="Draws" type="Label" parent="Content/ColHeaderPanel/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "U"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+
+[node name="Looses" type="Label" parent="Content/ColHeaderPanel/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "N"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainerRankings" type="VBoxContainer" parent="Content/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

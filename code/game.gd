@@ -1,12 +1,22 @@
 extends Node
 
-const SAVE_PATH = "user://save.json"
+const SAVE_DIR = "user://saves/"
 
 var all_clubs: Array[Club]
 var first_division_clubs: Array[Club]
+var free_agents: Array[Player] = []
 var current_season: Season
 var player_club: Club
 var current_date: Date
+var training_plan: Array[int] = []
+
+var trainer_lastname: String = ""
+var trainer_firstname: String = ""
+var trainer_birthdate: String = ""
+
+var pending_transfers: Array[Dictionary] = []
+
+var _preview_remaining_days: int = 0
 
 
 func _ready() -> void:
@@ -15,7 +25,8 @@ func _ready() -> void:
 
 
 func initial_load() -> void:
-	all_clubs = ReadNationFile.loadNationFile("res://dbfiles/LandDeutAllNeu.sav")
+	free_agents.clear()
+	all_clubs = ReadNationFile.loadNationFile("res://dbfiles/LandDeut.sav")
 	for i in GameConfig.FIRST_DIVISION_SIZE:
 		first_division_clubs.append(all_clubs[i])
 	for club in first_division_clubs:
@@ -23,6 +34,8 @@ func initial_load() -> void:
 	player_club = first_division_clubs[0]
 	current_season = Season.new(first_division_clubs)
 	current_date = Date.new(1, 7, GameConfig.SEASON_START_YEAR)
+	_init_training_plan()
+	_generate_free_agents()
 
 
 func _on_next_matchday() -> void:
@@ -30,39 +43,267 @@ func _on_next_matchday() -> void:
 
 
 func start_new_season() -> void:
+	_apply_pending_transfers()
 	var next_year: int = current_season.start_year + 1
+	_remove_expired_contracts(current_season.start_year)
+	_retire_free_agents(next_year)
 	for club: Club in first_division_clubs:
 		for player: Player in club.players:
 			player.matches_played = 0
 	current_season = Season.new(first_division_clubs, next_year)
 	current_date = Date.new(1, 7, next_year)
-	save_game()
+	_init_training_plan()
+	save_game("Autosave")
+
+
+func _remove_expired_contracts(season_start_year: int) -> void:
+	var end_year: int = season_start_year + 1
+	for club: Club in first_division_clubs:
+		var remaining: Array[Player] = []
+		for player: Player in club.players:
+			var parts := player.contract_end.split(".")
+			if parts.size() < 3 or parts[2].to_int() > end_year:
+				remaining.append(player)
+			elif _should_retire(player, end_year):
+				pass
+			else:
+				free_agents.append(player)
+		club.players = remaining
+		club.currentLineUp.clear()
+		club.defaultLineUp()
+
+
+func _retire_free_agents(current_year: int) -> void:
+	var remaining: Array[Player] = []
+	for player: Player in free_agents:
+		if not _should_retire(player, current_year):
+			remaining.append(player)
+	free_agents = remaining
+
+
+func _should_retire(player: Player, current_year: int) -> bool:
+	var parts := player.birthdate.split(".")
+	if parts.size() < 3:
+		return false
+	var age := current_year - parts[2].to_int()
+	if age < GameConfig.RETIREMENT_MIN_AGE:
+		return false
+	var chance := clampf(
+		(age - GameConfig.RETIREMENT_MIN_AGE) * GameConfig.RETIREMENT_CHANCE_PER_YEAR + GameConfig.RETIREMENT_BASE_CHANCE,
+		0.0, GameConfig.RETIREMENT_MAX_CHANCE
+	)
+	return randf() < chance
 
 
 func _on_next() -> void:
 	if current_season.finished:
 		return
-	var previous_date := current_date
-	GameState.last_matchday = current_season.get_current_matchday()
-	current_date = GameState.last_matchday.date
-	player_club.pay_wages(previous_date.days_until(current_date))
+
+	var next_md: Matchday = current_season.get_current_matchday()
+	var days_to_md: int = current_date.days_until(next_md.date)
+
+	var season_start := Date.new(1, 7, current_season.start_year)
+	var week_index: int = season_start.days_until(current_date) / 7
+
+	if days_to_md <= 7:
+		# Matchday falls within this week — pay wages up to match day,
+		# apply training, then hand off to the preview scene.
+		_pay_all_wages(maxi(0, days_to_md))
+		_apply_training(week_index)
+		_preview_remaining_days = 7 - maxi(0, days_to_md)
+		get_tree().change_scene_to_file("res://scenes/match_preview/match_preview_scene.tscn")
+	else:
+		# No matchday this week — advance 7 days
+		_pay_all_wages(7)
+		_apply_training(week_index)
+		current_date = current_date.add_days(7)
+		EventBus.emit_update_ui()
+		save_game("Autosave")
+
+
+func confirm_matchday_simulation() -> void:
+	var next_md := current_season.get_current_matchday()
 	current_season.simulate_next_matchday()
+	if _preview_remaining_days > 0:
+		_pay_all_wages(_preview_remaining_days)
+	current_date = current_date.add_days(7)
+	GameState.last_matchday = next_md
 	EventBus.emit_update_ui()
-	save_game()
+	save_game("Autosave")
 	if current_season.finished:
 		get_tree().change_scene_to_file("res://scenes/season_end/season_end.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/matchday_view.tscn")
 
 
+func _pay_all_wages(days: int) -> void:
+	for club: Club in first_division_clubs:
+		club.pay_wages(days)
+
+
+func _init_training_plan() -> void:
+	var season_start := Date.new(1, 7, current_season.start_year)
+	var last_md: Matchday = current_season.matchdays.back()
+	var total_weeks: int = int(ceil(season_start.days_until(last_md.date) / 7.0)) + 1
+	training_plan.resize(total_weeks)
+	training_plan.fill(GameConfig.TRAINING_TYPE_NONE)
+
+
+func _apply_training(week_index: int) -> void:
+	var player_type: int = training_plan[week_index] if week_index >= 0 and week_index < training_plan.size() else GameConfig.TRAINING_TYPE_NONE
+	_apply_training_to_club(player_club, player_type)
+	for club: Club in first_division_clubs:
+		if club == player_club:
+			continue
+		_apply_training_to_club(club, randi_range(GameConfig.TRAINING_TYPE_CONDITION, GameConfig.TRAINING_TYPE_REGEN))
+
+
+func _apply_training_to_club(club: Club, type: int) -> void:
+	for player: Player in club.players:
+		match type:
+			GameConfig.TRAINING_TYPE_CONDITION:
+				player.condition = mini(GameConfig.MAX_CONDITION, player.condition + GameConfig.TRAINING_CONDITION_GAIN)
+				player.freshness = maxi(GameConfig.MIN_FRESHNESS, player.freshness - GameConfig.TRAINING_CONDITION_FRESHNESS_LOSS)
+			GameConfig.TRAINING_TYPE_REGEN:
+				player.freshness = mini(GameConfig.MAX_FRESHNESS, player.freshness + GameConfig.TRAINING_REGEN_FRESHNESS_GAIN)
+				player.condition = maxi(GameConfig.MIN_CONDITION, player.condition - GameConfig.TRAINING_REGEN_CONDITION_LOSS)
+
+
+# --- Free agent generation ---
+
+func _generate_free_agents() -> void:
+	var firstnames := _load_lines("res://files/firstnames_male.txt")
+	var lastnames := _load_lines("res://files/lastnames.txt")
+	if firstnames.is_empty() or lastnames.is_empty():
+		return
+	for i in GameConfig.GENERATED_FREE_AGENT_COUNT:
+		var p := Player.new()
+		p.firstname = firstnames[randi() % firstnames.size()]
+		p.lastname = lastnames[randi() % lastnames.size()]
+		var age := randi_range(16, 35)
+		var birth_year := GameConfig.SEASON_START_YEAR - age
+		p.birthdate = "01.07.%d" % birth_year
+		p.position = str(randi_range(1, 10))
+		p.talent = str(randi_range(1, GameConfig.FREE_AGENT_MAX_TALENT))
+		p.currentAbility = str(randi_range(1, GameConfig.FREE_AGENT_MAX_ABILITY))
+		p.generate_contract()
+		p.contract_end = "30.06.%d" % GameConfig.SEASON_START_YEAR
+		free_agents.append(p)
+
+
+func _load_lines(path: String) -> Array[String]:
+	var lines: Array[String] = []
+	if not FileAccess.file_exists(path):
+		return lines
+	var file := FileAccess.open(path, FileAccess.READ)
+	while not file.eof_reached():
+		var line := file.get_line().strip_edges()
+		if not line.is_empty():
+			lines.append(line)
+	file.close()
+	return lines
+
+
+# --- Transfer market ---
+
+func days_until_contract_end(player: Player) -> int:
+	var parts := player.contract_end.split(".")
+	if parts.size() < 3:
+		return 9999
+	var end_date := Date.new(int(parts[0]), int(parts[1]), int(parts[2]))
+	return current_date.days_until(end_date)
+
+
+func sign_player_immediately(player: Player, from_club: Club, salary: int, auflauf: int, tor: int, contract_end_year: int) -> void:
+	if from_club != null:
+		from_club.players.erase(player)
+		from_club.currentLineUp.erase(player)
+		from_club.defaultLineUp()
+	else:
+		free_agents.erase(player)
+	player.salary = salary
+	player.auflauf_praemie = auflauf
+	player.tor_praemie = tor
+	player.contract_end = "30.06.%d" % contract_end_year
+	player_club.players.append(player)
+
+
+func add_pending_transfer(player: Player, from_club: Club, salary: int, auflauf: int, tor: int, contract_end_year: int) -> void:
+	pending_transfers.append({
+		"player": player,
+		"from_club": from_club,
+		"salary": salary,
+		"auflauf": auflauf,
+		"tor": tor,
+		"contract_end_year": contract_end_year,
+	})
+
+
+func _apply_pending_transfers() -> void:
+	for t: Dictionary in pending_transfers:
+		var p: Player = t["player"]
+		var fc: Club = t["from_club"]
+		if fc != null:
+			fc.players.erase(p)
+			fc.currentLineUp.erase(p)
+			fc.defaultLineUp()
+		p.salary = t["salary"]
+		p.auflauf_praemie = t["auflauf"]
+		p.tor_praemie = t["tor"]
+		p.contract_end = "30.06.%d" % t["contract_end_year"]
+		player_club.players.append(p)
+	pending_transfers.clear()
+
+
 # --- Save / Load ---
 
-func has_save() -> bool:
-	return FileAccess.file_exists(SAVE_PATH)
+func has_any_save() -> bool:
+	return not list_saves().is_empty()
 
 
-func save_game() -> void:
+func list_saves() -> Array[String]:
+	var saves: Array[String] = []
+	var dir := DirAccess.open(SAVE_DIR)
+	if dir == null:
+		return saves
+	dir.list_dir_begin()
+	var filename := dir.get_next()
+	while filename != "":
+		if filename.ends_with(".json"):
+			saves.append(filename.trim_suffix(".json"))
+		filename = dir.get_next()
+	saves.sort()
+	return saves
+
+
+func save_game(save_name: String) -> void:
+	var clubs_data: Array = []
+	for club: Club in first_division_clubs:
+		clubs_data.append(_serialize_club(club))
+
+	var matchday_results: Array = []
+	for matchday: Matchday in current_season.matchdays:
+		if matchday.played:
+			var scores: Array = []
+			for m: Match in matchday.matches:
+				scores.append([m.scoreHome, m.scoreAway])
+			matchday_results.append({"played": true, "scores": scores})
+		else:
+			matchday_results.append({"played": false})
+
+	var dt := Time.get_datetime_dict_from_system()
+	var saved_at := "%02d.%02d.%04d %02d:%02d" % [dt["day"], dt["month"], dt["year"], dt["hour"], dt["minute"]]
+
+	var free_agents_data: Array = []
+	for player: Player in free_agents:
+		free_agents_data.append(_serialize_player(player))
+
 	var data: Dictionary = {
+		"saved_at": saved_at,
+		"player_club_name": player_club.name,
+		"trainer_lastname": trainer_lastname,
+		"trainer_firstname": trainer_firstname,
+		"trainer_birthdate": trainer_birthdate,
 		"player_club_index": first_division_clubs.find(player_club),
 		"current_date_day": current_date.day,
 		"current_date_month": current_date.month,
@@ -70,19 +311,24 @@ func save_game() -> void:
 		"season_start_year": current_season.start_year,
 		"season_current_matchday": current_season.current_matchday,
 		"season_finished": current_season.finished,
-		"lineup_indices": _get_lineup_indices(),
-		"matchday_results": _get_matchday_results(),
-		"player_match_counts": _get_player_match_counts(),
+		"training_plan": training_plan,
+		"clubs": clubs_data,
+		"free_agents": free_agents_data,
+		"matchday_results": matchday_results,
+		"pending_transfers": _serialize_pending_transfers(),
 	}
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	DirAccess.make_dir_recursive_absolute(SAVE_DIR)
+	var path := SAVE_DIR + save_name + ".json"
+	var file := FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data, "\t"))
 	file.close()
 
 
-func load_game() -> bool:
-	if not FileAccess.file_exists(SAVE_PATH):
+func load_game(save_name: String) -> bool:
+	var path := SAVE_DIR + save_name + ".json"
+	if not FileAccess.file_exists(path):
 		return false
-	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	var file := FileAccess.open(path, FileAccess.READ)
 	var text := file.get_as_text()
 	file.close()
 	var json := JSON.new()
@@ -92,46 +338,142 @@ func load_game() -> bool:
 	return true
 
 
-func _get_lineup_indices() -> Array:
-	var indices: Array = []
-	for player: Player in player_club.currentLineUp:
-		indices.append(player_club.players.find(player))
-	return indices
+func _serialize_player(player: Player) -> Dictionary:
+	return {
+		"lastname": player.lastname,
+		"firstname": player.firstname,
+		"birthdate": player.birthdate,
+		"position": player.position,
+		"talent": player.talent,
+		"currentAbility": player.currentAbility,
+		"salary": player.salary,
+		"auflauf_praemie": player.auflauf_praemie,
+		"tor_praemie": player.tor_praemie,
+		"market_value": player.market_value,
+		"contract_end": player.contract_end,
+		"condition": player.condition,
+		"freshness": player.freshness,
+		"matches_played": player.matches_played,
+	}
 
 
-func _get_matchday_results() -> Array:
-	var results: Array = []
-	for matchday: Matchday in current_season.matchdays:
-		if matchday.played:
-			var scores: Array = []
-			for m: Match in matchday.matches:
-				scores.append([m.scoreHome, m.scoreAway])
-			results.append({"played": true, "scores": scores})
-		else:
-			results.append({"played": false})
-	return results
+func _deserialize_player(data: Dictionary) -> Player:
+	var p := Player.new()
+	p.lastname = data["lastname"]
+	p.firstname = data["firstname"]
+	p.birthdate = data["birthdate"]
+	p.position = data["position"]
+	p.talent = data["talent"]
+	p.currentAbility = data["currentAbility"]
+	p.salary = int(data["salary"])
+	p.auflauf_praemie = int(data["auflauf_praemie"])
+	p.tor_praemie = int(data.get("tor_praemie", 0))
+	p.market_value = int(data["market_value"])
+	p.contract_end = data["contract_end"]
+	p.condition = int(data.get("condition", 50))
+	p.freshness = int(data.get("freshness", 50))
+	p.matches_played = int(data.get("matches_played", 0))
+	return p
 
 
-func _get_player_match_counts() -> Array:
-	var counts: Array = []
-	for club: Club in first_division_clubs:
-		var club_counts: Array = []
-		for player: Player in club.players:
-			club_counts.append(player.matches_played)
-		counts.append(club_counts)
-	return counts
+func _serialize_club(club: Club) -> Dictionary:
+	var players_data: Array = []
+	for player: Player in club.players:
+		players_data.append(_serialize_player(player))
+
+	var lineup_indices: Array = []
+	for player: Player in club.currentLineUp:
+		lineup_indices.append(club.players.find(player))
+
+	var data: Dictionary = {
+		"name": club.name,
+		"nation": club.nation,
+		"money": club.money,
+		"players": players_data,
+		"lineup_indices": lineup_indices,
+	}
+	if club.manager != null:
+		data["manager_lastname"] = club.manager.lastname
+		data["manager_firstname"] = club.manager.firstname
+		data["manager_birthdate"] = club.manager.birthdate
+	if club.trainer != null:
+		data["trainer_lastname"] = club.trainer.lastname
+		data["trainer_firstname"] = club.trainer.firstname
+		data["trainer_birthdate"] = club.trainer.birthdate
+	if club.stadium != null:
+		data["stadium_name"] = club.stadium.name
+		data["stadium_city"] = club.stadium.city
+		data["stadium_north"] = club.stadium.north
+		data["stadium_south"] = club.stadium.south
+		data["stadium_west"] = club.stadium.west
+		data["stadium_east"] = club.stadium.east
+		data["stadium_ticket_price"] = club.stadium.ticket_price
+	return data
+
+
+func _deserialize_club(data: Dictionary) -> Club:
+	var club := Club.new()
+	club.name = data["name"]
+	club.nation = data.get("nation", "")
+	club.money = int(data["money"])
+
+	for pd: Dictionary in data["players"]:
+		club.players.append(_deserialize_player(pd))
+
+	for idx: Variant in data.get("lineup_indices", []):
+		var i := int(idx)
+		if i >= 0 and i < club.players.size():
+			club.currentLineUp.append(club.players[i])
+
+	if data.has("manager_lastname"):
+		club.manager = Manager.new(
+			data["manager_lastname"],
+			data["manager_firstname"],
+			data.get("manager_birthdate", "")
+		)
+	if data.has("trainer_lastname"):
+		club.trainer = Trainer.new(
+			data["trainer_lastname"],
+			data["trainer_firstname"],
+			data.get("trainer_birthdate", "")
+		)
+	if data.has("stadium_name"):
+		var st := Stadium.new()
+		st.name = data["stadium_name"]
+		st.city = data["stadium_city"]
+		st.north = int(data["stadium_north"])
+		st.south = int(data["stadium_south"])
+		st.west = int(data["stadium_west"])
+		st.east = int(data["stadium_east"])
+		st.ticket_price = int(data.get("stadium_ticket_price", GameConfig.TICKET_PRICE_DEFAULT))
+		club.stadium = st
+	return club
 
 
 func _apply_save(data: Dictionary) -> void:
+	first_division_clubs.clear()
+	all_clubs.clear()
+	for cd: Dictionary in data["clubs"]:
+		var club := _deserialize_club(cd)
+		first_division_clubs.append(club)
+		all_clubs.append(club)
+
+	trainer_lastname = data.get("trainer_lastname", "")
+	trainer_firstname = data.get("trainer_firstname", "")
+	trainer_birthdate = data.get("trainer_birthdate", "")
+
 	player_club = first_division_clubs[int(data["player_club_index"])]
+	if not trainer_lastname.is_empty():
+		player_club.trainer = Trainer.new(trainer_lastname, trainer_firstname, trainer_birthdate)
+
 	current_date = Date.new(
 		int(data["current_date_day"]),
 		int(data["current_date_month"]),
 		int(data["current_date_year"])
 	)
+
 	var saved_year: int = int(data.get("season_start_year", GameConfig.SEASON_START_YEAR))
-	if saved_year != current_season.start_year:
-		current_season = Season.new(first_division_clubs, saved_year)
+	current_season = Season.new(first_division_clubs, saved_year)
 	current_season.current_matchday = int(data["season_current_matchday"])
 	current_season.finished = bool(data["season_finished"])
 
@@ -150,18 +492,59 @@ func _apply_save(data: Dictionary) -> void:
 
 	current_season.update_table()
 
-	player_club.currentLineUp.clear()
-	for idx in data["lineup_indices"]:
-		var i: int = int(idx)
-		if i >= 0 and i < player_club.players.size():
-			player_club.currentLineUp.append(player_club.players[i])
+	free_agents.clear()
+	for pd: Dictionary in data.get("free_agents", []):
+		free_agents.append(_deserialize_player(pd))
 
-	var counts: Array = data["player_match_counts"]
-	for ci: int in counts.size():
-		if ci >= first_division_clubs.size():
+	_init_training_plan()
+	if data.has("training_plan"):
+		var saved_plan: Array = data["training_plan"]
+		for i: int in mini(saved_plan.size(), training_plan.size()):
+			training_plan[i] = int(saved_plan[i])
+
+	pending_transfers.clear()
+	for td: Dictionary in data.get("pending_transfers", []):
+		_deserialize_pending_transfer(td)
+
+
+func _serialize_pending_transfers() -> Array:
+	var result: Array = []
+	for t: Dictionary in pending_transfers:
+		var p: Player = t["player"]
+		var fc: Club = t["from_club"]
+		result.append({
+			"from_club_name": fc.name if fc != null else "",
+			"player_lastname": p.lastname,
+			"player_firstname": p.firstname,
+			"player_birthdate": p.birthdate,
+			"salary": t["salary"],
+			"auflauf": t["auflauf"],
+			"tor": t["tor"],
+			"contract_end_year": t["contract_end_year"],
+		})
+	return result
+
+
+func _deserialize_pending_transfer(data: Dictionary) -> void:
+	var from_club_name: String = data.get("from_club_name", "")
+	var from_club: Club = null
+	var player: Player = null
+	for club: Club in first_division_clubs:
+		if club.name == from_club_name:
+			from_club = club
 			break
-		var club: Club = first_division_clubs[ci]
-		var club_counts: Array = counts[ci]
-		for pi: int in club_counts.size():
-			if pi < club.players.size():
-				club.players[pi].matches_played = int(club_counts[pi])
+	if from_club != null:
+		for p: Player in from_club.players:
+			if p.lastname == data["player_lastname"] and p.birthdate == data["player_birthdate"]:
+				player = p
+				break
+	if player == null or from_club == null:
+		return
+	pending_transfers.append({
+		"player": player,
+		"from_club": from_club,
+		"salary": int(data["salary"]),
+		"auflauf": int(data["auflauf"]),
+		"tor": int(data["tor"]),
+		"contract_end_year": int(data["contract_end_year"]),
+	})

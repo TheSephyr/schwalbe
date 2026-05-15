@@ -1,8 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://dkalendscene1"]
+[gd_scene load_steps=6 format=3 uid="uid://dkalendscene1"]
 
 [ext_resource type="Script" uid="uid://ckalendscript" path="res://scenes/calendar/calendar_scene.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_topui"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_btmui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
 
 [node name="CalendarScene" type="Control"]
 layout_mode = 3
@@ -13,6 +28,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
 [node name="TopUi" parent="." instance=ExtResource("2_topui")]
 layout_mode = 1
 
@@ -22,7 +46,7 @@ layout_mode = 1
 [node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.047
+anchor_top = 0.05
 anchor_right = 1.0
 anchor_bottom = 0.9
 offset_left = 8.0
@@ -32,31 +56,36 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 4
 
-[node name="Header" type="HBoxContainer" parent="Content"]
+[node name="HeaderPanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="Header" type="HBoxContainer" parent="Content/HeaderPanel"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PrevButton" type="Button" parent="Content/Header"]
+[node name="PrevButton" type="Button" parent="Content/HeaderPanel/Header"]
 layout_mode = 2
 text = "<"
 
-[node name="MonthLabel" type="Label" parent="Content/Header"]
+[node name="MonthLabel" type="Label" parent="Content/HeaderPanel/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_alignment = 1
 text = "August 1999"
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 
-[node name="NextButton" type="Button" parent="Content/Header"]
+[node name="NextButton" type="Button" parent="Content/HeaderPanel/Header"]
 layout_mode = 2
 text = ">"
 
 [node name="DaysGrid" type="GridContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 7
 theme_override_constants/h_separation = 2
 theme_override_constants/v_separation = 2
 
-[connection signal="pressed" from="Content/Header/PrevButton" to="." method="_on_prev_button_pressed"]
-[connection signal="pressed" from="Content/Header/NextButton" to="." method="_on_next_button_pressed"]
+[connection signal="pressed" from="Content/HeaderPanel/Header/PrevButton" to="." method="_on_prev_button_pressed"]
+[connection signal="pressed" from="Content/HeaderPanel/Header/NextButton" to="." method="_on_next_button_pressed"]

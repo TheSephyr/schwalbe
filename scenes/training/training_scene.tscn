@@ -1,0 +1,212 @@
+[gd_scene load_steps=8 format=3 uid="uid://ctrainscene01"]
+
+[ext_resource type="Script" path="res://scenes/training/training_scene.gd" id="1_tscne"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_botui"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="3_topui"]
+[ext_resource type="Script" path="res://scenes/training/training_card.gd" id="4_tcrd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cond"]
+bg_color = Color(0.7, 0.88, 0.96, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.6, 0.8, 1)
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_regen"]
+bg_color = Color(0.96, 0.88, 0.7, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.6, 0.3, 1)
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="TrainingScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tscne")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+grow_horizontal = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitlePanel" type="PanelContainer" parent="Content/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/VBox/TitlePanel"]
+layout_mode = 2
+text = "Trainingsplan"
+theme_override_font_sizes/font_size = 15
+
+[node name="MainHBox" type="HBoxContainer" parent="Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="LeftPanel" type="VBoxContainer" parent="Content/VBox/MainHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(170, 0)
+theme_override_constants/separation = 6
+
+[node name="OptionsHeader" type="PanelContainer" parent="Content/VBox/MainHBox/LeftPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="OptionsTitle" type="Label" parent="Content/VBox/MainHBox/LeftPanel/OptionsHeader"]
+layout_mode = 2
+text = "Trainingseinheiten"
+theme_override_font_sizes/font_size = 12
+
+[node name="ConditionCard" type="PanelContainer" parent="Content/VBox/MainHBox/LeftPanel"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cond")
+script = ExtResource("4_tcrd")
+training_type = 1
+
+[node name="CondVBox" type="VBoxContainer" parent="Content/VBox/MainHBox/LeftPanel/ConditionCard"]
+layout_mode = 2
+
+[node name="CondName" type="Label" parent="Content/VBox/MainHBox/LeftPanel/ConditionCard/CondVBox"]
+layout_mode = 2
+text = "Konditionstraining"
+theme_override_font_sizes/font_size = 13
+
+[node name="CondEffect" type="Label" parent="Content/VBox/MainHBox/LeftPanel/ConditionCard/CondVBox"]
+layout_mode = 2
+text = "+ Kondition
+- Frische"
+theme_override_font_sizes/font_size = 11
+
+[node name="RegenCard" type="PanelContainer" parent="Content/VBox/MainHBox/LeftPanel"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_regen")
+script = ExtResource("4_tcrd")
+training_type = 2
+
+[node name="RegenVBox" type="VBoxContainer" parent="Content/VBox/MainHBox/LeftPanel/RegenCard"]
+layout_mode = 2
+
+[node name="RegenName" type="Label" parent="Content/VBox/MainHBox/LeftPanel/RegenCard/RegenVBox"]
+layout_mode = 2
+text = "Regeneration"
+theme_override_font_sizes/font_size = 13
+
+[node name="RegenEffect" type="Label" parent="Content/VBox/MainHBox/LeftPanel/RegenCard/RegenVBox"]
+layout_mode = 2
+text = "+ Frische
+- Kondition"
+theme_override_font_sizes/font_size = 11
+
+[node name="HintLabel" type="Label" parent="Content/VBox/MainHBox/LeftPanel"]
+layout_mode = 2
+text = "Auf Woche ziehen →"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.4, 0.4, 0.4, 1)
+
+[node name="RandomizeButton" type="Button" parent="Content/VBox/MainHBox/LeftPanel"]
+layout_mode = 2
+text = "Zufällig füllen"
+
+[node name="VSep" type="VSeparator" parent="Content/VBox/MainHBox"]
+layout_mode = 2
+
+[node name="WeeksPanel" type="VBoxContainer" parent="Content/VBox/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="WeeksHeader" type="PanelContainer" parent="Content/VBox/MainHBox/WeeksPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="WeeksHBox" type="HBoxContainer" parent="Content/VBox/MainHBox/WeeksPanel/WeeksHeader"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="WeekHeadLabel" type="Label" parent="Content/VBox/MainHBox/WeeksPanel/WeeksHeader/WeeksHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 0)
+text = "Woche"
+theme_override_font_sizes/font_size = 11
+
+[node name="DateHeadLabel" type="Label" parent="Content/VBox/MainHBox/WeeksPanel/WeeksHeader/WeeksHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Datum"
+theme_override_font_sizes/font_size = 11
+
+[node name="TrainHeadLabel" type="Label" parent="Content/VBox/MainHBox/WeeksPanel/WeeksHeader/WeeksHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+horizontal_alignment = 2
+text = "Training"
+theme_override_font_sizes/font_size = 11
+
+[node name="WeeksScroll" type="ScrollContainer" parent="Content/VBox/MainHBox/WeeksPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="WeeksList" type="VBoxContainer" parent="Content/VBox/MainHBox/WeeksPanel/WeeksScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[connection signal="pressed" from="Content/VBox/MainHBox/LeftPanel/RandomizeButton" to="." method="_on_randomize_pressed"]
+
+[node name="BottomUi" parent="." instance=ExtResource("2_botui")]
+layout_mode = 1
+
+[node name="TopUi" parent="." instance=ExtResource("3_topui")]
+layout_mode = 1

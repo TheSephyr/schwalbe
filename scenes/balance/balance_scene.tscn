@@ -1,10 +1,25 @@
-[gd_scene format=3 uid="uid://d1balancetscn"]
+[gd_scene load_steps=5 format=3 uid="uid://d1balancetscn"]
 
 [ext_resource type="Script" uid="uid://c1balancescr1" path="res://scenes/balance/balance_scene.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_topui"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_btmui"]
 
-[node name="BalanceScene" type="Control" unique_id=364364595]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="BalanceScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,16 +28,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="TopUi" parent="." unique_id=726277555 instance=ExtResource("2_topui")]
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="TopUi" parent="." instance=ExtResource("2_topui")]
 layout_mode = 1
 
-[node name="BottomUi" parent="." unique_id=1216067276 instance=ExtResource("3_btmui")]
+[node name="BottomUi" parent="." instance=ExtResource("3_btmui")]
 layout_mode = 1
 
-[node name="Content" type="VBoxContainer" parent="." unique_id=1524779541]
+[node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.047
+anchor_top = 0.05
 anchor_right = 1.0
 anchor_bottom = 0.9
 offset_left = 16.0
@@ -30,166 +54,173 @@ offset_top = 8.0
 offset_right = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 
-[node name="AnlagenHeader" type="Label" parent="Content" unique_id=1053159761]
+[node name="AnlagenHeaderPanel" type="PanelContainer" parent="Content"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.804, 0.706, 0.29, 1)
-theme_override_font_sizes/font_size = 16
-text = "Anlagen"
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
 
-[node name="AnlagenGrid" type="GridContainer" parent="Content" unique_id=1515320767]
+[node name="AnlagenHeaderLabel" type="Label" parent="Content/AnlagenHeaderPanel"]
+layout_mode = 2
+text = "Anlagen"
+theme_override_font_sizes/font_size = 13
+
+[node name="AnlagenGrid" type="GridContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 4
 columns = 2
 
-[node name="BankguthabenLabel" type="Label" parent="Content/AnlagenGrid" unique_id=986154961]
+[node name="BankguthabenLabel" type="Label" parent="Content/AnlagenGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Bankguthaben"
 
-[node name="BankguthabenValue" type="Label" parent="Content/AnlagenGrid" unique_id=758296328]
+[node name="BankguthabenValue" type="Label" parent="Content/AnlagenGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 DM"
 horizontal_alignment = 2
 
-[node name="AnlagenLabel" type="Label" parent="Content/AnlagenGrid" unique_id=1154820881]
+[node name="AnlagenLabel" type="Label" parent="Content/AnlagenGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Anlagen"
 
-[node name="AnlagenValue" type="Label" parent="Content/AnlagenGrid" unique_id=1706645940]
+[node name="AnlagenValue" type="Label" parent="Content/AnlagenGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 DM"
 horizontal_alignment = 2
 
-[node name="KrediteLabel" type="Label" parent="Content/AnlagenGrid" unique_id=1644043977]
+[node name="KrediteLabel" type="Label" parent="Content/AnlagenGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Kredite"
 
-[node name="KrediteValue" type="Label" parent="Content/AnlagenGrid" unique_id=884933107]
+[node name="KrediteValue" type="Label" parent="Content/AnlagenGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 DM"
 horizontal_alignment = 2
 
-[node name="HSeparator1" type="HSeparator" parent="Content" unique_id=1697422285]
+[node name="VermoegenHeaderPanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="VermoegenHeaderLabel" type="Label" parent="Content/VermoegenHeaderPanel"]
+layout_mode = 2
+text = "Vereinsvermögen"
+theme_override_font_sizes/font_size = 13
+
+[node name="VermoegenRow" type="HBoxContainer" parent="Content"]
 layout_mode = 2
 
-[node name="VermoegenRow" type="HBoxContainer" parent="Content" unique_id=965891324]
-layout_mode = 2
-
-[node name="VermoegenLabel" type="Label" parent="Content/VermoegenRow" unique_id=2056157138]
+[node name="VermoegenLabel" type="Label" parent="Content/VermoegenRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.804, 0.706, 0.29, 1)
 text = "Aktuelles Vereinsvermögen"
 
-[node name="VermoegenValue" type="Label" parent="Content/VermoegenRow" unique_id=1973518577]
+[node name="VermoegenValue" type="Label" parent="Content/VermoegenRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.804, 0.706, 0.29, 1)
 text = "0 DM"
 horizontal_alignment = 2
 
-[node name="HSeparator2" type="HSeparator" parent="Content" unique_id=1661191350]
+[node name="EntwicklungHeaderPanel" type="PanelContainer" parent="Content"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
 
-[node name="EntwicklungHeader" type="Label" parent="Content" unique_id=1664547896]
+[node name="EntwicklungHeaderLabel" type="Label" parent="Content/EntwicklungHeaderPanel"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.804, 0.706, 0.29, 1)
-theme_override_font_sizes/font_size = 16
 text = "Vermögensentwicklung"
+theme_override_font_sizes/font_size = 13
 
-[node name="EntwicklungGrid" type="GridContainer" parent="Content" unique_id=1630996813]
+[node name="EntwicklungGrid" type="GridContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 4
 columns = 2
 
-[node name="StartMoneyLabel" type="Label" parent="Content/EntwicklungGrid" unique_id=687419303]
+[node name="StartMoneyLabel" type="Label" parent="Content/EntwicklungGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Vereinsvermögen am Anfang der Saison"
 
-[node name="StartMoneyValue" type="Label" parent="Content/EntwicklungGrid" unique_id=1317289430]
+[node name="StartMoneyValue" type="Label" parent="Content/EntwicklungGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 DM"
 horizontal_alignment = 2
 
-[node name="GewinnLabel" type="Label" parent="Content/EntwicklungGrid" unique_id=101955528]
+[node name="GewinnLabel" type="Label" parent="Content/EntwicklungGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Gewinn in dieser Saison"
 
-[node name="GewinnValue" type="Label" parent="Content/EntwicklungGrid" unique_id=31578126]
+[node name="GewinnValue" type="Label" parent="Content/EntwicklungGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 DM"
 horizontal_alignment = 2
 
-[node name="HSeparator3" type="HSeparator" parent="Content" unique_id=1450101680]
+[node name="RechtsformHeaderPanel" type="PanelContainer" parent="Content"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
 
-[node name="RechtsformHeader" type="Label" parent="Content" unique_id=111056060]
+[node name="RechtsformHeaderLabel" type="Label" parent="Content/RechtsformHeaderPanel"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.804, 0.706, 0.29, 1)
-theme_override_font_sizes/font_size = 16
 text = "Rechtsform"
+theme_override_font_sizes/font_size = 13
 
-[node name="RechtsformGrid" type="GridContainer" parent="Content" unique_id=1654997210]
+[node name="RechtsformGrid" type="GridContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 4
 columns = 2
 
-[node name="StatusLabel" type="Label" parent="Content/RechtsformGrid" unique_id=1154519494]
+[node name="StatusLabel" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Status"
 
-[node name="StatusValue" type="Label" parent="Content/RechtsformGrid" unique_id=184264653]
+[node name="StatusValue" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Verein"
 horizontal_alignment = 2
 
-[node name="AktienLabel" type="Label" parent="Content/RechtsformGrid" unique_id=101952027]
+[node name="AktienLabel" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Anzahl Aktien"
 
-[node name="AktienValue" type="Label" parent="Content/RechtsformGrid" unique_id=1753632209]
+[node name="AktienValue" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "---"
 horizontal_alignment = 2
 
-[node name="KursLabel" type="Label" parent="Content/RechtsformGrid" unique_id=517169364]
+[node name="KursLabel" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Kurs"
 
-[node name="KursValue" type="Label" parent="Content/RechtsformGrid" unique_id=26173923]
+[node name="KursValue" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "---"
 horizontal_alignment = 2
 
-[node name="BoersenwertLabel" type="Label" parent="Content/RechtsformGrid" unique_id=483190450]
+[node name="BoersenwertLabel" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Börsenwert"
 
-[node name="BoersenwertValue" type="Label" parent="Content/RechtsformGrid" unique_id=715486153]
+[node name="BoersenwertValue" type="Label" parent="Content/RechtsformGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "---"

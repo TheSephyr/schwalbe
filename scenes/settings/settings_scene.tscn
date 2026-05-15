@@ -1,0 +1,161 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsettings001"]
+
+[ext_resource type="Script" path="res://scenes/settings/settings_scene.gd" id="1_sett"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_topui"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_botui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="SettingsScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sett")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="TopUi" parent="." instance=ExtResource("2_topui")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("3_botui")]
+layout_mode = 1
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+offset_left = 6.0
+offset_top = 4.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitlePanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/TitlePanel"]
+layout_mode = 2
+text = "Einstellungen"
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+
+[node name="MainHBox" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="LeftPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
+theme_override_constants/separation = 0
+
+[node name="SavesHeaderPanel" type="PanelContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="SavesHeaderLabel" type="Label" parent="Content/MainHBox/LeftPanel/SavesHeaderPanel"]
+layout_mode = 2
+text = "Spielstände"
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+
+[node name="SaveScroll" type="ScrollContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SaveList" type="VBoxContainer" parent="Content/MainHBox/LeftPanel/SaveScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="VSep" type="VSeparator" parent="Content/MainHBox"]
+layout_mode = 2
+
+[node name="RightPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="SaveHeaderPanel" type="PanelContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="SaveHeaderLabel" type="Label" parent="Content/MainHBox/RightPanel/SaveHeaderPanel"]
+layout_mode = 2
+text = "Speichern"
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+
+[node name="FormMargin" type="MarginContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="FormVBox" type="VBoxContainer" parent="Content/MainHBox/RightPanel/FormMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HintLabel" type="Label" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+text = "Spielstand auswählen oder\nneuen Namen eingeben:"
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 3
+
+[node name="SaveNameEdit" type="LineEdit" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+placeholder_text = "Name des Spielstands..."
+
+[node name="SaveButton" type="Button" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+disabled = true
+text = "Speichern"
+
+[node name="StatusLabel" type="Label" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 11
+
+[node name="HSep" type="HSeparator" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+
+[node name="MainMenuButton" type="Button" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+text = "Hauptmenü"
+
+[node name="QuitButton" type="Button" parent="Content/MainHBox/RightPanel/FormMargin/FormVBox"]
+layout_mode = 2
+text = "Spiel beenden"
+
+[connection signal="pressed" from="Content/MainHBox/RightPanel/FormMargin/FormVBox/SaveButton" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Content/MainHBox/RightPanel/FormMargin/FormVBox/MainMenuButton" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Content/MainHBox/RightPanel/FormMargin/FormVBox/QuitButton" to="." method="_on_quit_pressed"]

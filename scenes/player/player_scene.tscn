@@ -53,6 +53,21 @@ theme_override_constants/margin_bottom = 4
 layout_mode = 2
 theme_override_constants/separation = 5
 
+[node name="NavRow" type="HBoxContainer" parent="Content/VBox"]
+layout_mode = 2
+
+[node name="PrevButton" type="Button" parent="Content/VBox/NavRow"]
+layout_mode = 2
+text = "←"
+
+[node name="NavSpacer" type="Control" parent="Content/VBox/NavRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextButton" type="Button" parent="Content/VBox/NavRow"]
+layout_mode = 2
+text = "→"
+
 [node name="Header" type="PanelContainer" parent="Content/VBox"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2")
@@ -213,6 +228,26 @@ theme_override_font_sizes/font_size = 12
 [node name="FormVal" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
 layout_mode = 2
 text = "12"
+theme_override_font_sizes/font_size = 12
+
+[node name="KonditionL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "Kondition"
+theme_override_font_sizes/font_size = 12
+
+[node name="KonditionVal" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "50"
+theme_override_font_sizes/font_size = 12
+
+[node name="FrischeL" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "Frische"
+theme_override_font_sizes/font_size = 12
+
+[node name="FrischeVal" type="Label" parent="Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid"]
+layout_mode = 2
+text = "50"
 theme_override_font_sizes/font_size = 12
 
 [node name="RightVBox" type="VBoxContainer" parent="Content/VBox/Middle"]
@@ -476,6 +511,9 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 text = "Er ist gesund."
 theme_override_font_sizes/font_size = 12
+
+[connection signal="pressed" from="Content/VBox/NavRow/PrevButton" to="." method="_on_prev_pressed"]
+[connection signal="pressed" from="Content/VBox/NavRow/NextButton" to="." method="_on_next_pressed"]
 
 [node name="BottomUi" parent="." instance=ExtResource("1_vltva")]
 layout_mode = 1

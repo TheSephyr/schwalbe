@@ -57,3 +57,4 @@ func _poisson(lambda: float, rng: RandomNumberGenerator) -> int:
 func add_match_to_player(team: Club) -> void:
 	for player: Player in team.currentLineUp:
 		player.add_match(self)
+		team.money -= player.auflauf_praemie

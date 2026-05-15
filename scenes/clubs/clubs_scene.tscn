@@ -1,0 +1,161 @@
+[gd_scene load_steps=7 format=3 uid="uid://callclubsscn1"]
+
+[ext_resource type="Script" path="res://scenes/clubs/clubs_scene.gd" id="1_clbsc"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_botui"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="3_topui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_row"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_bottom = 1
+border_color = Color(0.7, 0.68, 0.58, 1)
+
+[node name="ClubsScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_clbsc")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+grow_horizontal = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="MainHBox" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LeftPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
+theme_override_constants/separation = 0
+
+[node name="LeftHeader" type="PanelContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="LeftTitle" type="Label" parent="Content/MainHBox/LeftPanel/LeftHeader"]
+layout_mode = 2
+text = "Vereine"
+theme_override_font_sizes/font_size = 13
+
+[node name="ClubScroll" type="ScrollContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ClubList" type="VBoxContainer" parent="Content/MainHBox/LeftPanel/ClubScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSep" type="VSeparator" parent="Content/MainHBox"]
+layout_mode = 2
+
+[node name="RightPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="RightHeader" type="PanelContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="ClubNameLabel" type="Label" parent="Content/MainHBox/RightPanel/RightHeader"]
+layout_mode = 2
+text = "— Verein auswählen —"
+theme_override_font_sizes/font_size = 13
+
+[node name="ColHeader" type="PanelContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ColHBox" type="HBoxContainer" parent="Content/MainHBox/RightPanel/ColHeader"]
+layout_mode = 2
+
+[node name="ColLastName" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Nachname"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+
+[node name="ColFirstName" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vorname"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+
+[node name="ColBirthday" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Geburtstag"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+
+[node name="ColTalent" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Talent"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+
+[node name="ColAbility" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Stärke"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+
+[node name="ColPosition" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Position"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+
+[node name="PlayerScroll" type="ScrollContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerList" type="VBoxContainer" parent="Content/MainHBox/RightPanel/PlayerScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomUi" parent="." instance=ExtResource("2_botui")]
+layout_mode = 1
+
+[node name="TopUi" parent="." instance=ExtResource("3_topui")]
+layout_mode = 1

@@ -1,6 +1,6 @@
 extends Control
 
-@onready var matchesHBox: VBoxContainer = $MatchesHBox
+@onready var matchesHBox: VBoxContainer = $Content/ScrollContainer/MatchesHBox
 var matches: Array[Match]
 var oneMatchScenes: Array[OneMatch]
 

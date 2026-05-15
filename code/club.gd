@@ -6,6 +6,9 @@ var name: String
 var players: Array[Player]
 var currentLineUp: Array[Player]
 var money: int = GameConfig.STARTING_CLUB_MONEY
+var manager: Manager = null
+var trainer: Trainer = null
+var stadium: Stadium = null
 
 func total_daily_wages() -> int:
 	var yearly_total: int = 0

@@ -1,52 +1,96 @@
-[gd_scene load_steps=2 format=3 uid="uid://blbsi3dx4c2d4"]
+[gd_scene load_steps=3 format=3 uid="uid://blbsi3dx4c2d4"]
 
 [ext_resource type="Script" uid="uid://8f7d1ynfkb6i" path="res://scenes/main_menu.gd" id="1_ensrl"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
 [node name="MainMenu" type="Control"]
 layout_mode = 3
-anchor_right = 1.01
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -0.52002
-offset_bottom = 9.0
-script = ExtResource("1_ensrl")
-
-[node name="StartButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.457
-anchor_top = 0.42
-anchor_right = 0.537
-anchor_bottom = 0.476
-offset_left = 0.536011
-offset_top = -0.160004
-offset_right = 0.496033
-offset_bottom = 0.0480042
 grow_horizontal = 2
 grow_vertical = 2
-text = "Start"
+script = ExtResource("1_ensrl")
 
-[node name="ContinueButton" type="Button" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.457
-anchor_top = 0.48
-anchor_right = 0.537
-anchor_bottom = 0.536
-offset_left = 0.536011
-offset_right = 0.496033
-text = "Continue"
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
 
-[node name="QuitGameButton" type="Button" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.457
-anchor_top = 0.55
-anchor_right = 0.537
-anchor_bottom = 0.606
-offset_left = 0.536011
-offset_right = 0.496033
-text = "Quit"
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[connection signal="button_down" from="StartButton" to="." method="_on_start_button_button_down"]
-[connection signal="button_down" from="ContinueButton" to="." method="_on_continue_button_pressed"]
-[connection signal="button_down" from="QuitGameButton" to="." method="_on_quit_game_button_button_down"]
+[node name="ContentVBox" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(240, 0)
+theme_override_constants/separation = 0
+
+[node name="TitlePanel" type="PanelContainer" parent="CenterContainer/ContentVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/ContentVBox/TitlePanel"]
+layout_mode = 2
+text = "Schwalbe"
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="CenterContainer/ContentVBox"]
+layout_mode = 2
+text = "Fußball Manager 1999/2000"
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+
+[node name="ButtonPanel" type="PanelContainer" parent="CenterContainer/ContentVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ButtonMargin" type="MarginContainer" parent="CenterContainer/ContentVBox/ButtonPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="ButtonVBox" type="VBoxContainer" parent="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StartButton" type="Button" parent="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin/ButtonVBox"]
+layout_mode = 2
+text = "Neues Spiel"
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin/ButtonVBox"]
+layout_mode = 2
+text = "Weiter spielen"
+
+[node name="QuitGameButton" type="Button" parent="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin/ButtonVBox"]
+layout_mode = 2
+text = "Beenden"
+
+[connection signal="button_down" from="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin/ButtonVBox/StartButton" to="." method="_on_start_button_button_down"]
+[connection signal="button_down" from="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin/ButtonVBox/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="button_down" from="CenterContainer/ContentVBox/ButtonPanel/ButtonMargin/ButtonVBox/QuitGameButton" to="." method="_on_quit_game_button_button_down"]

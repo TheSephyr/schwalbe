@@ -1,0 +1,259 @@
+[gd_scene load_steps=6 format=3 uid="uid://csrchplayer01"]
+
+[ext_resource type="Script" path="res://scenes/player_search/player_search_scene.gd" id="1_srch"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_botui"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="3_topui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="PlayerSearchScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_srch")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+grow_horizontal = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="MainHBox" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LeftPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_constants/separation = 4
+
+[node name="LeftHeader" type="PanelContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="LeftTitle" type="Label" parent="Content/MainHBox/LeftPanel/LeftHeader"]
+layout_mode = 2
+text = "Spielersuche"
+theme_override_font_sizes/font_size = 13
+
+[node name="FilterPanel" type="PanelContainer" parent="Content/MainHBox/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="FilterMargin" type="MarginContainer" parent="Content/MainHBox/LeftPanel/FilterPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="FilterVBox" type="VBoxContainer" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PosLabel" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Position"
+theme_override_font_sizes/font_size = 12
+
+[node name="PositionOption" type="OptionButton" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+
+[node name="AgeLabel" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Alter"
+theme_override_font_sizes/font_size = 12
+
+[node name="AgeHBox" type="HBoxContainer" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AgeMin" type="SpinBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/AgeHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 15.0
+max_value = 50.0
+value = 15.0
+
+[node name="AgeDash" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/AgeHBox"]
+layout_mode = 2
+text = "–"
+
+[node name="AgeMax" type="SpinBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/AgeHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 15.0
+max_value = 50.0
+value = 50.0
+
+[node name="TalentLabel" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Talent"
+theme_override_font_sizes/font_size = 12
+
+[node name="TalentHBox" type="HBoxContainer" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TalentMin" type="SpinBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/TalentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 100.0
+value = 1.0
+
+[node name="TalentDash" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/TalentHBox"]
+layout_mode = 2
+text = "–"
+
+[node name="TalentMax" type="SpinBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/TalentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 100.0
+value = 100.0
+
+[node name="AbilityLabel" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Stärke"
+theme_override_font_sizes/font_size = 12
+
+[node name="AbilityHBox" type="HBoxContainer" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AbilityMin" type="SpinBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/AbilityHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 100.0
+value = 1.0
+
+[node name="AbilityDash" type="Label" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/AbilityHBox"]
+layout_mode = 2
+text = "–"
+
+[node name="AbilityMax" type="SpinBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/AbilityHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 100.0
+value = 100.0
+
+[node name="FreeAgentsCheck" type="CheckBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Nur Vereinslose"
+
+[node name="ExpiringCheck" type="CheckBox" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Vertrag läuft aus"
+
+[node name="SearchButton" type="Button" parent="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox"]
+layout_mode = 2
+text = "Suchen"
+
+[node name="VSep" type="VSeparator" parent="Content/MainHBox"]
+layout_mode = 2
+
+[node name="RightPanel" type="VBoxContainer" parent="Content/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="ColHeader" type="PanelContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ColHBox" type="HBoxContainer" parent="Content/MainHBox/RightPanel/ColHeader"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ColName" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name"
+theme_override_font_sizes/font_size = 11
+
+[node name="ColClub" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Verein"
+theme_override_font_sizes/font_size = 11
+
+[node name="ColPos" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(44, 0)
+text = "Pos."
+theme_override_font_sizes/font_size = 11
+
+[node name="ColAge" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "Alter"
+theme_override_font_sizes/font_size = 11
+
+[node name="ColTalent" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 0)
+text = "Talent"
+theme_override_font_sizes/font_size = 11
+
+[node name="ColAbility" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(48, 0)
+text = "Stärke"
+theme_override_font_sizes/font_size = 11
+
+[node name="CountLabel" type="Label" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+text = "0 Spieler gefunden"
+theme_override_font_sizes/font_size = 11
+
+[node name="ResultScroll" type="ScrollContainer" parent="Content/MainHBox/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ResultList" type="VBoxContainer" parent="Content/MainHBox/RightPanel/ResultScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("2_botui")]
+layout_mode = 1
+
+[node name="TopUi" parent="." instance=ExtResource("3_topui")]
+layout_mode = 1
+
+[connection signal="pressed" from="Content/MainHBox/LeftPanel/FilterPanel/FilterMargin/FilterVBox/SearchButton" to="." method="_on_search_pressed"]

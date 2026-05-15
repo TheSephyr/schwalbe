@@ -1,8 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://w1ufir0imwtu"]
+[gd_scene load_steps=6 format=3 uid="uid://w1ufir0imwtu"]
 
 [ext_resource type="Script" uid="uid://bpcij3lcdk85m" path="res://scenes/lineup/lineUpScene.gd" id="1_jkbo1"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_wqrd0"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_6mytl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
 
 [node name="LineUp" type="Control"]
 layout_mode = 3
@@ -13,6 +28,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jkbo1")
 
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
 [node name="TopUi" parent="." instance=ExtResource("2_wqrd0")]
 layout_mode = 1
 
@@ -21,31 +45,55 @@ layout_mode = 1
 
 [node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 1
+anchors_preset = -1
 anchor_right = 1.0
-anchor_top = 0.047
+anchor_top = 0.05
 anchor_bottom = 0.9
+offset_left = 6.0
+offset_top = 4.0
+offset_right = -6.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 0
 
-[node name="FormationRow" type="HBoxContainer" parent="Content"]
+[node name="TitlePanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/TitlePanel"]
+layout_mode = 2
+text = "Line-Up"
+theme_override_font_sizes/font_size = 13
+
+[node name="FormationPanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="FormationMargin" type="MarginContainer" parent="Content/FormationPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="FormationRow" type="HBoxContainer" parent="Content/FormationPanel/FormationMargin"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="Content/FormationRow"]
+[node name="Label" type="Label" parent="Content/FormationPanel/FormationMargin/FormationRow"]
 layout_mode = 2
 text = "Formation:"
 vertical_alignment = 1
 
-[node name="Btn442" type="Button" parent="Content/FormationRow"]
+[node name="Btn442" type="Button" parent="Content/FormationPanel/FormationMargin/FormationRow"]
 layout_mode = 2
 text = "4-4-2"
 
-[node name="Btn532" type="Button" parent="Content/FormationRow"]
+[node name="Btn532" type="Button" parent="Content/FormationPanel/FormationMargin/FormationRow"]
 layout_mode = 2
 text = "5-3-2"
 
-[node name="Btn433" type="Button" parent="Content/FormationRow"]
+[node name="Btn433" type="Button" parent="Content/FormationPanel/FormationMargin/FormationRow"]
 layout_mode = 2
 text = "4-3-3"
 
@@ -57,12 +105,16 @@ theme_override_constants/separation = 0
 [node name="LineupPanel" type="VBoxContainer" parent="Content/ListsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/separation = 0
 
-[node name="LineupHeader" type="Label" parent="Content/ListsRow/LineupPanel"]
+[node name="LineupHeaderPanel" type="PanelContainer" parent="Content/ListsRow/LineupPanel"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="LineupHeaderLabel" type="Label" parent="Content/ListsRow/LineupPanel/LineupHeaderPanel"]
+layout_mode = 2
 text = "Aufstellung"
+theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Content/ListsRow/LineupPanel"]
@@ -79,12 +131,16 @@ layout_mode = 2
 [node name="BenchPanel" type="VBoxContainer" parent="Content/ListsRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/separation = 0
 
-[node name="BenchHeader" type="Label" parent="Content/ListsRow/BenchPanel"]
+[node name="BenchHeaderPanel" type="PanelContainer" parent="Content/ListsRow/BenchPanel"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="BenchHeaderLabel" type="Label" parent="Content/ListsRow/BenchPanel/BenchHeaderPanel"]
+layout_mode = 2
 text = "Kader"
+theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 
 [node name="Scroll" type="ScrollContainer" parent="Content/ListsRow/BenchPanel"]
@@ -95,6 +151,6 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="pressed" from="Content/FormationRow/Btn442" to="." method="_on_formation_pressed" binds=["4-4-2"]]
-[connection signal="pressed" from="Content/FormationRow/Btn532" to="." method="_on_formation_pressed" binds=["5-3-2"]]
-[connection signal="pressed" from="Content/FormationRow/Btn433" to="." method="_on_formation_pressed" binds=["4-3-3"]]
+[connection signal="pressed" from="Content/FormationPanel/FormationMargin/FormationRow/Btn442" to="." method="_on_formation_pressed" binds=["4-4-2"]]
+[connection signal="pressed" from="Content/FormationPanel/FormationMargin/FormationRow/Btn532" to="." method="_on_formation_pressed" binds=["5-3-2"]]
+[connection signal="pressed" from="Content/FormationPanel/FormationMargin/FormationRow/Btn433" to="." method="_on_formation_pressed" binds=["4-3-3"]]

@@ -1,6 +1,6 @@
 extends Control
 
-@onready var tableStandings: VBoxContainer = $VBoxContainerRankings
+@onready var tableStandings: VBoxContainer = $Content/ScrollContainer/VBoxContainerRankings
 var singleTableEntriesScenes: Array[SingleTableEntryScene]
 
 # Called when the node enters the scene tree for the first time.

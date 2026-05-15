@@ -10,7 +10,7 @@ const WEEKDAY_NAMES: Array[String] = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 var display_month: int
 var display_year: int
 
-@onready var month_label: Label = $Content/Header/MonthLabel
+@onready var month_label: Label = $Content/HeaderPanel/Header/MonthLabel
 @onready var days_grid: GridContainer = $Content/DaysGrid
 
 

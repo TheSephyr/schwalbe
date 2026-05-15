@@ -45,4 +45,16 @@ size_flags_horizontal = 3
 text = "test"
 horizontal_alignment = 1
 
+[node name="ContractEnd" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "–"
+horizontal_alignment = 1
+
+[node name="Salary" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "–"
+horizontal_alignment = 1
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

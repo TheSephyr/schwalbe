@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://bmatchview123"]
+[gd_scene load_steps=4 format=3 uid="uid://bmatchview123"]
 
 [ext_resource type="Script" path="res://scenes/matchday_view.gd" id="1_match"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_topui"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_btmui"]
 
 [node name="MatchdayView" type="Control"]
 layout_mode = 3
@@ -11,19 +13,35 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_match")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="TopUi" parent="." instance=ExtResource("2_topui")]
+layout_mode = 1
+
+[node name="BottomUi" parent="." instance=ExtResource("3_btmui")]
+layout_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
 theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
+theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_bottom = 8
 
 [node name="VBox" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 8
 
 [node name="ScoreRow" type="HBoxContainer" parent="Margin/VBox"]
 layout_mode = 2
