@@ -45,8 +45,10 @@ func _on_next_matchday() -> void:
 func start_new_season() -> void:
 	_apply_pending_transfers()
 	var next_year: int = current_season.start_year + 1
+	_ai_renew_contracts(next_year)
 	_remove_expired_contracts(current_season.start_year)
 	_retire_free_agents(next_year)
+	_ai_fill_squads(next_year)
 	for club: Club in first_division_clubs:
 		for player: Player in club.players:
 			player.matches_played = 0
@@ -54,6 +56,98 @@ func start_new_season() -> void:
 	current_date = Date.new(1, 7, next_year)
 	_init_training_plan()
 	save_game("Autosave")
+
+
+func _ai_renew_contracts(season_end_year: int) -> void:
+	for club: Club in first_division_clubs:
+		if club == player_club:
+			continue
+		for player: Player in club.players:
+			var parts := player.contract_end.split(".")
+			if parts.size() < 3:
+				continue
+			if parts[2].to_int() > season_end_year:
+				continue
+			if randf() < GameConfig.AI_CONTRACT_RENEWAL_CHANCE:
+				var new_years := randi_range(1, 3)
+				player.contract_end = "30.06.%d" % (season_end_year + new_years)
+				player.salary = mini(GameConfig.CONTRACT_MAX_SALARY,
+					int(player.salary * randf_range(1.0, 1.15)))
+
+
+func _ai_fill_squads(season_end_year: int) -> void:
+	# pos -> [min, max]
+	var requirements: Dictionary = {
+		"1":  [2, 3],  # GK
+		"3":  [3, 4],  # CB
+		"4":  [1, 2],  # LB
+		"5":  [1, 2],  # RB
+		"7":  [1, 2],  # LM
+		"8":  [1, 2],  # RM
+		"2":  [0, 2],  # LI
+		"6":  [0, 2],  # CDM
+		"9":  [1, 2],  # CM
+		"10": [2, 3],  # ST
+	}
+
+	for club: Club in first_division_clubs:
+		if club == player_club:
+			continue
+		if club.players.size() >= 22:
+			continue
+
+		var counts: Dictionary = {}
+		for player: Player in club.players:
+			counts[player.position] = counts.get(player.position, 0) + 1
+
+		var signed_any := false
+
+		# First pass: fill positions below their minimum
+		for pos: String in requirements:
+			var shortage := requirements[pos][0] - counts.get(pos, 0)
+			for i in shortage:
+				if club.players.size() >= 22:
+					break
+				var candidate := _best_free_agent_for_position(pos)
+				if candidate == null:
+					break
+				_sign_free_agent_for_ai(club, candidate, season_end_year)
+				counts[pos] = counts.get(pos, 0) + 1
+				signed_any = true
+
+		# Second pass: fill up to max per position until squad reaches 22
+		for pos: String in requirements:
+			if club.players.size() >= 22:
+				break
+			while counts.get(pos, 0) < requirements[pos][1] and club.players.size() < 22:
+				var candidate := _best_free_agent_for_position(pos)
+				if candidate == null:
+					break
+				_sign_free_agent_for_ai(club, candidate, season_end_year)
+				counts[pos] = counts.get(pos, 0) + 1
+				signed_any = true
+
+		if signed_any:
+			club.currentLineUp.clear()
+			club.defaultLineUp()
+
+
+func _sign_free_agent_for_ai(club: Club, player: Player, season_end_year: int) -> void:
+	free_agents.erase(player)
+	player.contract_end = "30.06.%d" % (season_end_year + randi_range(1, 3))
+	club.players.append(player)
+
+
+func _best_free_agent_for_position(position: String) -> Player:
+	var best: Player = null
+	var best_ability := -1
+	for player: Player in free_agents:
+		if player.position == position:
+			var ability := player.currentAbility.to_int()
+			if ability > best_ability:
+				best_ability = ability
+				best = player
+	return best
 
 
 func _remove_expired_contracts(season_start_year: int) -> void:

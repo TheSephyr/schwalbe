@@ -81,6 +81,9 @@ const GENERATED_FREE_AGENT_COUNT: int = 100
 const FREE_AGENT_MAX_ABILITY: int = 4
 const FREE_AGENT_MAX_TALENT: int = 4
 
+# --- AI contract management ---
+const AI_CONTRACT_RENEWAL_CHANCE: float = 0.85
+
 # --- Player retirement (triggered when contract expires) ---
 const RETIREMENT_MIN_AGE: int = 30
 const RETIREMENT_BASE_CHANCE: float = 0.05
