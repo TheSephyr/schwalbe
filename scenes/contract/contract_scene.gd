@@ -51,6 +51,9 @@ func _update_left_header() -> void:
 		"precontract":
 			var club_name := _source_club.name if _source_club != null else "?"
 			left_header_label.text = "Vorvertrag (%s)" % club_name
+		"negotiation":
+			var club_name := _source_club.name if _source_club != null else "?"
+			left_header_label.text = "Transfer von %s" % club_name
 		"transfer":
 			var club_name := _source_club.name if _source_club != null else "?"
 			left_header_label.text = "Transfer von %s" % club_name
@@ -156,6 +159,9 @@ func _on_offer_pressed() -> void:
 		"precontract":
 			Game.add_pending_transfer(player, _source_club, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year)
 			status_label.text = "Vorvertrag abgeschlossen! Spieler kommt zur neuen Saison."
+		"negotiation":
+			Game.start_transfer_negotiation(player, _source_club, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year, GameState.transfer_fee)
+			status_label.text = "Verhandlung gestartet! Entscheidung in 2 Wochen."
 		"transfer":
 			Game.sign_player_immediately(player, _source_club, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year)
 			status_label.text = "Spieler wechselt sofort!"

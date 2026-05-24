@@ -5,7 +5,7 @@ var assigned_type: int = 0
 var _training_label: Label
 
 
-func setup(index: int, week_start: Date, type: int, matchday_num: int = 0) -> void:
+func setup(index: int, week_start: Date, type: int, matchday_num: int = 0, is_current: bool = false) -> void:
 	week_index = index
 	assigned_type = type
 
@@ -45,6 +45,15 @@ func setup(index: int, week_start: Date, type: int, matchday_num: int = 0) -> vo
 	_training_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_training_label.add_theme_font_size_override("font_size", 12)
 	hbox.add_child(_training_label)
+
+	if is_current:
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color(0.2, 0.5, 0.2, 0.6)
+		style.corner_radius_top_left = 4
+		style.corner_radius_top_right = 4
+		style.corner_radius_bottom_left = 4
+		style.corner_radius_bottom_right = 4
+		add_theme_stylebox_override("panel", style)
 
 
 func update_type(type: int) -> void:

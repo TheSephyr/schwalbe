@@ -21,9 +21,11 @@ func _build_week_rows() -> void:
 		var wk: int = season_start.days_until(md.date) / 7
 		md_in_week[wk] = md.matchdayNumber
 
+	var current_week: int = season_start.days_until(Game.current_date) / 7
+
 	for i: int in Game.training_plan.size():
 		var week_start: Date = season_start.add_days(i * 7)
 		var row := PanelContainer.new()
 		row.set_script(row_script)
 		weeks_list.add_child(row)
-		row.setup(i, week_start, Game.training_plan[i], md_in_week.get(i, 0))
+		row.setup(i, week_start, Game.training_plan[i], md_in_week.get(i, 0), i == current_week)

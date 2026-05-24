@@ -18,6 +18,10 @@ func _on_line_up_button_down():
 	get_tree().change_scene_to_file("res://scenes/lineup/lineUp.tscn")
 
 
+func _on_taktik_button_down() -> void:
+	get_tree().change_scene_to_file("res://scenes/taktik/taktik_scene.tscn")
+
+
 func _on_club_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/club/club.tscn")
 
@@ -36,6 +40,10 @@ func _on_training_button_down() -> void:
 
 func _on_suche_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/player_search/player_search_scene.tscn")
+
+
+func _on_transfers_button_down() -> void:
+	get_tree().change_scene_to_file("res://scenes/transfer_market/transfer_market_scene.tscn")
 
 
 func _on_stadion_button_down() -> void:

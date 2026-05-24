@@ -1,0 +1,98 @@
+[gd_scene load_steps=5 format=3 uid="uid://transfer_mkt01"]
+
+[ext_resource type="Script" path="res://scenes/transfer_market/transfer_market_scene.gd" id="1_tmscn"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_botui"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="3_topui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="TransferMarket" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tmscn")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="ActivePanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ActiveMargin" type="MarginContainer" parent="Content/ActivePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="ActiveVBox" type="VBoxContainer" parent="Content/ActivePanel/ActiveMargin"]
+layout_mode = 2
+
+[node name="ActiveHeader" type="HBoxContainer" parent="Content/ActivePanel/ActiveMargin/ActiveVBox"]
+layout_mode = 2
+
+[node name="ActiveTitle" type="Label" parent="Content/ActivePanel/ActiveMargin/ActiveVBox/ActiveHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Laufende Verhandlungen"
+theme_override_font_sizes/font_size = 14
+
+[node name="ActiveCount" type="Label" parent="Content/ActivePanel/ActiveMargin/ActiveVBox/ActiveHeader"]
+layout_mode = 2
+text = "(0)"
+theme_override_font_sizes/font_size = 12
+
+[node name="ActiveScroll" type="ScrollContainer" parent="Content/ActivePanel/ActiveMargin/ActiveVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NegotiationsList" type="VBoxContainer" parent="Content/ActivePanel/ActiveMargin/ActiveVBox/ActiveScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="ResultsPanel" type="PanelContainer" parent="Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="ResultsMargin" type="MarginContainer" parent="Content/ResultsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="ResultsVBox" type="VBoxContainer" parent="Content/ResultsPanel/ResultsMargin"]
+layout_mode = 2
+
+[node name="ResultsTitle" type="Label" parent="Content/ResultsPanel/ResultsMargin/ResultsVBox"]
+layout_mode = 2
+text = "Letzte Transfers"
+theme_override_font_sizes/font_size = 14
+
+[node name="ResultsList" type="VBoxContainer" parent="Content/ResultsPanel/ResultsMargin/ResultsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="BottomUi" parent="." instance=ExtResource("2_botui")]
+
+[node name="TopUi" parent="." instance=ExtResource("3_topui")]

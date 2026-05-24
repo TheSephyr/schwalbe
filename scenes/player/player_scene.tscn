@@ -515,6 +515,33 @@ theme_override_font_sizes/font_size = 12
 [connection signal="pressed" from="Content/VBox/NavRow/PrevButton" to="." method="_on_prev_pressed"]
 [connection signal="pressed" from="Content/VBox/NavRow/NextButton" to="." method="_on_next_pressed"]
 
+[node name="EntwicklungPanel" type="PanelContainer" parent="Content/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2")
+
+[node name="EntwicklungVBox" type="VBoxContainer" parent="Content/VBox/EntwicklungPanel"]
+layout_mode = 2
+
+[node name="EntwicklungHdr" type="PanelContainer" parent="Content/VBox/EntwicklungPanel/EntwicklungVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="EntwicklungTitle" type="Label" parent="Content/VBox/EntwicklungPanel/EntwicklungVBox/EntwicklungHdr"]
+layout_mode = 2
+text = "Entwicklung"
+theme_override_font_sizes/font_size = 12
+
+[node name="EntwicklungMargin" type="MarginContainer" parent="Content/VBox/EntwicklungPanel/EntwicklungVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="HistoryEntries" type="HBoxContainer" parent="Content/VBox/EntwicklungPanel/EntwicklungVBox/EntwicklungMargin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
 [node name="BottomUi" parent="." instance=ExtResource("1_vltva")]
 layout_mode = 1
 

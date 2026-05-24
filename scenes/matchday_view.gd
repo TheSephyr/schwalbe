@@ -43,4 +43,7 @@ func _player_label(player: Player) -> Label:
 
 
 func _on_continue_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/club_overview.tscn")
+	if Game.current_season.current_matchday == GameConfig.WINTER_BREAK_AFTER_MD + 1:
+		get_tree().change_scene_to_file("res://scenes/player_update/player_update_scene.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/club_overview.tscn")

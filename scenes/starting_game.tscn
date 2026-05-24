@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7o267r5a3ofy"]
+[gd_scene format=3 uid="uid://c7o267r5a3ofy"]
 
 [ext_resource type="Script" uid="uid://cgv1kuci33upy" path="res://scenes/starting_game.gd" id="1_86u1m"]
 
-[node name="StartingGame" type="Control"]
+[node name="StartingGame" type="Control" unique_id=776191105]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

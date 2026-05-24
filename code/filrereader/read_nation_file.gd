@@ -32,10 +32,10 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 	var readingCoach: bool = false
 	var readingManager: bool = false
 	var readingStadion: bool = false
-	var lineCounterPlayer: int = 1;
-	var lineCounterClub: int = 1;
-	var lineCounterCoach: int = 1;
-	var lineCounterManager: int = 1;
+	var lineCounterPlayer: int = 0
+	var lineCounterClub: int = 0
+	var lineCounterCoach: int = 0
+	var lineCounterManager: int = 0
 	var newPlayer: Player
 	var newClub: Club
 	var newManager: Manager
@@ -52,7 +52,7 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 				PLAYER_MARKER_END:
 					newPlayer.generate_contract()
 					allPlayer.append(newPlayer)
-					lineCounterPlayer = 1
+					lineCounterPlayer = 0
 					readingPlayer = false
 				CLUB_MARKER_START:
 					readingClub = true
@@ -61,12 +61,12 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 				CLUB_MARKER_END:
 					readingClub = false
 					newClub.players = allPlayer
-					lineCounterClub = 1
+					lineCounterClub = 0
 					all_clubs.append(newClub)
 				COACH_MARKER_START:
 					readingCoach = true
 					newTrainer = Trainer.new("", "", "")
-					lineCounterCoach = 1
+					lineCounterCoach = 0
 				COACH_MARKER_END:
 					readingCoach = false
 					if newClub != null:
@@ -74,7 +74,7 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 				MANAGER_MARKER_START:
 					readingManager = true
 					newManager = Manager.new("", "", "")
-					lineCounterManager = 1
+					lineCounterManager = 0
 				MANAGER_MARKER_END:
 					readingManager = false
 					if newClub != null:
@@ -90,42 +90,41 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 					#print("Could not find: " + line)
 		else:
 			if readingClub:
-				match(lineCounterClub):
-					1:
+				match lineCounterClub:
+					ClubFieldIndex.HeaderField.COUNTRY:
 						newClub.nation = line
-					2:
+					ClubFieldIndex.HeaderField.CLUB_NAME:
 						newClub.name = line
-				lineCounterClub = lineCounterClub + 1
+				lineCounterClub += 1
 			if readingCoach:
 				match lineCounterCoach:
-					1: newTrainer.lastname = line
-					2: newTrainer.firstname = line
-					6: newTrainer.birthdate = line
+					TrainerFieldIndex.Field.FIRST_NAME: newTrainer.firstname = line
+					TrainerFieldIndex.Field.LAST_NAME:  newTrainer.lastname = line
+					TrainerFieldIndex.Field.BIRTHDAY:   newTrainer.birthdate = line
 				lineCounterCoach += 1
 			if readingManager:
 				match lineCounterManager:
-					1: newManager.lastname = line
-					2: newManager.firstname = line
-					5: newManager.birthdate = line
+					ManagerFieldIndex.Field.FIRST_NAME: newManager.firstname = line
+					ManagerFieldIndex.Field.LAST_NAME:  newManager.lastname = line
+					ManagerFieldIndex.Field.BIRTHDAY:   newManager.birthdate = line
 				lineCounterManager += 1
 			if readingStadion:
 				stadionLines.append(line)
 			if readingPlayer:
-				match(lineCounterPlayer):
-					1:
+				match lineCounterPlayer:
+					PlayerFieldIndex.Field.LAST_NAME:
 						newPlayer.lastname = line
-					2:
+					PlayerFieldIndex.Field.FIRST_NAME:
 						newPlayer.firstname = line
-					7:
+					PlayerFieldIndex.Field.ABILITY:
 						newPlayer.currentAbility = line
-					9:
+					PlayerFieldIndex.Field.MAIN_POSITION:
 						newPlayer.position = line
-					19:
+					PlayerFieldIndex.Field.TALENT:
 						newPlayer.talent = line
-					22:
+					PlayerFieldIndex.Field.BIRTHDAY:
 						newPlayer.birthdate = line
-				lineCounterPlayer = lineCounterPlayer + 1
-				#player_instance = Player.new("John", "Doe", "2000-01-01", "Football", "Forward")
+				lineCounterPlayer += 1
 	file.close()
 	#print(allPlayer)
 	print(all_clubs)

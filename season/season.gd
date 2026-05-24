@@ -103,3 +103,11 @@ func simulate_next_matchday() -> void:
 func simulate_season() -> void:
 	for singleMatchday: Matchday in matchdays:
 		singleMatchday.simulateMatches()
+
+
+func simulate_up_to(target_md: int) -> void:
+	for i in range(current_matchday - 1, target_md):
+		matchdays[i].simulateMatches()
+	current_matchday = mini(target_md + 1, matchdays.size())
+	if target_md >= matchdays.size():
+		finished = true

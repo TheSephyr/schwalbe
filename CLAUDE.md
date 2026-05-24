@@ -39,7 +39,7 @@ Registered in `project.godot` and accessible globally by name:
 
 ```
 Game.initial_load()
-  → ReadNationFile.loadNationFile()     # parses LandDeut.sav
+  → ReadNationFile.loadNationFile()     # parses LandDeut.sav (code/filrereader/read_nation_file.gd)
   → Game.all_clubs / first_division_clubs[0..17]
   → Season(first_division_clubs)        # generates round-robin schedule + assigns dates
       → Matchday[] (each with a Date)
@@ -164,13 +164,107 @@ Four transfer contexts stored in `GameState.transfer_context`:
 | Settings | `scenes/settings/settings_scene.tscn` | Save/load management, main menu, quit |
 | Season end | `scenes/season_end/season_end.tscn` | Final standings; start next season |
 
+### File Reader Infrastructure (`code/filrereader/`)
+
+Note: directory name has a typo (`filrereader`, not `filereader`) — do not rename it.
+
+- `read_nation_file.gd` — `ReadNationFile`: static `loadNationFile()` parses `LandDeut.sav` and returns `Array[Club]`. Line counters are **0-based** and matched against field index enums (no magic numbers).
+- `field_mappings.gd` — `FieldMappings`: lookup tables (`PackedStringArray` / `Dictionary`) and legacy `SP_*`/`VE_*`/`VP_*`/`TR_*`/`MA_*`/`ST_*`/`RE_*`/`SC_*`/`PR_*` constants. Use field index enums instead of these constants for new code.
+
+**Field index enums** (0-based integers matching each section's line offsets):
+
+| File | Class | Section |
+|------|-------|---------|
+| `player_field_index.gd` | `PlayerFieldIndex` | `%SECT%SPIELER` |
+| `club_field_index.gd` | `ClubFieldIndex` | `%SECT%VEREIN` (two enums: `HeaderField`, `PostField`) |
+| `trainer_field_index.gd` | `TrainerFieldIndex` | `%SECT%TRAINER` |
+| `manager_field_index.gd` | `ManagerFieldIndex` | `%SECT%MANAGER` |
+| `stadium_field_index.gd` | `StadiumFieldIndex` | `%SECT%STADION` |
+| `reporter_field_index.gd` | `ReporterFieldIndex` | `%SECT%REPORTER` |
+| `referee_field_index.gd` | `RefereeFieldIndex` | `%SECT%SCHIRI` / `%SECT%ISCHIRI` |
+| `celebrity_field_index.gd` | `CelebrityFieldIndex` | `%SECT%PROMI` |
+
+### Type Enums
+
+All lookup tables from `FieldMappings` have corresponding enum classes. Enum values equal the array index (or bitmask bit for `*_BITS` tables). Use these instead of raw integers when working with parsed game data.
+
+**`code/player/` — player-specific:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `player_skill_types.gd` | `PlayerSkillTypes` | `Skill` | `SPIELER_FAEHIGKEITEN` (bitmask) |
+| `goalkeeper_skill_types.gd` | `GoalkeeperSkillTypes` | `Skill` | `TORWART_FAEHIGKEITEN` (bitmask) |
+| `characteristic_types.gd` | `PlayerCharacteristicTypes` | `Characteristic` | `EIGENSCHAFTEN` (bitmask) |
+| `player_character_types.gd` | `PlayerCharacterTypes` | `Character` | `CHARAKTER` (bitmask) |
+| `beard_types.gd` | `BeardTypes` | `Beard` | `BART_BITS` (bitmask) |
+| `skin_color_types.gd` | `SkinColorTypes` | `SkinColor` | `HAUTFARBE` |
+| `hair_color_types.gd` | `HairColorTypes` | `HairColor` | `HAARFARBE` |
+| `hair_style_types.gd` | `HairStyleTypes` | `HairStyle` | `HAAR` |
+| `position_types.gd` | `PositionTypes` | `Position` | `POSITION` |
+| `foot_types.gd` | `FootTypes` | `Foot` | `FUSS` (1-based; `NONE=0`) |
+| `talent_types.gd` | `TalentTypes` | `Talent` | `TALENT` (1-based; `NONE=0`) |
+| `health_types.gd` | `HealthTypes` | `Health` | `GESUNDHEIT` |
+| `crowd_appeal_types.gd` | `CrowdAppealTypes` | `CrowdAppeal` | `PUBLIKUM` (1-based; `NONE=0`) |
+| `abbreviation_article_types.gd` | `AbbreviationArticleTypes` | `Article` | `KUERZEL_ARTIKEL` |
+
+**`code/club/` — club / kit / fans:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `kit_color_types.gd` | `KitColorTypes` | `KitColor` | `TRIKOT_FARBE` |
+| `kit_pattern_types.gd` | `KitPatternTypes` | `KitPattern` | `TRIKOT_MUSTER` |
+| `fan_attendance_types.gd` | `FanAttendanceTypes` | `FanAttendance` | `FANAUFKOMMEN` |
+| `fan_type_types.gd` | `FanTypeTypes` | `FanType` | `ART_DER_FANS` |
+| `board_types.gd` | `BoardTypes` | `Board` | `VORSTAND` |
+| `opposition_types.gd` | `OppositionTypes` | `Opposition` | `OPPOSITION` |
+| `financial_strength_types.gd` | `FinancialStrengthTypes` | `FinancialStrength` | `FINANZKRAFT` |
+| `hooligan_types.gd` | `HooliganTypes` | `Hooligans` | `HOOLIGANS` |
+
+**`code/trainer/`:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `trainer_reputation_types.gd` | `TrainerReputationTypes` | `Reputation` | `TRAINER_RUF` |
+
+**`code/referee/`:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `referee_characteristic_types.gd` | `RefereeCharacteristicTypes` | `Characteristic` | `SCHIRI_EIGENSCHAFTEN` (bitmask) |
+
+**`code/reporter/`:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `reporter_attitude_types.gd` | `ReporterAttitudeTypes` | `Attitude` | `BOESE_LIEB` |
+
+**`code/stadion/`:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `scoreboard_types.gd` | `ScoreboardTypes` | `Scoreboard` | `ANZEIGETAFEL` |
+| `stand_types.gd` | `StandTypes` | `Stand` | `TRIBUNEN_TYP` |
+| `stadium_condition_types.gd` | `StadiumConditionTypes` | `Condition` | `STADION_ZUSTAND` |
+| `roof_cover_types.gd` | `RoofCoverTypes` | `RoofCover` | `DACH_BITS` (bitmask) |
+
+**`code/league/`:**
+
+| File | Class | Enum | Source table |
+|------|-------|------|-------------|
+| `regional_league_types.gd` | `RegionalLeagueTypes` | `RegionalLeague` | `REGIONALLIGA` (values 2/5, not 0-based) |
+
 ### Database & Data Files
 
-- `dbfiles/LandDeut.sav` — main game data (clubs, players, stadiums); custom line-based format
+- `dbfiles/LandDeut.sav` — main game data; custom line-based format with `%SECT%`/`%ENDSECT%` delimiters
   - `%SECT%SPIELER` — players
-  - `%SECT%VEREIN` — clubs
-  - `%SECT%TRAINER` — coaches (parsed but not used)
-  - `%SECT%STADION` — stadiums (N/S/W/E stand capacities parsed)
+  - `%SECT%VEREIN` — clubs (header fields + post-manager block)
+  - `%SECT%TRAINER` — coaches
+  - `%SECT%MANAGER` — managers
+  - `%SECT%STADION` — stadiums
+  - `%SECT%REPORTER` — TV reporters
+  - `%SECT%SCHIRI` / `%SECT%ISCHIRI` — referees
+  - `%SECT%PROMI` — celebrities
+  - `%SECT%LAND` — nation data
 - `files/firstnames_male.txt` — male first names for generated free agents (one per line)
 - `files/lastnames.txt` — last names for generated free agents (one per line)
 

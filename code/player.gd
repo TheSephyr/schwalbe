@@ -9,6 +9,9 @@ var position : String
 var played_matches: Array[Match]
 var matches_played: int = 0
 
+var ability_history: Array[Dictionary] = []
+var negotiating: bool = false
+
 var condition: int = randi_range(GameConfig.DEFAULT_CONDITION_MIN, GameConfig.DEFAULT_CONDITION_MAX)
 var freshness: int = randi_range(GameConfig.DEFAULT_FRESHNESS_MIN, GameConfig.DEFAULT_FRESHNESS_MAX)
 

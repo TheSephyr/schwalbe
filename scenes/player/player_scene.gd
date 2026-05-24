@@ -19,6 +19,7 @@ var _player_index: int = 0
 @onready var tor_val: Label = $Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid/TorVal
 @onready var markt_val: Label = $Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid/MarktVal
 @onready var vertrag_bis_val: Label = $Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid/VertragBisVal
+@onready var history_entries: HBoxContainer = $Content/VBox/EntwicklungPanel/EntwicklungVBox/EntwicklungMargin/HistoryEntries
 
 
 func _ready() -> void:
@@ -51,6 +52,36 @@ func _load_player() -> void:
 	tor_val.text = _format_money(player.tor_praemie)
 	markt_val.text = _format_money(player.market_value)
 	vertrag_bis_val.text = player.contract_end
+	_populate_history()
+
+
+func _populate_history() -> void:
+	for child in history_entries.get_children():
+		child.queue_free()
+	if player.ability_history.is_empty():
+		var empty_lbl := Label.new()
+		empty_lbl.text = "Keine Daten"
+		empty_lbl.add_theme_font_size_override("font_size", 11)
+		empty_lbl.modulate = Color(0.6, 0.6, 0.6, 1.0)
+		history_entries.add_child(empty_lbl)
+		return
+	for entry: Dictionary in player.ability_history:
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 2)
+
+		var lbl := Label.new()
+		lbl.text = entry["label"]
+		lbl.add_theme_font_size_override("font_size", 10)
+		lbl.modulate = Color(0.5, 0.5, 0.5, 1.0)
+		col.add_child(lbl)
+
+		var val := Label.new()
+		val.text = str(entry["ability"])
+		val.add_theme_font_size_override("font_size", 14)
+		val.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		col.add_child(val)
+
+		history_entries.add_child(col)
 
 
 func _on_prev_pressed() -> void:

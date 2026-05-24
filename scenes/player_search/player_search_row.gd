@@ -26,7 +26,10 @@ func setup(player: Player, club_name: String) -> void:
 	hbox.add_theme_constant_override("separation", 4)
 	margin.add_child(hbox)
 
-	_add_lbl(hbox, player.lastname + ", " + player.firstname, true, 0)
+	var name_text := player.lastname + ", " + player.firstname
+	if player.negotiating:
+		name_text += " [V]"
+	_add_lbl(hbox, name_text, true, 0)
 	_add_lbl(hbox, club_name, true, 0)
 	_add_lbl(hbox, player.position_label(), false, 44)
 	_add_lbl(hbox, _age(player.birthdate), false, 40)
@@ -43,6 +46,8 @@ func setup(player: Player, club_name: String) -> void:
 
 
 func _action_label() -> String:
+	if _player.negotiating:
+		return "In Verhandlung"
 	if _source_club == null:
 		return "Vertragsverhandlung"
 	if _source_club == Game.player_club:
@@ -90,6 +95,9 @@ func _on_popup_id_pressed(id: int) -> void:
 	GameState.selected_player = _player
 	if id == 0:
 		get_tree().change_scene_to_file("res://scenes/player/player_scene.tscn")
+		return
+
+	if _player.negotiating:
 		return
 
 	if _source_club == null:

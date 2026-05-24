@@ -15,6 +15,7 @@ var trainer_firstname: String = ""
 var trainer_birthdate: String = ""
 
 var pending_transfers: Array[Dictionary] = []
+var active_negotiations: Array[Dictionary] = []
 
 var _preview_remaining_days: int = 0
 
@@ -36,6 +37,7 @@ func initial_load() -> void:
 	current_date = Date.new(1, 7, GameConfig.SEASON_START_YEAR)
 	_init_training_plan()
 	_generate_free_agents()
+	_record_ability_snapshot("Saisonstart %d" % GameConfig.SEASON_START_YEAR)
 
 
 func _on_next_matchday() -> void:
@@ -55,6 +57,7 @@ func start_new_season() -> void:
 	current_season = Season.new(first_division_clubs, next_year)
 	current_date = Date.new(1, 7, next_year)
 	_init_training_plan()
+	_record_ability_snapshot("Saisonstart %d" % next_year)
 	save_game("Autosave")
 
 
@@ -104,7 +107,7 @@ func _ai_fill_squads(season_end_year: int) -> void:
 
 		# First pass: fill positions below their minimum
 		for pos: String in requirements:
-			var shortage := requirements[pos][0] - counts.get(pos, 0)
+			var shortage: int = requirements[pos][0] - counts.get(pos, 0)
 			for i in shortage:
 				if club.players.size() >= 22:
 					break
@@ -211,6 +214,7 @@ func _on_next() -> void:
 		_pay_all_wages(7)
 		_apply_training(week_index)
 		current_date = current_date.add_days(7)
+		_process_negotiations()
 		EventBus.emit_update_ui()
 		save_game("Autosave")
 
@@ -221,6 +225,7 @@ func confirm_matchday_simulation() -> void:
 	if _preview_remaining_days > 0:
 		_pay_all_wages(_preview_remaining_days)
 	current_date = current_date.add_days(7)
+	_process_negotiations()
 	GameState.last_matchday = next_md
 	EventBus.emit_update_ui()
 	save_game("Autosave")
@@ -261,6 +266,16 @@ func _apply_training_to_club(club: Club, type: int) -> void:
 			GameConfig.TRAINING_TYPE_REGEN:
 				player.freshness = mini(GameConfig.MAX_FRESHNESS, player.freshness + GameConfig.TRAINING_REGEN_FRESHNESS_GAIN)
 				player.condition = maxi(GameConfig.MIN_CONDITION, player.condition - GameConfig.TRAINING_REGEN_CONDITION_LOSS)
+
+
+# --- Ability history ---
+
+func _record_ability_snapshot(label: String) -> void:
+	for club: Club in all_clubs:
+		for p: Player in club.players:
+			p.ability_history.append({"label": label, "ability": p.currentAbility.to_int()})
+	for p: Player in free_agents:
+		p.ability_history.append({"label": label, "ability": p.currentAbility.to_int()})
 
 
 # --- Free agent generation ---
@@ -320,6 +335,101 @@ func sign_player_immediately(player: Player, from_club: Club, salary: int, aufla
 	player.tor_praemie = tor
 	player.contract_end = "30.06.%d" % contract_end_year
 	player_club.players.append(player)
+
+
+func start_transfer_negotiation(player: Player, from_club: Club, salary: int, auflauf: int, tor: int, contract_end_year: int, fee: int) -> void:
+	player.negotiating = true
+	var deadline := current_date.add_days(GameConfig.TRANSFER_NEGOTIATION_DAYS)
+	active_negotiations.append({
+		"player": player,
+		"from_club": from_club,
+		"deadline_day": deadline.day,
+		"deadline_month": deadline.month,
+		"deadline_year": deadline.year,
+		"offers": [{
+			"to_club": player_club,
+			"salary": salary,
+			"auflauf": auflauf,
+			"tor": tor,
+			"contract_end_year": contract_end_year,
+			"fee": fee,
+		}],
+	})
+
+
+func _process_negotiations() -> void:
+	_add_ai_negotiation_offers()
+	var remaining: Array[Dictionary] = []
+	for neg: Dictionary in active_negotiations:
+		var deadline := Date.new(int(neg["deadline_day"]), int(neg["deadline_month"]), int(neg["deadline_year"]))
+		if current_date.days_until(deadline) <= 0:
+			_resolve_negotiation(neg)
+		else:
+			remaining.append(neg)
+	active_negotiations = remaining
+
+
+func _add_ai_negotiation_offers() -> void:
+	for neg: Dictionary in active_negotiations:
+		if randf() > GameConfig.AI_NEGOTIATION_OFFER_CHANCE:
+			continue
+		var player: Player = neg["player"]
+		var from_club: Club = neg["from_club"]
+		var offers: Array = neg["offers"]
+		var clubs_with_offers: Array = []
+		for offer: Dictionary in offers:
+			clubs_with_offers.append(offer["to_club"])
+		var candidates: Array[Club] = []
+		for club: Club in first_division_clubs:
+			if club == player_club or club == from_club:
+				continue
+			if club in clubs_with_offers:
+				continue
+			candidates.append(club)
+		if candidates.is_empty():
+			continue
+		var bidder: Club = candidates[randi() % candidates.size()]
+		offers.append({
+			"to_club": bidder,
+			"salary": int(player.salary * randf_range(0.9, 1.4)),
+			"auflauf": player.auflauf_praemie,
+			"tor": player.tor_praemie,
+			"contract_end_year": current_season.start_year + 1 + randi_range(1, 3),
+			"fee": int(player.market_value * randf_range(0.7, 1.2)),
+		})
+
+
+func _resolve_negotiation(neg: Dictionary) -> void:
+	var player: Player = neg["player"]
+	player.negotiating = false
+	var from_club: Club = neg["from_club"]
+	var offers: Array = neg["offers"]
+	if offers.is_empty():
+		return
+	var best: Dictionary = offers[0]
+	for offer: Dictionary in offers:
+		if int(offer["salary"]) > int(best["salary"]):
+			best = offer
+	var winner: Club = best["to_club"]
+	if from_club != null:
+		from_club.players.erase(player)
+		from_club.currentLineUp.erase(player)
+		from_club.defaultLineUp()
+	player.salary = int(best["salary"])
+	player.auflauf_praemie = int(best["auflauf"])
+	player.tor_praemie = int(best["tor"])
+	player.contract_end = "30.06.%d" % int(best["contract_end_year"])
+	winner.players.append(player)
+	winner.currentLineUp.clear()
+	winner.defaultLineUp()
+	GameState.transfer_results.append({
+		"player_name": player.firstname + " " + player.lastname,
+		"from_club": from_club.name if from_club != null else "Vereinslos",
+		"to_club": winner.name,
+		"won_by_player": winner == player_club,
+	})
+	while GameState.transfer_results.size() > 10:
+		GameState.transfer_results.pop_front()
 
 
 func add_pending_transfer(player: Player, from_club: Club, salary: int, auflauf: int, tor: int, contract_end_year: int) -> void:
@@ -410,6 +520,7 @@ func save_game(save_name: String) -> void:
 		"free_agents": free_agents_data,
 		"matchday_results": matchday_results,
 		"pending_transfers": _serialize_pending_transfers(),
+		"active_negotiations": _serialize_negotiations(),
 	}
 	DirAccess.make_dir_recursive_absolute(SAVE_DIR)
 	var path := SAVE_DIR + save_name + ".json"
@@ -448,6 +559,8 @@ func _serialize_player(player: Player) -> Dictionary:
 		"condition": player.condition,
 		"freshness": player.freshness,
 		"matches_played": player.matches_played,
+		"ability_history": player.ability_history,
+		"negotiating": player.negotiating,
 	}
 
 
@@ -467,6 +580,10 @@ func _deserialize_player(data: Dictionary) -> Player:
 	p.condition = int(data.get("condition", 50))
 	p.freshness = int(data.get("freshness", 50))
 	p.matches_played = int(data.get("matches_played", 0))
+	var raw_history: Array = data.get("ability_history", [])
+	for entry: Variant in raw_history:
+		p.ability_history.append(entry as Dictionary)
+	p.negotiating = bool(data.get("negotiating", false))
 	return p
 
 
@@ -485,6 +602,8 @@ func _serialize_club(club: Club) -> Dictionary:
 		"money": club.money,
 		"players": players_data,
 		"lineup_indices": lineup_indices,
+		"spielstil": club.spielstil,
+		"pressing": club.pressing,
 	}
 	if club.manager != null:
 		data["manager_lastname"] = club.manager.lastname
@@ -510,6 +629,8 @@ func _deserialize_club(data: Dictionary) -> Club:
 	club.name = data["name"]
 	club.nation = data.get("nation", "")
 	club.money = int(data["money"])
+	club.spielstil = int(data.get("spielstil", GameConfig.SPIELSTIL_AUSGEWOGEN))
+	club.pressing = int(data.get("pressing", GameConfig.PRESSING_MITTEL))
 
 	for pd: Dictionary in data["players"]:
 		club.players.append(_deserialize_player(pd))
@@ -600,6 +721,8 @@ func _apply_save(data: Dictionary) -> void:
 	for td: Dictionary in data.get("pending_transfers", []):
 		_deserialize_pending_transfer(td)
 
+	_deserialize_negotiations(data.get("active_negotiations", []))
+
 
 func _serialize_pending_transfers() -> Array:
 	var result: Array = []
@@ -617,6 +740,80 @@ func _serialize_pending_transfers() -> Array:
 			"contract_end_year": t["contract_end_year"],
 		})
 	return result
+
+
+func _serialize_negotiations() -> Array:
+	var result: Array = []
+	for neg: Dictionary in active_negotiations:
+		var player: Player = neg["player"]
+		var from_club: Club = neg["from_club"]
+		var offers_data: Array = []
+		for offer: Dictionary in neg["offers"]:
+			var to_club: Club = offer["to_club"]
+			offers_data.append({
+				"to_club_name": to_club.name if to_club != null else "",
+				"salary": offer["salary"],
+				"auflauf": offer["auflauf"],
+				"tor": offer["tor"],
+				"contract_end_year": offer["contract_end_year"],
+				"fee": offer.get("fee", 0),
+			})
+		result.append({
+			"player_lastname": player.lastname,
+			"player_firstname": player.firstname,
+			"player_birthdate": player.birthdate,
+			"from_club_name": from_club.name if from_club != null else "",
+			"deadline_day": neg["deadline_day"],
+			"deadline_month": neg["deadline_month"],
+			"deadline_year": neg["deadline_year"],
+			"offers": offers_data,
+		})
+	return result
+
+
+func _deserialize_negotiations(data: Array) -> void:
+	active_negotiations.clear()
+	for neg_data: Dictionary in data:
+		var from_club_name: String = neg_data.get("from_club_name", "")
+		var from_club: Club = null
+		for club: Club in first_division_clubs:
+			if club.name == from_club_name:
+				from_club = club
+				break
+		if from_club == null:
+			continue
+		var player: Player = null
+		for p: Player in from_club.players:
+			if p.lastname == neg_data["player_lastname"] and p.birthdate == neg_data["player_birthdate"]:
+				player = p
+				break
+		if player == null:
+			continue
+		player.negotiating = true
+		var offers: Array = []
+		for offer_data: Dictionary in neg_data.get("offers", []):
+			var to_club_name: String = offer_data.get("to_club_name", "")
+			var to_club: Club = player_club
+			for club: Club in first_division_clubs:
+				if club.name == to_club_name:
+					to_club = club
+					break
+			offers.append({
+				"to_club": to_club,
+				"salary": int(offer_data["salary"]),
+				"auflauf": int(offer_data["auflauf"]),
+				"tor": int(offer_data["tor"]),
+				"contract_end_year": int(offer_data["contract_end_year"]),
+				"fee": int(offer_data.get("fee", 0)),
+			})
+		active_negotiations.append({
+			"player": player,
+			"from_club": from_club,
+			"deadline_day": int(neg_data["deadline_day"]),
+			"deadline_month": int(neg_data["deadline_month"]),
+			"deadline_year": int(neg_data["deadline_year"]),
+			"offers": offers,
+		})
 
 
 func _deserialize_pending_transfer(data: Dictionary) -> void:

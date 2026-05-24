@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://player_update_scene"]
+
+[ext_resource type="Script" path="res://scenes/player_update/player_update_scene.gd" id="1_update"]
+
+[node name="PlayerUpdateScene" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_update")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "Halbjahresbewertung"
+theme_override_font_sizes/font_size = 20
+
+[node name="Subtitle" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "Entwicklung deiner Spieler in der Hinrunde"
+theme_override_font_sizes/font_size = 13
+modulate = Color(0.75, 0.75, 0.75, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerList" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ContinueButton" type="Button" parent="Margin/VBox"]
+layout_mode = 2
+text = "Weiter"
+
+[connection signal="pressed" from="Margin/VBox/ContinueButton" to="." method="_on_continue_pressed"]

@@ -22,56 +22,76 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 
 [node name="ClubsButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Clubs"
 
 [node name="MatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-text = "Matchday
-"
+size_flags_horizontal = 3
+text = "Matchday"
 
 [node name="TableButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-text = "Table
-"
+size_flags_horizontal = 3
+text = "Table"
 
 [node name="LineUp" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Line-Up"
+
+[node name="TaktikButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Taktik"
 
 [node name="Club" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Club"
 
 [node name="BalanceButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Balance"
 
 [node name="KalenderButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Kalender"
 
 [node name="TrainingButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Training"
 
 [node name="SucheButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Suche"
+
+[node name="TransfersButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Transfers"
 
 [node name="StadionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Stadion"
 
 [node name="AusgabenButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Ausgaben"
 
 [node name="MenuButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Menü"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
@@ -86,11 +106,13 @@ text = "NEXT"
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/MatchdayButton" to="." method="_on_matchday_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TableButton" to="." method="_on_table_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/LineUp" to="." method="_on_line_up_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/TaktikButton" to="." method="_on_taktik_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/Club" to="." method="_on_club_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/BalanceButton" to="." method="_on_balance_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/KalenderButton" to="." method="_on_kalender_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TrainingButton" to="." method="_on_training_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/SucheButton" to="." method="_on_suche_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/TransfersButton" to="." method="_on_transfers_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/StadionButton" to="." method="_on_stadion_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/AusgabenButton" to="." method="_on_ausgaben_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_down"]

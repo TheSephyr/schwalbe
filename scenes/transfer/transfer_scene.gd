@@ -63,7 +63,8 @@ func _on_offer_pressed() -> void:
 	if _offer >= threshold:
 		status_label.text = "Angebot angenommen! Ablöse: %s" % _fmt(_offer)
 		offer_button.disabled = true
-		GameState.transfer_context = "transfer"
+		GameState.transfer_context = "negotiation"
+		GameState.transfer_fee = _offer
 		get_tree().change_scene_to_file("res://scenes/contract/contract_scene.tscn")
 	else:
 		status_label.text = "Angebot abgelehnt. Höheres Angebot nötig."

@@ -75,6 +75,8 @@ const TICKET_PRICE_STEP: int = 5
 
 # --- Transfer market ---
 const PRECONTRACT_WINDOW_DAYS: int = 182
+const TRANSFER_NEGOTIATION_DAYS: int = 14
+const AI_NEGOTIATION_OFFER_CHANCE: float = 0.35
 
 # --- Generated free agents (new game) ---
 const GENERATED_FREE_AGENT_COUNT: int = 100
@@ -89,6 +91,15 @@ const RETIREMENT_MIN_AGE: int = 30
 const RETIREMENT_BASE_CHANCE: float = 0.05
 const RETIREMENT_CHANCE_PER_YEAR: float = 0.10
 const RETIREMENT_MAX_CHANCE: float = 0.95
+
+# --- Taktik ---
+const SPIELSTIL_DEFENSIV: int = 0
+const SPIELSTIL_AUSGEWOGEN: int = 1
+const SPIELSTIL_OFFENSIV: int = 2
+
+const PRESSING_TIEF: int = 0
+const PRESSING_MITTEL: int = 1
+const PRESSING_HOCH: int = 2
 
 # --- Display ---
 const MILLIONS_THRESHOLD: int = 1_000_000
