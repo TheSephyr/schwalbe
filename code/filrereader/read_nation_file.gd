@@ -116,14 +116,63 @@ static func loadNationFile(nationFile: String) -> Array[Club]:
 						newPlayer.lastname = line
 					PlayerFieldIndex.Field.FIRST_NAME:
 						newPlayer.firstname = line
+					PlayerFieldIndex.Field.SKIN_COLOR:
+						newPlayer.skin_color = line.to_int() as SkinColorTypes.SkinColor
+					PlayerFieldIndex.Field.HAIR_COLOR:
+						newPlayer.hair_color = line.to_int() as HairColorTypes.HairColor
 					PlayerFieldIndex.Field.ABILITY:
 						newPlayer.currentAbility = line
+					PlayerFieldIndex.Field.COUNTRY:
+						newPlayer.country = line.to_int()
 					PlayerFieldIndex.Field.MAIN_POSITION:
 						newPlayer.position = line
+					PlayerFieldIndex.Field.SECONDARY_POSITION_1:
+						newPlayer.secondary_position_1 = line.to_int() as PositionTypes.Position
+					PlayerFieldIndex.Field.SECONDARY_POSITION_2:
+						newPlayer.secondary_position_2 = line.to_int() as PositionTypes.Position
+					PlayerFieldIndex.Field.POSITIVE_SKILLS:
+						var mask := line.to_int()
+						for skill_val: int in PlayerSkillTypes.Skill.values():
+							if mask & skill_val:
+								newPlayer.positive_skills.append(skill_val as PlayerSkillTypes.Skill)
+					PlayerFieldIndex.Field.NEGATIVE_SKILLS:
+						var mask := line.to_int()
+						for skill_val: int in PlayerSkillTypes.Skill.values():
+							if mask & skill_val:
+								newPlayer.negative_skills.append(skill_val as PlayerSkillTypes.Skill)
+					PlayerFieldIndex.Field.CHARACTERISTICS:
+						var mask := line.to_int()
+						for char_val: int in PlayerCharacteristicTypes.Characteristic.values():
+							if mask & char_val:
+								newPlayer.characteristics.append(char_val as PlayerCharacteristicTypes.Characteristic)
+					PlayerFieldIndex.Field.CHARACTER:
+						newPlayer.character = line.to_int() as PlayerCharacterTypes.Character
+					PlayerFieldIndex.Field.HAS_STAGE_NAME:
+						newPlayer.has_stage_name = line.to_int() != 0
+					PlayerFieldIndex.Field.STAGE_NAME:
+						newPlayer.stage_name = line
+					PlayerFieldIndex.Field.FOOT:
+						newPlayer.foot = line.to_int() as FootTypes.Foot
 					PlayerFieldIndex.Field.TALENT:
 						newPlayer.talent = line
+					PlayerFieldIndex.Field.HEALTH:
+						newPlayer.health = line.to_int() as HealthTypes.Health
+					PlayerFieldIndex.Field.CROWD_APPEAL:
+						newPlayer.crowd_appeal = line.to_int() as CrowdAppealTypes.CrowdAppeal
 					PlayerFieldIndex.Field.BIRTHDAY:
 						newPlayer.birthdate = line
+					PlayerFieldIndex.Field.COUNTRY_2:
+						newPlayer.country_2 = line.to_int()
+					PlayerFieldIndex.Field.NATIONAL_PLAYER:
+						newPlayer.nation_player = line.to_int()
+					PlayerFieldIndex.Field.CAPTAIN_RETIREMENT:
+						newPlayer.captain_retirement = line.to_int()
+					PlayerFieldIndex.Field.SQUAD_NUMBER:
+						newPlayer.squad_number = line.to_int()
+					PlayerFieldIndex.Field.HAIR_BEARD:
+						var val := line.to_int()
+						newPlayer.hair_style = (val >> 16) as HairStyleTypes.HairStyle
+						newPlayer.beard = (val & 0xF) as BeardTypes.Beard
 				lineCounterPlayer += 1
 	file.close()
 	#print(allPlayer)

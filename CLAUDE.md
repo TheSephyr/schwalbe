@@ -101,6 +101,12 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
   - AI management: `AI_CONTRACT_RENEWAL_CHANCE=0.85`
 
 - `code/player.gd` — `Player`: name, position (`"1"`–`"10"`), talent/currentAbility (String, 1–100), birthdate, condition, freshness, matches_played; contract: `salary`, `auflauf_praemie`, `tor_praemie`, `market_value`, `contract_end`; `generate_contract()` scales financials from ability/talent via power curve; `POSITION_LABELS` dict maps codes to labels (GK, LI, CB, LB, RB, CDM, LM, RM, CM, ST)
+  - Appearance: `skin_color: SkinColorTypes.SkinColor`, `hair_color: HairColorTypes.HairColor`, `hair_style: HairStyleTypes.HairStyle`, `beard: BeardTypes.Beard`
+  - Positions: `secondary_position_1/2: PositionTypes.Position`
+  - Skills/traits (bitmask-parsed arrays): `positive_skills: Array[PlayerSkillTypes.Skill]`, `negative_skills: Array[PlayerSkillTypes.Skill]`, `characteristics: Array[PlayerCharacteristicTypes.Characteristic]`
+  - Character: `character: PlayerCharacterTypes.Character` (bitmask int)
+  - Misc: `foot: FootTypes.Foot`, `health: HealthTypes.Health`, `crowd_appeal: CrowdAppealTypes.CrowdAppeal`, `has_stage_name: bool`, `stage_name: String`, `country: int`, `country_2: int`, `nation_player: int`, `captain_retirement: int`, `squad_number: int`
+  - All fields above are populated by `ReadNationFile` from `LandDeut.sav` using `PlayerFieldIndex` constants
 
 - `code/club.gd` — `Club`: name, roster (`Player[]`), lineup, `money`, `manager`, `trainer`, `stadium`; `total_daily_wages()` = sum(salary)/365; `pay_wages(days)` deducts; `defaultLineUp()` / `apply_formation()`
 

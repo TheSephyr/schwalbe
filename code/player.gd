@@ -3,9 +3,31 @@ class_name Player
 var firstname : String
 var lastname : String
 var birthdate : String
-var talent : String
+var talent : String #TODO: Change this to the enum
 var currentAbility: String
+var skin_color: SkinColorTypes.SkinColor
+var hair_color: HairColorTypes.HairColor
+var country: int #TODO: Update this to an enum
+
 var position : String
+var secondary_position_1: PositionTypes.Position
+var secondary_position_2: PositionTypes.Position
+var positive_skills: Array[PlayerSkillTypes.Skill]
+var negative_skills: Array[PlayerSkillTypes.Skill]
+var characteristics: Array[PlayerCharacteristicTypes.Characteristic]
+var character: PlayerCharacterTypes.Character
+var has_stage_name: bool #TODO: Is this value even needed?
+var stage_name: String
+var foot: FootTypes.Foot
+var health: HealthTypes.Health
+var crowd_appeal: CrowdAppealTypes.CrowdAppeal
+var country_2: int #TODO: Update this to enum
+var nation_player: int #TODO: Create a enum for this.
+var captain_retirement: int
+var squad_number: int
+var hair_style: HairStyleTypes.HairStyle
+var beard: BeardTypes.Beard
+
 var played_matches: Array[Match]
 var matches_played: int = 0
 
