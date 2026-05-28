@@ -20,6 +20,8 @@ var _player_index: int = 0
 @onready var markt_val: Label = $Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid/MarktVal
 @onready var vertrag_bis_val: Label = $Content/VBox/Middle/RightVBox/VertragPanel/VertragVBox/VertragMargin/VertragGrid/VertragBisVal
 @onready var history_entries: HBoxContainer = $Content/VBox/EntwicklungPanel/EntwicklungVBox/EntwicklungMargin/HistoryEntries
+@onready var faeh_margin: MarginContainer = $Content/VBox/Bottom/FaehPanel/FaehVBox/FaehMargin
+
 
 
 func _ready() -> void:
@@ -53,6 +55,7 @@ func _load_player() -> void:
 	markt_val.text = _format_money(player.market_value)
 	vertrag_bis_val.text = player.contract_end
 	_populate_history()
+	_populate_skills()
 
 
 func _populate_history() -> void:
@@ -100,6 +103,42 @@ func _on_next_pressed() -> void:
 	player = _club_players[_player_index]
 	GameState.selected_player = player
 	_load_player()
+
+
+func _populate_skills() -> void:
+	for child in faeh_margin.get_children():
+		child.queue_free()
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 2)
+	faeh_margin.add_child(vbox)
+	var is_gk := player.position == "1"
+	var pos_empty := player.gk_positive_skills.is_empty() if is_gk else player.positive_skills.is_empty()
+	var neg_empty := player.gk_negative_skills.is_empty() if is_gk else player.negative_skills.is_empty()
+	if pos_empty and neg_empty:
+		var lbl := Label.new()
+		lbl.text = "-"
+		lbl.add_theme_font_size_override("font_size", 11)
+		lbl.modulate = Color(0.6, 0.6, 0.6, 1.0)
+		vbox.add_child(lbl)
+		return
+	if is_gk:
+		for skill: GoalkeeperSkillTypes.Skill in player.gk_positive_skills:
+			_add_skill_label(vbox, "+ " + GoalkeeperSkillTypes.LABELS.get(skill, str(skill)), Color(0.18, 0.6, 0.18, 1.0))
+		for skill: GoalkeeperSkillTypes.Skill in player.gk_negative_skills:
+			_add_skill_label(vbox, "- " + GoalkeeperSkillTypes.LABELS.get(skill, str(skill)), Color(0.75, 0.15, 0.15, 1.0))
+	else:
+		for skill: PlayerSkillTypes.Skill in player.positive_skills:
+			_add_skill_label(vbox, "+ " + PlayerSkillTypes.LABELS.get(skill, str(skill)), Color(0.18, 0.6, 0.18, 1.0))
+		for skill: PlayerSkillTypes.Skill in player.negative_skills:
+			_add_skill_label(vbox, "- " + PlayerSkillTypes.LABELS.get(skill, str(skill)), Color(0.75, 0.15, 0.15, 1.0))
+
+
+func _add_skill_label(parent: VBoxContainer, text: String, color: Color) -> void:
+	var lbl := Label.new()
+	lbl.text = text
+	lbl.add_theme_font_size_override("font_size", 11)
+	lbl.modulate = color
+	parent.add_child(lbl)
 
 
 func _format_age_and_date(birthdate: String) -> String:

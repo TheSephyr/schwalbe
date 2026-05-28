@@ -35,10 +35,12 @@ func simulateMatch() -> void:
 func _lineup_strength(club: Club) -> float:
 	if club.currentLineUp.is_empty():
 		return 1.0
-	var total := 0
-	for player: Player in club.currentLineUp:
-		total += player.currentAbility.to_int()
-	return float(total) / club.currentLineUp.size()
+	var total := 0.0
+	for i: int in club.currentLineUp.size():
+		var player: Player = club.currentLineUp[i]
+		var slot: String = club.currentLineUpSlots[i] if i < club.currentLineUpSlots.size() else player.position_label()
+		total += float(player.effective_strength(slot))
+	return total / club.currentLineUp.size()
 
 
 # Knuth's algorithm: returns a Poisson-distributed integer with the given mean.

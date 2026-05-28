@@ -1,0 +1,186 @@
+[gd_scene load_steps=6 format=3 uid="uid://individual_training_scene"]
+
+[ext_resource type="Script" path="res://scenes/individual_training/individual_training_scene.gd" id="1_itscn"]
+[ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="2_itscn"]
+[ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="3_itscn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_picker"]
+bg_color = Color(0.85, 0.84, 0.75, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.38, 0.28, 1)
+
+[node name="IndividualTrainingScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_itscn")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_top = 0.05
+anchor_bottom = 0.9
+grow_horizontal = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="VBox" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeaderPanel" type="PanelContainer" parent="Content/VBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="HeaderVBox" type="VBoxContainer" parent="Content/VBox/HeaderPanel"]
+layout_mode = 2
+
+[node name="TitleHdr" type="PanelContainer" parent="Content/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/VBox/HeaderPanel/HeaderVBox/TitleHdr"]
+layout_mode = 2
+text = "Einzeltraining"
+theme_override_font_sizes/font_size = 13
+
+[node name="ColHeaderMargin" type="MarginContainer" parent="Content/VBox/HeaderPanel/HeaderVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 3
+
+[node name="ColHeaders" type="HBoxContainer" parent="Content/VBox/HeaderPanel/HeaderVBox/ColHeaderMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameHdr" type="Label" parent="Content/VBox/HeaderPanel/HeaderVBox/ColHeaderMargin/ColHeaders"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.45, 0.44, 0.35, 1)
+
+[node name="PosHdr" type="Label" parent="Content/VBox/HeaderPanel/HeaderVBox/ColHeaderMargin/ColHeaders"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 0)
+text = "Pos"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.45, 0.44, 0.35, 1)
+
+[node name="SkillHdr" type="Label" parent="Content/VBox/HeaderPanel/HeaderVBox/ColHeaderMargin/ColHeaders"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 0)
+text = "Trainiert"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.45, 0.44, 0.35, 1)
+
+[node name="ProgressHdr" type="Label" parent="Content/VBox/HeaderPanel/HeaderVBox/ColHeaderMargin/ColHeaders"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "Fortschritt"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.45, 0.44, 0.35, 1)
+
+[node name="FaehHdr" type="Label" parent="Content/VBox/HeaderPanel/HeaderVBox/ColHeaderMargin/ColHeaders"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fähigkeiten"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.45, 0.44, 0.35, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="Content/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerList" type="VBoxContainer" parent="Content/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="SkillPicker" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_right = 0.9
+anchor_top = 0.1
+anchor_bottom = 0.85
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_picker")
+visible = false
+
+[node name="PickerMargin" type="MarginContainer" parent="SkillPicker"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="PickerVBox" type="VBoxContainer" parent="SkillPicker/PickerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PickerHeader" type="HBoxContainer" parent="SkillPicker/PickerMargin/PickerVBox"]
+layout_mode = 2
+
+[node name="PickerTitle" type="Label" parent="SkillPicker/PickerMargin/PickerVBox/PickerHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fähigkeit wählen"
+theme_override_font_sizes/font_size = 14
+
+[node name="CloseButton" type="Button" parent="SkillPicker/PickerMargin/PickerVBox/PickerHeader"]
+layout_mode = 2
+text = "×"
+
+[node name="SkillScroll" type="ScrollContainer" parent="SkillPicker/PickerMargin/PickerVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SkillList" type="VBoxContainer" parent="SkillPicker/PickerMargin/PickerVBox/SkillScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="BottomUi" parent="." instance=ExtResource("2_itscn")]
+layout_mode = 1
+
+[node name="TopUi" parent="." instance=ExtResource("3_itscn")]
+layout_mode = 1
+
+[connection signal="pressed" from="SkillPicker/PickerMargin/PickerVBox/PickerHeader/CloseButton" to="." method="_on_picker_close_pressed"]

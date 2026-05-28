@@ -478,10 +478,6 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 2
 
-[node name="FaehValue" type="Label" parent="Content/VBox/Bottom/FaehPanel/FaehVBox/FaehMargin"]
-layout_mode = 2
-text = ""
-theme_override_font_sizes/font_size = 12
 
 [node name="VerlPanel" type="PanelContainer" parent="Content/VBox/Bottom"]
 layout_mode = 2

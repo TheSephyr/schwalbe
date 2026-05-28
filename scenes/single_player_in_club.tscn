@@ -2,59 +2,78 @@
 
 [ext_resource type="Script" uid="uid://cwilw5of32fgc" path="res://scenes/single_player_in_club.gd" id="1_8y2np"]
 
-[node name="SinglePlayerInClub" type="HBoxContainer"]
+[node name="SinglePlayerInClub" type="PanelContainer"]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
 script = ExtResource("1_8y2np")
 
-[node name="LastName" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LastName" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Michael"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="FirstName" type="Label" parent="."]
+[node name="FirstName" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Kasd"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="Birthday" type="Label" parent="."]
+[node name="Birthday" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "10.10.1992"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="Talent" type="Label" parent="."]
+[node name="Talent" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "10"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="CurrentAbility" type="Label" parent="."]
+[node name="CurrentAbility" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "LM"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="Postion" type="Label" parent="."]
+[node name="Postion" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "test"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="ContractEnd" type="Label" parent="."]
+[node name="ContractEnd" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "–"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
-[node name="Salary" type="Label" parent="."]
+[node name="Salary" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "–"
 horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

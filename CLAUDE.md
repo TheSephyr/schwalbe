@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Schwalbe** is a football (soccer) manager simulation game built with Godot 4.6 (mobile renderer). The player takes the role of a **trainer** (not manager), selects a German club, negotiates player contracts, simulates matchdays, tracks league standings, manages finances, and develops the squad across multiple seasons. The name means "swallow" in German. The in-game world is set in the 1999/2000 season.
 
+### Design Inspiration
+
+**[`infos/A3_gameplay_features.md`](infos/A3_gameplay_features.md)** is the primary design reference for Schwalbe. It documents the core mechanics of *Anstoss 3* (the 1999 German football manager that Schwalbe is spiritually based on), including:
+
+- Player strength calculation (7-step formula with Frische, Kondition, Talent, Eigenschaften)
+- End-of-season upgrade/downgrade system with age and talent modifiers
+- Manager career attributes and promotion conditions
+- Finance system (tickets, sponsors, merchandise, friendlies)
+- Training mechanics (Kondition vs Frische, overtraining thresholds)
+- Transfer policy (market value curves, Stammplatzgarantie)
+- Team talks and individual player conversation system
+- Youth development and stadium expansion
+- Tactics (man-marking, offside trap, formation effects on strength)
+
+When designing or extending any game mechanic, consult this file first. Schwalbe should feel like a faithful spiritual successor to Anstoss 3.
+
 ## Running the Project
 
 There are no build scripts — run and test via the Godot editor:
@@ -30,7 +46,7 @@ Registered in `project.godot` and accessible globally by name:
 
 | Singleton | File | Purpose |
 |-----------|------|---------|
-| `Game` | `code/game.gd` | Central state: clubs, season, date, free agents, pending transfers, save/load, AI logic |
+| `Game` | `code/game.gd` | Central state: clubs, season, date, free agents, reporters, referees, celebrities, sponsors, sponsor contract, pending transfers, save/load, AI logic |
 | `EventBus` | `code/global/event_bus.gd` | Pub/sub signal hub — UI scenes connect here instead of to each other |
 | `GameState` | `code/global/game_state.gd` | Lightweight UI state: `selected_player`, `last_matchday`, `transfer_context`, `transfer_source_club` |
 | `Global` | `code/global/global.gd` | Misc utilities |
@@ -39,8 +55,8 @@ Registered in `project.godot` and accessible globally by name:
 
 ```
 Game.initial_load()
-  → ReadNationFile.loadNationFile()     # parses LandDeut.sav (code/filrereader/read_nation_file.gd)
-  → Game.all_clubs / first_division_clubs[0..17]
+  → ReadNationFile.loadNationFile()     # parses LandDeut.sav → Dictionary{clubs, reporters, referees, celebrities, sponsors}
+  → Game.all_clubs / first_division_clubs[0..17] / reporters / referees / celebrities / sponsors
   → Season(first_division_clubs)        # generates round-robin schedule + assigns dates
       → Matchday[] (each with a Date)
       → Match[]
@@ -81,7 +97,7 @@ Season end:
 
 Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.tscn` (current date + club name) and `bottomUi.tscn` (navigation buttons) are embedded in all league-phase screens.
 
-**Bottom navigation buttons:** Clubs · Matchday · Table · Line-Up · Club · Balance · Kalender · Training · Suche · Stadion · Ausgaben · Menü
+**Bottom navigation buttons:** Clubs · Matchday · Table · Line-Up · Club · Balance · Kalender · Training · Einzeltraining · Suche · Transfers · Stadion · Ausgaben · Personal · Menü
 
 ### Key Data Models
 
@@ -99,20 +115,43 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
   - Ticket pricing: `TICKET_PRICE_DEFAULT=25`, `TICKET_PRICE_MIN=5`, `TICKET_PRICE_MAX=150`, `TICKET_PRICE_STEP=5`
   - Generated free agents: `GENERATED_FREE_AGENT_COUNT=100`, `FREE_AGENT_MAX_ABILITY=4`, `FREE_AGENT_MAX_TALENT=4`
   - AI management: `AI_CONTRACT_RENEWAL_CHANCE=0.85`
+  - Individual training: `INDIVIDUAL_TRAINING_WEEKS=8` — weeks for a player to fully learn one new skill
 
-- `code/player.gd` — `Player`: name, position (`"1"`–`"10"`), talent/currentAbility (String, 1–100), birthdate, condition, freshness, matches_played; contract: `salary`, `auflauf_praemie`, `tor_praemie`, `market_value`, `contract_end`; `generate_contract()` scales financials from ability/talent via power curve; `POSITION_LABELS` dict maps codes to labels (GK, LI, CB, LB, RB, CDM, LM, RM, CM, ST)
+- `code/player.gd` — `Player`: name, position (`"1"`–`"10"`), talent/currentAbility (String, 1–100), birthdate, condition, freshness, matches_played; contract: `salary`, `auflauf_praemie`, `tor_praemie`, `market_value`, `contract_end`; `generate_contract()` scales financials from ability/talent via power curve; `POSITION_LABELS` dict maps codes to labels (GK, LI, CB, LB, RB, CDM, LM, RM, CM, ST); `POSITION_CODES` is the reverse mapping (label → code)
   - Appearance: `skin_color: SkinColorTypes.SkinColor`, `hair_color: HairColorTypes.HairColor`, `hair_style: HairStyleTypes.HairStyle`, `beard: BeardTypes.Beard`
   - Positions: `secondary_position_1/2: PositionTypes.Position`
   - Skills/traits (bitmask-parsed arrays): `positive_skills: Array[PlayerSkillTypes.Skill]`, `negative_skills: Array[PlayerSkillTypes.Skill]`, `characteristics: Array[PlayerCharacteristicTypes.Characteristic]`
+  - **Goalkeeper skills** (position `"1"` only — different bitmask): `gk_positive_skills: Array[GoalkeeperSkillTypes.Skill]`, `gk_negative_skills: Array[GoalkeeperSkillTypes.Skill]`; outfield `positive_skills`/`negative_skills` remain empty for GKs
   - Character: `character: PlayerCharacterTypes.Character` (bitmask int)
   - Misc: `foot: FootTypes.Foot`, `health: HealthTypes.Health`, `crowd_appeal: CrowdAppealTypes.CrowdAppeal`, `has_stage_name: bool`, `stage_name: String`, `country: int`, `country_2: int`, `nation_player: int`, `captain_retirement: int`, `squad_number: int`
+  - **Individual training**: `training_skill: int = 0` (0 = none; otherwise a `PlayerSkillTypes.Skill` or `GoalkeeperSkillTypes.Skill` int value), `training_progress: float = 0.0` (0–1); advanced by `1/INDIVIDUAL_TRAINING_WEEKS` each week by `game._apply_individual_training()`; on completion the skill is appended to the appropriate positive_skills array and both fields reset to 0
   - All fields above are populated by `ReadNationFile` from `LandDeut.sav` using `PlayerFieldIndex` constants
+  - **`effective_strength(slot: String) -> int`** — A3-faithful strength used in match simulation: base `currentAbility` ± fitness deviation (±2), ± talent bonus (WONDERKID +20 … TWO_LEFT_FEET −20, halved for ability >75, capped at 80), +10/−10 per positive/negative skill, − position penalty (0 if primary or secondary position matches slot; otherwise `_position_distance / 2` where distance: same group = |Δpos|, cross-group = |Δgroup|×2+1, GK↔outfield = 8)
 
-- `code/club.gd` — `Club`: name, roster (`Player[]`), lineup, `money`, `manager`, `trainer`, `stadium`; `total_daily_wages()` = sum(salary)/365; `pay_wages(days)` deducts; `defaultLineUp()` / `apply_formation()`
+- `code/club.gd` — `Club`: name, roster (`Player[]`), `currentLineUp: Array[Player]`, `currentLineUpSlots: Array[String]` (parallel array of formation slot labels, e.g. `"CB"`, `"ST"`; populated by `apply_formation()` alongside `currentLineUp`), `money` (set from `BALANCE` field in .sav), `manager`, `trainer`, `stadium`; `total_daily_wages()` = sum(salary)/365; `pay_wages(days)` deducts; `defaultLineUp()` / `apply_formation()`
+  - Identity: `abbreviation`, `chant`, `fan_name`, `abbreviation_article: AbbreviationArticleTypes.Article`, `media_city`, `founding_year`, `public_company`, `regional_league: RegionalLeagueTypes.RegionalLeague`
+  - Kits: `home_kit_color1/2/shorts_color/socks_color: KitColorTypes.KitColor`, `home_kit_pattern: KitPatternTypes.KitPattern`, `home_kit_socks_striped: bool` (same set for `away_kit_*`); color1+pattern are packed in a single file field: `color = val & 0xF`, `pattern = (val >> 4) & 0xF`; socks: `color = val & 0xF`, `striped = (val & 0x10) != 0`
+  - Fans: `fan_attendance: FanAttendanceTypes.FanAttendance`, `fan_type: FanTypeTypes.FanType`, `fan_friendship_with: int`, `arch_rival: int`, `max_fan_attendance: int`, `hooligans: HooliganTypes.Hooligans`
+  - Organisation: `board: BoardTypes.Board`, `cup_team: int`, `opposition: OppositionTypes.Opposition`, `amateur_section_of: int`, `pro_section_of: int`, `financial_strength: FinancialStrengthTypes.FinancialStrength`
+  - Chairman: `chairman_lastname`, `chairman_firstname`, `chairman_birthday`
+  - History: `all_time_goals`, `all_time_goals_against`, `all_time_matches`, `all_time_points`, `titles_championships`, `titles_cups`, `titles_league_cups`, `titles_europa_leagues`, `titles_champions_leagues`, `titles_world_cups`
 
-- `code/stadium.gd` — `Stadium`: name, city, north/south/west/east capacities (from .sav), `ticket_price` (DM, adjustable in stadium scene); `total()` returns sum of all stands
+- `code/stadium.gd` — `Stadium`: name, city, north/south/west/east capacities (main+away+left+right stands, standing+seating summed), `ticket_price` (DM, adjustable in stadium scene); `total()` returns sum of all stands
+  - Facilities: `scoreboard: ScoreboardTypes.Scoreboard`, `pitch_heating`, `floodlights`, `running_track`, `heat_lamps` (bitmask), `luxury_boxes`, `seat_cushions`, `heated_seats`, `retractable_pitch` (all bool/int)
+  - Location: `home_stand`, `away_stand`, `city_location`, `owned`, `motorway`, `tv_tower`, `mountains`, `castle`, `palace`
+  - Per-stand: `main_vip`, `main_condition: StadiumConditionTypes.Condition` (repeated for away/left/right); `roof: int` (bitmask per `RoofCoverTypes.RoofCover`)
 
-- `code/manager.gd` / `code/trainer.gd` — Simple data classes: lastname, firstname, birthdate
+- `code/manager.gd` — `Manager`: lastname, firstname, birthdate, `competence: int`; `age(year)` computes from birthdate; `full_name()`
+
+- `code/trainer.gd` — `Trainer`: lastname, firstname, birthdate, `competence: int`, `reputation: TrainerReputationTypes.Reputation`; `age(year)` computes from birthdate; `full_name()`
+
+- `code/reporter.gd` — `Reporter`: broadcaster, lastname, firstname, `attitude: ReporterAttitudeTypes.Attitude`; `full_name()`; stored in `Game.reporters`
+
+- `code/referee.gd` — `Referee`: firstname, lastname, `competence: int`, `strictness: int`, `disliked_club: int`, `characteristics: Array[RefereeCharacteristicTypes.Characteristic]` (bitmask-parsed); `full_name()`; stored in `Game.referees` (both `%SECT%SCHIRI` and `%SECT%ISCHIRI`)
+
+- `code/celebrity.gd` — `Celebrity`: lastname, firstname, `favorite_club: int`; `full_name()`; stored in `Game.celebrities`
+
+- `code/sponsor.gd` — `Sponsor`: `name: String`, `income_per_season: int` (DM; field value × 1000); stored in `Game.sponsors` (40 entries from `%SECT%SPONSOR`). Active contract stored in `Game.sponsor_name` and `Game.sponsor_income`; applied to `player_club.money` when the player accepts in the preseason scene.
 
 - `code/util/date.gd` — `Date` (RefCounted): day/month/year; `add_days(n) → Date`; `days_until(other) → int` (Julian Day Number diff)
 
@@ -120,7 +159,7 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
 
 - `season/table.gd` / `season/teamStanding.gd` — League standings sorted by points then goal difference
 
-- `match/match.gd` — Simulates goals via Poisson weighted by lineup ability; home advantage 1.15×
+- `match/match.gd` — Simulates goals via Poisson weighted by lineup strength; home advantage 1.15×; `_lineup_strength()` averages `player.effective_strength(slot)` across all 11 starters using `club.currentLineUpSlots` (falls back to `player.position_label()` if slots array is shorter)
 
 - `match/matchday.gd` — Collection of matches for one matchday; holds a `date: Date`
 
@@ -152,7 +191,8 @@ Four transfer contexts stored in `GameState.transfer_context`:
 | Starting game | `scenes/starting_game.tscn` | Entry point |
 | Main menu | `scenes/main_menu.tscn` | New game / load game |
 | Trainer setup | `scenes/manager_setup/manager_setup_scene.tscn` | Enter trainer name + age before new game |
-| Team selection | `scenes/team_selection.tscn` | Pick your club |
+| Team selection | `scenes/team_selection.tscn` | Pick your club → navigates to preseason scene |
+| Preseason | `scenes/preseason/preseason_scene.tscn` | Sponsor negotiation at game start; 3 real sponsors drawn randomly from `Game.sponsors`; accept/negotiate (up to 130% of base); accepted sponsor income credited to `player_club.money` on "Weiter" → club overview |
 | Club overview | `scenes/club/club.tscn` | Roster list; toggle current vs next-season squad |
 | Player profile | `scenes/player/player_scene.tscn` | Player stats + contract |
 | Contract negotiation | `scenes/contract/contract_scene.tscn` | Adjust salary/bonuses/years; context-aware (renewal/free/precontract/transfer) |
@@ -165,16 +205,19 @@ Four transfer contexts stored in `GameState.transfer_context`:
 | Expenditure | `scenes/expenditure/expenditure_scene.tscn` | Season wage + bonus costs (full season vs remaining) |
 | Calendar | `scenes/calendar/calendar_scene.tscn` | Monthly calendar; matchdays highlighted |
 | Training | `scenes/training/training_scene.tscn` | Weekly training plan (condition vs regen); drag-and-drop per week |
+| Individual training | `scenes/individual_training/individual_training_scene.tscn` | Per-player skill training; rows show name · position · skill being learned (green) · progress bar · existing skills (green/red); click row → skill picker overlay; skills already owned are excluded; GK players see `GoalkeeperSkillTypes` skills, outfield see `PlayerSkillTypes` skills |
 | Stadium | `scenes/stadium/stadium_scene.tscn` | Stadium schematic + ticket price adjustment |
 | Player search | `scenes/player_search/player_search_scene.tscn` | Filter by position/age/talent/ability; "Nur Vereinslose" for free agents; "Vertrag läuft aus" for expiring contracts; right-click to negotiate |
 | Settings | `scenes/settings/settings_scene.tscn` | Save/load management, main menu, quit |
 | Season end | `scenes/season_end/season_end.tscn` | Final standings; start next season |
+| Personnel directory | `scenes/personal/personal_scene.tscn` | Scrollable list of all NPCs (Manager, Trainer, Reporters, Referees, Celebrities); click row → person detail |
+| Person detail | `scenes/person/person_scene.tscn` | Shows fields for any NPC type; type dispatched via `GameState.selected_person` (RefCounted) using `is` checks |
 
 ### File Reader Infrastructure (`code/filrereader/`)
 
 Note: directory name has a typo (`filrereader`, not `filereader`) — do not rename it.
 
-- `read_nation_file.gd` — `ReadNationFile`: static `loadNationFile()` parses `LandDeut.sav` and returns `Array[Club]`. Line counters are **0-based** and matched against field index enums (no magic numbers).
+- `read_nation_file.gd` — `ReadNationFile`: static `loadNationFile()` parses `LandDeut.sav` and returns a `Dictionary` with keys `clubs` (`Array[Club]`), `reporters` (`Array[Reporter]`), `referees` (`Array[Referee]`), `celebrities` (`Array[Celebrity]`), `sponsors` (`Array[Sponsor]`). Line counters are **0-based** and matched against field index enums (no magic numbers). Club post-manager fields are read via a separate `readingClubPost` / `lineCounterClubPost` state that activates after `%ENDSECT%STADION` within a `%SECT%VEREIN` block. `%SECT%SCHIRI` and `%SECT%ISCHIRI` are both parsed into the same referees array. `%SECT%SPONSORP` is a parent wrapper with no own fields — it is silently skipped; individual `%SECT%SPONSOR` entries inside it are parsed normally.
 - `field_mappings.gd` — `FieldMappings`: lookup tables (`PackedStringArray` / `Dictionary`) and legacy `SP_*`/`VE_*`/`VP_*`/`TR_*`/`MA_*`/`ST_*`/`RE_*`/`SC_*`/`PR_*` constants. Use field index enums instead of these constants for new code.
 
 **Field index enums** (0-based integers matching each section's line offsets):
@@ -189,6 +232,7 @@ Note: directory name has a typo (`filrereader`, not `filereader`) — do not ren
 | `reporter_field_index.gd` | `ReporterFieldIndex` | `%SECT%REPORTER` |
 | `referee_field_index.gd` | `RefereeFieldIndex` | `%SECT%SCHIRI` / `%SECT%ISCHIRI` |
 | `celebrity_field_index.gd` | `CelebrityFieldIndex` | `%SECT%PROMI` |
+| `sponsor_field_index.gd` | `SponsorFieldIndex` | `%SECT%SPONSOR` |
 
 ### Type Enums
 
@@ -198,8 +242,8 @@ All lookup tables from `FieldMappings` have corresponding enum classes. Enum val
 
 | File | Class | Enum | Source table |
 |------|-------|------|-------------|
-| `player_skill_types.gd` | `PlayerSkillTypes` | `Skill` | `SPIELER_FAEHIGKEITEN` (bitmask) |
-| `goalkeeper_skill_types.gd` | `GoalkeeperSkillTypes` | `Skill` | `TORWART_FAEHIGKEITEN` (bitmask) |
+| `player_skill_types.gd` | `PlayerSkillTypes` | `Skill` | `SPIELER_FAEHIGKEITEN` (bitmask); also has `static var LABELS: Dictionary` mapping `Skill` values to German display names |
+| `goalkeeper_skill_types.gd` | `GoalkeeperSkillTypes` | `Skill` | `TORWART_FAEHIGKEITEN` (bitmask); also has `static var LABELS: Dictionary` mapping `Skill` values to German display names |
 | `characteristic_types.gd` | `PlayerCharacteristicTypes` | `Characteristic` | `EIGENSCHAFTEN` (bitmask) |
 | `player_character_types.gd` | `PlayerCharacterTypes` | `Character` | `CHARAKTER` (bitmask) |
 | `beard_types.gd` | `BeardTypes` | `Beard` | `BART_BITS` (bitmask) |
@@ -270,13 +314,15 @@ All lookup tables from `FieldMappings` have corresponding enum classes. Enum val
   - `%SECT%REPORTER` — TV reporters
   - `%SECT%SCHIRI` / `%SECT%ISCHIRI` — referees
   - `%SECT%PROMI` — celebrities
+  - `%SECT%SPONSORP` — parent wrapper for all sponsor entries (no own data fields; silently skipped by reader)
+  - `%SECT%SPONSOR` — individual sponsors (40 entries): field 0 = name, field 6 = income in thousands DM
   - `%SECT%LAND` — nation data
 - `files/firstnames_male.txt` — male first names for generated free agents (one per line)
 - `files/lastnames.txt` — last names for generated free agents (one per line)
 
 ### Save / Load
 
-JSON saves in `user://saves/`. Each save includes: clubs (players, lineup, money, stadium, trainer), current date, season state, matchday results, training plan, free agents, pending transfers. Autosave runs after each week advance and matchday confirmation.
+JSON saves in `user://saves/`. Each save includes: clubs (players, lineup, money, stadium, trainer), current date, season state, matchday results, training plan, free agents, pending transfers, sponsor contract (`sponsor_name`, `sponsor_income`). Per-player: `training_skill`, `training_progress`. Autosave runs after each week advance and matchday confirmation.
 
 ## Code Conventions
 

@@ -4,6 +4,7 @@ extends RefCounted
 var lastname: String = ""
 var firstname: String = ""
 var birthdate: String = ""
+var competence: int = 0
 
 
 func _init(p_lastname: String, p_firstname: String, p_birthdate: String) -> void:

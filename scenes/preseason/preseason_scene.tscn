@@ -1,0 +1,184 @@
+[gd_scene load_steps=5 format=3 uid="uid://preseason_scene"]
+
+[ext_resource type="Script" path="res://scenes/preseason/preseason_scene.gd" id="1_presc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_neg"]
+bg_color = Color(0.87, 0.86, 0.77, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.38, 0.28, 1)
+
+[node name="PreseasonScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_presc")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="OuterVBox" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitlePanel" type="PanelContainer" parent="Content/OuterVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="TitleVBox" type="VBoxContainer" parent="Content/OuterVBox/TitlePanel"]
+layout_mode = 2
+
+[node name="TitleHdr" type="PanelContainer" parent="Content/OuterVBox/TitlePanel/TitleVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="Content/OuterVBox/TitlePanel/TitleVBox/TitleHdr"]
+layout_mode = 2
+text = "Vorsaison — Sponsorensuche"
+theme_override_font_sizes/font_size = 16
+
+[node name="TitleMargin" type="MarginContainer" parent="Content/OuterVBox/TitlePanel/TitleVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="TitleDesc" type="Label" parent="Content/OuterVBox/TitlePanel/TitleVBox/TitleMargin"]
+layout_mode = 2
+text = "Wählen Sie einen Sponsor für die kommende Saison. Sie können mit jedem Sponsor verhandeln."
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="StatusPanel" type="PanelContainer" parent="Content/OuterVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="StatusMargin" type="MarginContainer" parent="Content/OuterVBox/StatusPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="StatusLabel" type="Label" parent="Content/OuterVBox/StatusPanel/StatusMargin"]
+layout_mode = 2
+text = "Kein Sponsor ausgewählt"
+theme_override_font_sizes/font_size = 13
+modulate = Color(0.55, 0.55, 0.55, 1)
+
+[node name="SponsorsHBox" type="HBoxContainer" parent="Content/OuterVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="WeiterButton" type="Button" parent="Content/OuterVBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Weiter →"
+theme_override_font_sizes/font_size = 14
+
+[node name="NegotiationPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_right = 0.85
+anchor_top = 0.15
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_neg")
+visible = false
+
+[node name="NegMargin" type="MarginContainer" parent="NegotiationPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="NegVBox" type="VBoxContainer" parent="NegotiationPanel/NegMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NegHeader" type="HBoxContainer" parent="NegotiationPanel/NegMargin/NegVBox"]
+layout_mode = 2
+
+[node name="NegTitle" type="Label" parent="NegotiationPanel/NegMargin/NegVBox/NegHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Verhandlung"
+theme_override_font_sizes/font_size = 16
+
+[node name="NegCloseButton" type="Button" parent="NegotiationPanel/NegMargin/NegVBox/NegHeader"]
+layout_mode = 2
+text = "×"
+theme_override_font_sizes/font_size = 14
+
+[node name="OfferLabel" type="Label" parent="NegotiationPanel/NegMargin/NegVBox"]
+layout_mode = 2
+text = "Aktuelles Angebot: 0 DM"
+theme_override_font_sizes/font_size = 14
+
+[node name="InputLabel" type="Label" parent="NegotiationPanel/NegMargin/NegVBox"]
+layout_mode = 2
+text = "Ihr Gegenangebot (DM):"
+theme_override_font_sizes/font_size = 12
+
+[node name="CounterInput" type="LineEdit" parent="NegotiationPanel/NegMargin/NegVBox"]
+layout_mode = 2
+placeholder_text = "z.B. 500000"
+theme_override_font_sizes/font_size = 13
+
+[node name="MakeOfferButton" type="Button" parent="NegotiationPanel/NegMargin/NegVBox"]
+layout_mode = 2
+text = "Angebot machen"
+theme_override_font_sizes/font_size = 13
+
+[node name="ResponseLabel" type="Label" parent="NegotiationPanel/NegMargin/NegVBox"]
+layout_mode = 2
+text = ""
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 12
+
+[connection signal="pressed" from="Content/OuterVBox/WeiterButton" to="." method="_on_weiter_pressed"]
+[connection signal="pressed" from="NegotiationPanel/NegMargin/NegVBox/NegHeader/NegCloseButton" to="." method="_on_neg_close_pressed"]
+[connection signal="pressed" from="NegotiationPanel/NegMargin/NegVBox/MakeOfferButton" to="." method="_on_make_offer_pressed"]

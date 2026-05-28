@@ -18,7 +18,7 @@ func _on_club_selected(club: Club) -> void:
 	club_name_label.text = club.name
 	for child in player_list.get_children():
 		child.queue_free()
-	for player: Player in club.players:
+	for i: int in club.players.size():
 		var entry: SinglePlayerInClub = preload("res://scenes/single_player_in_club.tscn").instantiate()
 		player_list.add_child(entry)
-		entry.init(player)
+		entry.init(club.players[i], i)

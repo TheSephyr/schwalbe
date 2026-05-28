@@ -21,4 +21,4 @@ func _on_select_button_pressed() -> void:
 	Game.player_club.trainer = Trainer.new(
 		Game.trainer_lastname, Game.trainer_firstname, Game.trainer_birthdate
 	)
-	get_tree().change_scene_to_file("res://scenes/club_overview.tscn")
+	get_tree().change_scene_to_file("res://scenes/preseason/preseason_scene.tscn")

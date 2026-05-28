@@ -14,6 +14,8 @@ var secondary_position_1: PositionTypes.Position
 var secondary_position_2: PositionTypes.Position
 var positive_skills: Array[PlayerSkillTypes.Skill]
 var negative_skills: Array[PlayerSkillTypes.Skill]
+var gk_positive_skills: Array[GoalkeeperSkillTypes.Skill]
+var gk_negative_skills: Array[GoalkeeperSkillTypes.Skill]
 var characteristics: Array[PlayerCharacteristicTypes.Characteristic]
 var character: PlayerCharacterTypes.Character
 var has_stage_name: bool #TODO: Is this value even needed?
@@ -27,6 +29,9 @@ var captain_retirement: int
 var squad_number: int
 var hair_style: HairStyleTypes.HairStyle
 var beard: BeardTypes.Beard
+
+var training_skill: int = 0
+var training_progress: float = 0.0
 
 var played_matches: Array[Match]
 var matches_played: int = 0
@@ -49,8 +54,62 @@ static var POSITION_LABELS: Dictionary = {
 	"6": "CDM", "7": "LM", "8": "RM", "9": "CM", "10": "ST",
 }
 
+static var POSITION_CODES: Dictionary = {
+	"GK": "1", "LI": "2", "CB": "3", "LB": "4", "RB": "5",
+	"CDM": "6", "LM": "7", "RM": "8", "CM": "9", "ST": "10",
+}
+
 func position_label() -> String:
 	return POSITION_LABELS.get(position, position)
+
+
+func effective_strength(slot: String) -> int:
+	var base: int = currentAbility.to_int()
+	var str_val: int = base
+	var avg_fitness: float = (condition + freshness) / 2.0
+	str_val += clampi(roundi((avg_fitness - 50.0) / 25.0), -2, 2)
+	str_val += _talent_bonus(base)
+	if base > 75:
+		str_val = mini(str_val, 80)
+	str_val += positive_skills.size() * 10
+	str_val -= negative_skills.size() * 10
+	str_val -= _position_penalty(slot)
+	return maxi(1, str_val)
+
+
+func _talent_bonus(base_ability: int) -> int:
+	var talent_val: int = talent.to_int()
+	if talent_val == 0:
+		return 0
+	var full_bonus: int = (3 - talent_val) * 10
+	if base_ability > 75:
+		return full_bonus / 2
+	return full_bonus
+
+
+func _position_penalty(slot: String) -> int:
+	if slot.is_empty() or position_label() == slot:
+		return 0
+	var sec1_label: String = POSITION_LABELS.get(str(int(secondary_position_1)), "")
+	var sec2_label: String = POSITION_LABELS.get(str(int(secondary_position_2)), "")
+	if sec1_label == slot or sec2_label == slot:
+		return 0
+	var slot_code: String = POSITION_CODES.get(slot, "")
+	if slot_code.is_empty():
+		return 0
+	return _position_distance(position.to_int(), slot_code.to_int()) / 2
+
+
+static func _position_distance(a: int, b: int) -> int:
+	if a == b:
+		return 0
+	if a == 1 or b == 1:
+		return 8
+	var ga: int = 1 if a <= 5 else (2 if a <= 9 else 3)
+	var gb: int = 1 if b <= 5 else (2 if b <= 9 else 3)
+	if ga == gb:
+		return absi(a - b)
+	return absi(ga - gb) * 2 + 1
 
 func _to_string():
 	return "(" + lastname + ", " + firstname + ")"

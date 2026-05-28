@@ -33,10 +33,10 @@ func _populate(next_season: bool) -> void:
 	else:
 		players = Game.player_club.players
 
-	for player: Player in players:
+	for i: int in players.size():
 		var entry: SinglePlayerInClub = _scene.instantiate()
 		player_list.add_child(entry)
-		entry.init(player)
+		entry.init(players[i], i)
 
 
 func _next_season_squad() -> Array[Player]:

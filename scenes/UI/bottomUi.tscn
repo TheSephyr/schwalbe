@@ -69,6 +69,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Training"
 
+[node name="EinzeltrainingButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Einzeltraining"
+
 [node name="SucheButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -88,6 +93,11 @@ text = "Stadion"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Ausgaben"
+
+[node name="PersonalButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Personal"
 
 [node name="MenuButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -111,9 +121,11 @@ text = "NEXT"
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/BalanceButton" to="." method="_on_balance_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/KalenderButton" to="." method="_on_kalender_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TrainingButton" to="." method="_on_training_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/EinzeltrainingButton" to="." method="_on_einzeltraining_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/SucheButton" to="." method="_on_suche_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/TransfersButton" to="." method="_on_transfers_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/StadionButton" to="." method="_on_stadion_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/AusgabenButton" to="." method="_on_ausgaben_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/PersonalButton" to="." method="_on_personal_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/MenuButton" to="." method="_on_menu_button_down"]
 [connection signal="button_up" from="HBoxContainer/HBoxContainer/NextButton" to="." method="_on_next_button_button_up"]

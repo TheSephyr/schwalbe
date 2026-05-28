@@ -50,6 +50,7 @@ const TRAINING_CONDITION_GAIN: int = 8
 const TRAINING_CONDITION_FRESHNESS_LOSS: int = 4
 const TRAINING_REGEN_FRESHNESS_GAIN: int = 8
 const TRAINING_REGEN_CONDITION_LOSS: int = 4
+const INDIVIDUAL_TRAINING_WEEKS: int = 8
 
 # --- Match simulation (Poisson model) ---
 const HOME_ADVANTAGE: float = 1.15

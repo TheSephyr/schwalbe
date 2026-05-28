@@ -38,6 +38,10 @@ func _on_training_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/training/training_scene.tscn")
 
 
+func _on_einzeltraining_button_down() -> void:
+	get_tree().change_scene_to_file("res://scenes/individual_training/individual_training_scene.tscn")
+
+
 func _on_suche_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/player_search/player_search_scene.tscn")
 
@@ -52,6 +56,10 @@ func _on_stadion_button_down() -> void:
 
 func _on_ausgaben_button_down() -> void:
 	get_tree().change_scene_to_file("res://scenes/expenditure/expenditure_scene.tscn")
+
+
+func _on_personal_button_down() -> void:
+	get_tree().change_scene_to_file("res://scenes/personal/personal_scene.tscn")
 
 
 func _on_menu_button_down() -> void:

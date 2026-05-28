@@ -5,14 +5,23 @@ const SAVE_DIR = "user://saves/"
 var all_clubs: Array[Club]
 var first_division_clubs: Array[Club]
 var free_agents: Array[Player] = []
+var reporters: Array[Reporter] = []
+var referees: Array[Referee] = []
+var celebrities: Array[Celebrity] = []
+var sponsors: Array[Sponsor] = []
 var current_season: Season
 var player_club: Club
 var current_date: Date
 var training_plan: Array[int] = []
 
+var sponsor_name: String = ""
+var sponsor_income: int = 0
+
 var trainer_lastname: String = ""
 var trainer_firstname: String = ""
 var trainer_birthdate: String = ""
+var trainer_competence: int = 0
+var trainer_reputation: TrainerReputationTypes.Reputation = TrainerReputationTypes.Reputation.NONE
 
 var pending_transfers: Array[Dictionary] = []
 var active_negotiations: Array[Dictionary] = []
@@ -27,7 +36,12 @@ func _ready() -> void:
 
 func initial_load() -> void:
 	free_agents.clear()
-	all_clubs = ReadNationFile.loadNationFile("res://dbfiles/LandDeut.sav")
+	var nation_data := ReadNationFile.loadNationFile("res://dbfiles/LandDeut.sav")
+	all_clubs.assign(nation_data["clubs"])
+	reporters.assign(nation_data["reporters"])
+	referees.assign(nation_data["referees"])
+	celebrities.assign(nation_data["celebrities"])
+	sponsors.assign(nation_data["sponsors"])
 	for i in GameConfig.FIRST_DIVISION_SIZE:
 		first_division_clubs.append(all_clubs[i])
 	for club in first_division_clubs:
@@ -255,6 +269,29 @@ func _apply_training(week_index: int) -> void:
 		if club == player_club:
 			continue
 		_apply_training_to_club(club, randi_range(GameConfig.TRAINING_TYPE_CONDITION, GameConfig.TRAINING_TYPE_REGEN))
+	_apply_individual_training()
+
+
+func _apply_individual_training() -> void:
+	for player: Player in player_club.players:
+		if player.training_skill == 0:
+			continue
+		player.training_progress += 1.0 / GameConfig.INDIVIDUAL_TRAINING_WEEKS
+		if player.training_progress >= 1.0:
+			_complete_individual_training(player)
+
+
+func _complete_individual_training(player: Player) -> void:
+	if player.position == "1":
+		var skill := player.training_skill as GoalkeeperSkillTypes.Skill
+		if not player.gk_positive_skills.has(skill):
+			player.gk_positive_skills.append(skill)
+	else:
+		var skill := player.training_skill as PlayerSkillTypes.Skill
+		if not player.positive_skills.has(skill):
+			player.positive_skills.append(skill)
+	player.training_skill = 0
+	player.training_progress = 0.0
 
 
 func _apply_training_to_club(club: Club, type: int) -> void:
@@ -505,9 +542,13 @@ func save_game(save_name: String) -> void:
 	var data: Dictionary = {
 		"saved_at": saved_at,
 		"player_club_name": player_club.name,
+		"sponsor_name": sponsor_name,
+		"sponsor_income": sponsor_income,
 		"trainer_lastname": trainer_lastname,
 		"trainer_firstname": trainer_firstname,
 		"trainer_birthdate": trainer_birthdate,
+		"trainer_competence": trainer_competence,
+		"trainer_reputation": trainer_reputation,
 		"player_club_index": first_division_clubs.find(player_club),
 		"current_date_day": current_date.day,
 		"current_date_month": current_date.month,
@@ -561,6 +602,8 @@ func _serialize_player(player: Player) -> Dictionary:
 		"matches_played": player.matches_played,
 		"ability_history": player.ability_history,
 		"negotiating": player.negotiating,
+		"training_skill": player.training_skill,
+		"training_progress": player.training_progress,
 	}
 
 
@@ -584,6 +627,8 @@ func _deserialize_player(data: Dictionary) -> Player:
 	for entry: Variant in raw_history:
 		p.ability_history.append(entry as Dictionary)
 	p.negotiating = bool(data.get("negotiating", false))
+	p.training_skill = int(data.get("training_skill", 0))
+	p.training_progress = float(data.get("training_progress", 0.0))
 	return p
 
 
@@ -609,10 +654,13 @@ func _serialize_club(club: Club) -> Dictionary:
 		data["manager_lastname"] = club.manager.lastname
 		data["manager_firstname"] = club.manager.firstname
 		data["manager_birthdate"] = club.manager.birthdate
+		data["manager_competence"] = club.manager.competence
 	if club.trainer != null:
 		data["trainer_lastname"] = club.trainer.lastname
 		data["trainer_firstname"] = club.trainer.firstname
 		data["trainer_birthdate"] = club.trainer.birthdate
+		data["trainer_competence"] = club.trainer.competence
+		data["trainer_reputation"] = club.trainer.reputation
 	if club.stadium != null:
 		data["stadium_name"] = club.stadium.name
 		data["stadium_city"] = club.stadium.city
@@ -646,12 +694,15 @@ func _deserialize_club(data: Dictionary) -> Club:
 			data["manager_firstname"],
 			data.get("manager_birthdate", "")
 		)
+		club.manager.competence = data.get("manager_competence", 0)
 	if data.has("trainer_lastname"):
 		club.trainer = Trainer.new(
 			data["trainer_lastname"],
 			data["trainer_firstname"],
 			data.get("trainer_birthdate", "")
 		)
+		club.trainer.competence = data.get("trainer_competence", 0)
+		club.trainer.reputation = data.get("trainer_reputation", TrainerReputationTypes.Reputation.NONE)
 	if data.has("stadium_name"):
 		var st := Stadium.new()
 		st.name = data["stadium_name"]
@@ -673,13 +724,19 @@ func _apply_save(data: Dictionary) -> void:
 		first_division_clubs.append(club)
 		all_clubs.append(club)
 
+	sponsor_name = data.get("sponsor_name", "")
+	sponsor_income = int(data.get("sponsor_income", 0))
 	trainer_lastname = data.get("trainer_lastname", "")
 	trainer_firstname = data.get("trainer_firstname", "")
 	trainer_birthdate = data.get("trainer_birthdate", "")
+	trainer_competence = data.get("trainer_competence", 0)
+	trainer_reputation = data.get("trainer_reputation", TrainerReputationTypes.Reputation.NONE)
 
 	player_club = first_division_clubs[int(data["player_club_index"])]
 	if not trainer_lastname.is_empty():
 		player_club.trainer = Trainer.new(trainer_lastname, trainer_firstname, trainer_birthdate)
+		player_club.trainer.competence = trainer_competence
+		player_club.trainer.reputation = trainer_reputation
 
 	current_date = Date.new(
 		int(data["current_date_day"]),

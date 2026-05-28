@@ -1,20 +1,21 @@
 class_name SinglePlayerInClub
-extends HBoxContainer
+extends PanelContainer
 
-@onready var last_name: Label = $LastName
-@onready var first_name: Label = $FirstName
-@onready var birthday: Label = $Birthday
-@onready var talent: Label = $Talent
-@onready var current_ability: Label = $CurrentAbility
-@onready var postion: Label = $Postion
-@onready var contract_end: Label = $ContractEnd
-@onready var salary: Label = $Salary
+@onready var last_name: Label = $MarginContainer/HBoxContainer/LastName
+@onready var first_name: Label = $MarginContainer/HBoxContainer/FirstName
+@onready var birthday: Label = $MarginContainer/HBoxContainer/Birthday
+@onready var talent: Label = $MarginContainer/HBoxContainer/Talent
+@onready var current_ability: Label = $MarginContainer/HBoxContainer/CurrentAbility
+@onready var postion: Label = $MarginContainer/HBoxContainer/Postion
+@onready var contract_end: Label = $MarginContainer/HBoxContainer/ContractEnd
+@onready var salary: Label = $MarginContainer/HBoxContainer/Salary
 
 var player: Player
 var _popup: PopupMenu
 
 
 func _ready() -> void:
+	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	_popup = PopupMenu.new()
 	_popup.add_item("Spieler Info", 0)
 	_popup.add_item("Vertragsverhandlung", 1)
@@ -22,7 +23,7 @@ func _ready() -> void:
 	add_child(_popup)
 
 
-func init(player_update: Player) -> void:
+func init(player_update: Player, row_index: int) -> void:
 	player = player_update
 	last_name.text = player.lastname
 	first_name.text = player.firstname
@@ -33,6 +34,13 @@ func init(player_update: Player) -> void:
 	var parts := player.contract_end.split(".")
 	contract_end.text = parts[2] if parts.size() >= 3 else "–"
 	salary.text = _format_salary(player.salary)
+	_apply_row_style(row_index)
+
+
+func _apply_row_style(index: int) -> void:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.91, 0.9, 0.82, 1) if index % 2 == 0 else Color(0.85, 0.84, 0.74, 1)
+	add_theme_stylebox_override("panel", style)
 
 
 func _format_salary(amount: int) -> String:
