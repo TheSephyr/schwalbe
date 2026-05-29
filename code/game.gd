@@ -14,9 +14,6 @@ var player_club: Club
 var current_date: Date
 var training_plan: Array[int] = []
 
-var sponsor_name: String = ""
-var sponsor_income: int = 0
-
 var trainer_lastname: String = ""
 var trainer_firstname: String = ""
 var trainer_birthdate: String = ""
@@ -61,6 +58,9 @@ func _on_next_matchday() -> void:
 func start_new_season() -> void:
 	_apply_pending_transfers()
 	var next_year: int = current_season.start_year + 1
+	for club: Club in first_division_clubs:
+		club.money += club.sponsor_income
+	ai_assign_sponsors()
 	_ai_renew_contracts(next_year)
 	_remove_expired_contracts(current_season.start_year)
 	_retire_free_agents(next_year)
@@ -73,6 +73,20 @@ func start_new_season() -> void:
 	_init_training_plan()
 	_record_ability_snapshot("Saisonstart %d" % next_year)
 	save_game("Autosave")
+
+
+func ai_assign_sponsors() -> void:
+	var pool := sponsors.duplicate()
+	pool.shuffle()
+	var pool_idx: int = 0
+	for club: Club in first_division_clubs:
+		if club == player_club:
+			continue
+		if pool_idx < pool.size():
+			var s: Sponsor = pool[pool_idx]
+			club.sponsor_name = s.name
+			club.sponsor_income = s.income_per_season
+			pool_idx += 1
 
 
 func _ai_renew_contracts(season_end_year: int) -> void:
@@ -542,8 +556,6 @@ func save_game(save_name: String) -> void:
 	var data: Dictionary = {
 		"saved_at": saved_at,
 		"player_club_name": player_club.name,
-		"sponsor_name": sponsor_name,
-		"sponsor_income": sponsor_income,
 		"trainer_lastname": trainer_lastname,
 		"trainer_firstname": trainer_firstname,
 		"trainer_birthdate": trainer_birthdate,
@@ -649,6 +661,8 @@ func _serialize_club(club: Club) -> Dictionary:
 		"lineup_indices": lineup_indices,
 		"spielstil": club.spielstil,
 		"pressing": club.pressing,
+		"sponsor_name": club.sponsor_name,
+		"sponsor_income": club.sponsor_income,
 	}
 	if club.manager != null:
 		data["manager_lastname"] = club.manager.lastname
@@ -679,6 +693,8 @@ func _deserialize_club(data: Dictionary) -> Club:
 	club.money = int(data["money"])
 	club.spielstil = int(data.get("spielstil", GameConfig.SPIELSTIL_AUSGEWOGEN))
 	club.pressing = int(data.get("pressing", GameConfig.PRESSING_MITTEL))
+	club.sponsor_name = data.get("sponsor_name", "")
+	club.sponsor_income = int(data.get("sponsor_income", 0))
 
 	for pd: Dictionary in data["players"]:
 		club.players.append(_deserialize_player(pd))
@@ -724,8 +740,6 @@ func _apply_save(data: Dictionary) -> void:
 		first_division_clubs.append(club)
 		all_clubs.append(club)
 
-	sponsor_name = data.get("sponsor_name", "")
-	sponsor_income = int(data.get("sponsor_income", 0))
 	trainer_lastname = data.get("trainer_lastname", "")
 	trainer_firstname = data.get("trainer_firstname", "")
 	trainer_birthdate = data.get("trainer_birthdate", "")

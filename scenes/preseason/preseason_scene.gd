@@ -12,6 +12,7 @@ var _offers: Array[Dictionary] = []
 var _negotiating_index: int = -1
 
 func _ready() -> void:
+	Game.ai_assign_sponsors()
 	_offers = _generate_offers()
 	_rebuild_cards()
 	_update_status()
@@ -127,8 +128,8 @@ func _make_card(offer: Dictionary, index: int) -> Control:
 
 func _accept_offer(index: int) -> void:
 	_offers[index]["status"] = "accepted"
-	Game.sponsor_name = _offers[index]["name"]
-	Game.sponsor_income = _offers[index]["current_offer"]
+	Game.player_club.sponsor_name = _offers[index]["name"]
+	Game.player_club.sponsor_income = _offers[index]["current_offer"]
 	_rebuild_cards()
 	_update_status()
 
@@ -154,8 +155,8 @@ func _on_make_offer_pressed() -> void:
 	if counter <= offer["max_offer"]:
 		offer["current_offer"] = counter
 		offer["status"] = "accepted"
-		Game.sponsor_name = offer["name"]
-		Game.sponsor_income = counter
+		Game.player_club.sponsor_name = offer["name"]
+		Game.player_club.sponsor_income = counter
 		negotiation_panel.visible = false
 		_rebuild_cards()
 		_update_status()
@@ -171,17 +172,17 @@ func _on_neg_close_pressed() -> void:
 
 
 func _on_weiter_pressed() -> void:
-	if Game.sponsor_income > 0:
-		Game.player_club.money += Game.sponsor_income
+	if Game.player_club.sponsor_income > 0:
+		Game.player_club.money += Game.player_club.sponsor_income
 	get_tree().change_scene_to_file("res://scenes/club_overview.tscn")
 
 
 func _update_status() -> void:
-	if Game.sponsor_name.is_empty():
+	if Game.player_club.sponsor_name.is_empty():
 		status_label.text = "Kein Sponsor ausgewählt"
 		status_label.modulate = Color(0.55, 0.55, 0.55, 1)
 	else:
-		status_label.text = "Sponsor: " + Game.sponsor_name + "  —  " + _format_money(Game.sponsor_income) + " / Saison"
+		status_label.text = "Sponsor: " + Game.player_club.sponsor_name + "  —  " + _format_money(Game.player_club.sponsor_income) + " / Saison"
 		status_label.modulate = Color(0.18, 0.55, 0.18, 1)
 
 

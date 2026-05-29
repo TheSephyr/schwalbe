@@ -58,9 +58,9 @@ Game.initial_load()
   → ReadNationFile.loadNationFile()     # parses LandDeut.sav → Dictionary{clubs, reporters, referees, celebrities, sponsors}
   → Game.all_clubs / first_division_clubs[0..17] / reporters / referees / celebrities / sponsors
   → Season(first_division_clubs)        # generates round-robin schedule + assigns dates
-      → Matchday[] (each with a Date)
-      → Match[]
-      → Table (TeamStanding per club)
+	  → Matchday[] (each with a Date)
+	  → Match[]
+	  → Table (TeamStanding per club)
   → Game.current_date = Date(1, 7, 1999)
   → _generate_free_agents()            # 100 low-ability players from files/firstnames_male.txt + files/lastnames.txt
   → UI scenes subscribe to EventBus signals and render state
@@ -79,11 +79,11 @@ Match preview flow:
 Season end:
   → season_end.tscn shown
   → "Neue Saison starten" → Game.start_new_season()
-      → _apply_pending_transfers()     # pre-contract signings join
-      → _ai_renew_contracts()          # AI clubs renew ~85% of expiring contracts
-      → _remove_expired_contracts()    # remaining expired → free agents or retire
-      → _retire_free_agents()          # old free agents age out
-      → _ai_fill_squads()              # AI clubs below 22 players sign free agents by position
+	  → _apply_pending_transfers()     # pre-contract signings join
+	  → _ai_renew_contracts()          # AI clubs renew ~85% of expiring contracts
+	  → _remove_expired_contracts()    # remaining expired → free agents or retire
+	  → _retire_free_agents()          # old free agents age out
+	  → _ai_fill_squads()              # AI clubs below 22 players sign free agents by position
 ```
 
 ### Signal-Driven UI
