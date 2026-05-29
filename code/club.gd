@@ -17,6 +17,8 @@ var spielstil: int = GameConfig.SPIELSTIL_AUSGEWOGEN
 var pressing: int = GameConfig.PRESSING_MITTEL
 var sponsor_name: String = ""
 var sponsor_income: int = 0
+var sponsor_duration: int = 0
+var sponsor_championship_bonus: int = 0
 
 var home_kit_color1: KitColorTypes.KitColor = KitColorTypes.KitColor.WHITE
 var home_kit_pattern: KitPatternTypes.KitPattern = KitPatternTypes.KitPattern.PLAIN

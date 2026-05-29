@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://4xj8gjw5yguw"]
+
+[ext_resource type="Script" uid="uid://bndg6tw0y3pk1" path="res://scenes/preseason/negotiation_dialog.gd" id="1_ndlg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_neg"]
+bg_color = Color(0.87, 0.86, 0.77, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.38, 0.28, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_row"]
+bg_color = Color(0.82, 0.81, 0.72, 1)
+
+[node name="NegotiationDialog" type="PanelContainer" unique_id=536367635]
+theme_override_styles/panel = SubResource("StyleBoxFlat_neg")
+script = ExtResource("1_ndlg")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=283722249]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=1235723154]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox" unique_id=1703974935]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/Header" unique_id=1963370520]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
+
+[node name="CloseButton" type="Button" parent="Margin/VBox/Header" unique_id=1427677748]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "×"
+
+[node name="Grid" type="GridContainer" parent="Margin/VBox" unique_id=560547796]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="HeaderEmpty" type="PanelContainer" parent="Margin/VBox/Grid" unique_id=1649121656]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_row")
+
+[node name="HeaderAktuell" type="PanelContainer" parent="Margin/VBox/Grid" unique_id=1335655612]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_row")
+
+[node name="HeaderAktuellLabel" type="Label" parent="Margin/VBox/Grid/HeaderAktuell" unique_id=951663306]
+modulate = Color(0.35, 0.35, 0.35, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Aktuell"
+
+[node name="HeaderAngebot" type="PanelContainer" parent="Margin/VBox/Grid" unique_id=1601319160]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_row")
+
+[node name="HeaderAngebotLabel" type="Label" parent="Margin/VBox/Grid/HeaderAngebot" unique_id=938737713]
+modulate = Color(0.35, 0.35, 0.35, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Angebot"
+
+[node name="HeaderForderung" type="PanelContainer" parent="Margin/VBox/Grid" unique_id=640281843]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_row")
+
+[node name="HeaderForderungLabel" type="Label" parent="Margin/VBox/Grid/HeaderForderung" unique_id=1074223909]
+modulate = Color(0.35, 0.35, 0.35, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Forderung"
+
+[node name="AttrGrundbetrag" type="Label" parent="Margin/VBox/Grid" unique_id=1704324944]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Grundbetrag"
+
+[node name="CurrentGrundbetrag" type="Label" parent="Margin/VBox/Grid" unique_id=2138432103]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "—"
+
+[node name="OfferGrundbetrag" type="Label" parent="Margin/VBox/Grid" unique_id=1468338812]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="GrundbetragSpin" type="SpinBox" parent="Margin/VBox/Grid" unique_id=470742927]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10000000.0
+step = 50000.0
+suffix = "DM"
+
+[node name="AttrLaufzeit" type="Label" parent="Margin/VBox/Grid" unique_id=2000039994]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Laufzeit"
+
+[node name="CurrentLaufzeit" type="Label" parent="Margin/VBox/Grid" unique_id=590786441]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "—"
+
+[node name="OfferLaufzeit" type="Label" parent="Margin/VBox/Grid" unique_id=579839346]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="LaufzeitSpin" type="SpinBox" parent="Margin/VBox/Grid" unique_id=648523440]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 5.0
+value = 1.0
+suffix = "J."
+
+[node name="AttrMeister" type="Label" parent="Margin/VBox/Grid" unique_id=859670948]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Meister/Aufstieg"
+
+[node name="CurrentMeister" type="Label" parent="Margin/VBox/Grid" unique_id=1189277962]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "—"
+
+[node name="OfferMeister" type="Label" parent="Margin/VBox/Grid" unique_id=564614065]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="MeisterSpin" type="SpinBox" parent="Margin/VBox/Grid" unique_id=1771540127]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 5000000.0
+step = 50000.0
+suffix = "DM"
+
+[node name="MakeOfferButton" type="Button" parent="Margin/VBox" unique_id=1262086095]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Angebot machen"
+
+[connection signal="pressed" from="Margin/VBox/Header/CloseButton" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Margin/VBox/MakeOfferButton" to="." method="_on_make_offer_pressed"]

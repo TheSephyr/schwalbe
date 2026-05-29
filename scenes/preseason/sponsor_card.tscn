@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dspc5rdx8nh3o"]
+
+[ext_resource type="Script" uid="uid://cspc4rdx7mg2n" path="res://scenes/preseason/sponsor_card.gd" id="1_card"]
+
+[node name="SponsorCard" type="PanelContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1_card")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 14
+
+[node name="AmountLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+
+[node name="PerLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "pro Saison"
+horizontal_alignment = 1
+modulate = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 11
+
+[node name="Spacer" type="Control" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AcceptedLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "Angenommen"
+horizontal_alignment = 1
+modulate = Color(0.18, 0.55, 0.18, 1)
+theme_override_font_sizes/font_size = 13
+visible = false
+
+[node name="DeclinedLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "Abgelehnt"
+horizontal_alignment = 1
+modulate = Color(0.65, 0.15, 0.15, 1)
+theme_override_font_sizes/font_size = 13
+visible = false
+
+[node name="ButtonsVBox" type="VBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AcceptButton" type="Button" parent="Margin/VBox/ButtonsVBox"]
+layout_mode = 2
+text = "Annehmen"
+theme_override_font_sizes/font_size = 12
+
+[node name="NegotiateButton" type="Button" parent="Margin/VBox/ButtonsVBox"]
+layout_mode = 2
+text = "Verhandeln"
+theme_override_font_sizes/font_size = 12
+
+[connection signal="pressed" from="Margin/VBox/ButtonsVBox/AcceptButton" to="." method="_on_accept_pressed"]
+[connection signal="pressed" from="Margin/VBox/ButtonsVBox/NegotiateButton" to="." method="_on_negotiate_pressed"]

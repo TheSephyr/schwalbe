@@ -663,6 +663,8 @@ func _serialize_club(club: Club) -> Dictionary:
 		"pressing": club.pressing,
 		"sponsor_name": club.sponsor_name,
 		"sponsor_income": club.sponsor_income,
+		"sponsor_duration": club.sponsor_duration,
+		"sponsor_championship_bonus": club.sponsor_championship_bonus,
 	}
 	if club.manager != null:
 		data["manager_lastname"] = club.manager.lastname
@@ -695,6 +697,8 @@ func _deserialize_club(data: Dictionary) -> Club:
 	club.pressing = int(data.get("pressing", GameConfig.PRESSING_MITTEL))
 	club.sponsor_name = data.get("sponsor_name", "")
 	club.sponsor_income = int(data.get("sponsor_income", 0))
+	club.sponsor_duration = int(data.get("sponsor_duration", 0))
+	club.sponsor_championship_bonus = int(data.get("sponsor_championship_bonus", 0))
 
 	for pd: Dictionary in data["players"]:
 		club.players.append(_deserialize_player(pd))

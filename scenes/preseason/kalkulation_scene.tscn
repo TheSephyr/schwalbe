@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://preseason_scene"]
+[gd_scene format=3 uid="uid://dkm4owt0arq5s"]
 
-[ext_resource type="Script" uid="uid://bt7imvrtou2xg" path="res://scenes/preseason/preseason_scene.gd" id="1_presc"]
+[ext_resource type="Script" uid="uid://ckm3nwtx8pq4r" path="res://scenes/preseason/kalkulation_scene.gd" id="1_kalk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
 bg_color = Color(0.96, 0.8, 0.0, 1)
@@ -17,14 +17,14 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.5, 0.48, 0.38, 1)
 
-[node name="PreseasonScene" type="Control"]
+[node name="KalkulationScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_presc")
+script = ExtResource("1_kalk")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -64,24 +64,24 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_header")
 
 [node name="TitleLabel" type="Label" parent="Content/OuterVBox/TitlePanel/TitleVBox/TitleHdr"]
 layout_mode = 2
-text = "Vorsaison"
+text = "Kalkulation"
 theme_override_font_sizes/font_size = 16
 
 [node name="Spacer" type="Control" parent="Content/OuterVBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="KalkulationButton" type="Button" parent="Content/OuterVBox"]
+[node name="SponsorsButton" type="Button" parent="Content/OuterVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Kalkulation"
+text = "Sponsoren"
 theme_override_font_sizes/font_size = 14
 
-[node name="StartSeasonButton" type="Button" parent="Content/OuterVBox"]
+[node name="ZuruckButton" type="Button" parent="Content/OuterVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Saison starten →"
+text = "← Zurück"
 theme_override_font_sizes/font_size = 14
 
-[connection signal="pressed" from="Content/OuterVBox/KalkulationButton" to="." method="_on_kalkulation_pressed"]
-[connection signal="pressed" from="Content/OuterVBox/StartSeasonButton" to="." method="_on_start_season_pressed"]
+[connection signal="pressed" from="Content/OuterVBox/SponsorsButton" to="." method="_on_sponsors_pressed"]
+[connection signal="pressed" from="Content/OuterVBox/ZuruckButton" to="." method="_on_zuruck_pressed"]

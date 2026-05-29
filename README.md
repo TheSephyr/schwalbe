@@ -9,7 +9,7 @@ In Schwalbe übernimmst du die Rolle eines Trainers in der deutschen Liga der Sa
 ## Voraussetzungen
 
 - [Godot 4.x](https://godotengine.org/)
-- nation.sav-File eines Landes von Anstoss 3 (muss in UTF-8 umkonvertiert werden)
+- nation.sav-File eines Landes von Anstoss 3 (muss in UTF-8 umkonvertiert werden) unter dbfiles/LandDeut.sav
 
 ## Starten
 
@@ -30,8 +30,6 @@ Die Einstiegsszene ist `res://scenes/starting_game.tscn`.
 - Vereinsfinanzen und Gehaltsabrechnung
 - Wochentraining und Spielerform
 - Stadionverwaltung und Ticketpreise
-- KI-gesteuerte Gegnervereine
-- Saisonübergänge mit automatischer KI-Kaderpflege
 
 ## Debug
 
