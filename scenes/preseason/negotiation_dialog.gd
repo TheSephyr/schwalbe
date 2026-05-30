@@ -15,6 +15,10 @@ signal offer_submitted(demands: Dictionary)
 @onready var meister_spin: SpinBox = $Margin/VBox/Grid/MeisterSpin
 
 
+func _ready() -> void:
+	visible = false
+
+
 func open(sponsor_name: String, current: Dictionary, offer: Dictionary) -> void:
 	title_label.text = sponsor_name
 

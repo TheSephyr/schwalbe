@@ -129,6 +129,9 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
   - **`effective_strength(slot: String) -> int`** — A3-faithful strength used in match simulation: base `currentAbility` ± fitness deviation (±2), ± talent bonus (WONDERKID +20 … TWO_LEFT_FEET −20, halved for ability >75, capped at 80), +10/−10 per positive/negative skill, − position penalty (0 if primary or secondary position matches slot; otherwise `_position_distance / 2` where distance: same group = |Δpos|, cross-group = |Δgroup|×2+1, GK↔outfield = 8)
 
 - `code/club.gd` — `Club`: name, roster (`Player[]`), `currentLineUp: Array[Player]`, `currentLineUpSlots: Array[String]` (parallel array of formation slot labels, e.g. `"CB"`, `"ST"`; populated by `apply_formation()` alongside `currentLineUp`), `money` (set from `BALANCE` field in .sav), `manager`, `trainer`, `stadium`; `total_daily_wages()` = sum(salary)/365; `pay_wages(days)` deducts; `defaultLineUp()` / `apply_formation()`
+  - Tactics: `spielstil: int` (default `GameConfig.SPIELSTIL_AUSGEWOGEN`), `pressing: int` (default `GameConfig.PRESSING_MITTEL`)
+  - Sponsor contract: `sponsor_name: String`, `sponsor_income: int` (DM/season), `sponsor_duration: int` (years), `sponsor_championship_bonus: int` (DM); set in `sponsor_scene` during preseason; `sponsor_income` credited to `money` when "Saison starten" is pressed in `preseason_scene`
+  - Attendance planning: `planned_attendance: int = 0` — player-set average attendance used for ticket revenue projection in `attendance_revenue_scene`; persisted in saves
   - Identity: `abbreviation`, `chant`, `fan_name`, `abbreviation_article: AbbreviationArticleTypes.Article`, `media_city`, `founding_year`, `public_company`, `regional_league: RegionalLeagueTypes.RegionalLeague`
   - Kits: `home_kit_color1/2/shorts_color/socks_color: KitColorTypes.KitColor`, `home_kit_pattern: KitPatternTypes.KitPattern`, `home_kit_socks_striped: bool` (same set for `away_kit_*`); color1+pattern are packed in a single file field: `color = val & 0xF`, `pattern = (val >> 4) & 0xF`; socks: `color = val & 0xF`, `striped = (val & 0x10) != 0`
   - Fans: `fan_attendance: FanAttendanceTypes.FanAttendance`, `fan_type: FanTypeTypes.FanType`, `fan_friendship_with: int`, `arch_rival: int`, `max_fan_attendance: int`, `hooligans: HooliganTypes.Hooligans`
@@ -151,7 +154,7 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
 
 - `code/celebrity.gd` — `Celebrity`: lastname, firstname, `favorite_club: int`; `full_name()`; stored in `Game.celebrities`
 
-- `code/sponsor.gd` — `Sponsor`: `name: String`, `income_per_season: int` (DM; field value × 1000); stored in `Game.sponsors` (40 entries from `%SECT%SPONSOR`). Active contract stored in `Game.sponsor_name` and `Game.sponsor_income`; applied to `player_club.money` when the player accepts in the preseason scene.
+- `code/sponsor.gd` — `Sponsor`: `name: String`, `income_per_season: int` (DM; field value × 1000); stored in `Game.sponsors` (40 entries from `%SECT%SPONSOR`). Active contract stored on `player_club` (`sponsor_name`, `sponsor_income`, `sponsor_duration`, `sponsor_championship_bonus`); income credited to `player_club.money` when "Saison starten" is pressed in `preseason_scene`.
 
 - `code/util/date.gd` — `Date` (RefCounted): day/month/year; `add_days(n) → Date`; `days_until(other) → int` (Julian Day Number diff)
 
@@ -192,7 +195,11 @@ Four transfer contexts stored in `GameState.transfer_context`:
 | Main menu | `scenes/main_menu.tscn` | New game / load game |
 | Trainer setup | `scenes/manager_setup/manager_setup_scene.tscn` | Enter trainer name + age before new game |
 | Team selection | `scenes/team_selection.tscn` | Pick your club → navigates to preseason scene |
-| Preseason | `scenes/preseason/preseason_scene.tscn` | Sponsor negotiation at game start; 3 real sponsors drawn randomly from `Game.sponsors`; accept/negotiate (up to 130% of base); accepted sponsor income credited to `player_club.money` on "Weiter" → club overview |
+| Preseason | `scenes/preseason/preseason_scene.tscn` | Hub before season start; "Kalkulation" → calculation scene; "Saison starten" credits `sponsor_income` to `player_club.money` then navigates to club overview |
+| Calculation | `scenes/preseason/calculation_scene.tscn` | Financial planning hub; links to Sponsors and Attendance Revenue sub-scenes |
+| Sponsor search | `scenes/preseason/sponsor_scene.tscn` | 3 random sponsors drawn from `Game.sponsors`; accept at base price or negotiate (up to 130% base, +1 year duration, up to 150% championship bonus); result stored on `player_club` |
+| Attendance revenue | `scenes/preseason/attendance_revenue_scene.tscn` | Slider to set planned average attendance (1–stadium capacity); shows projected season ticket revenue; persisted as `player_club.planned_attendance` |
+| Tactics | `scenes/tactics/tactics_scene.tscn` | Spielstil and pressing selection |
 | Club overview | `scenes/club/club.tscn` | Roster list; toggle current vs next-season squad |
 | Player profile | `scenes/player/player_scene.tscn` | Player stats + contract |
 | Contract negotiation | `scenes/contract/contract_scene.tscn` | Adjust salary/bonuses/years; context-aware (renewal/free/precontract/transfer) |
@@ -288,7 +295,7 @@ All lookup tables from `FieldMappings` have corresponding enum classes. Enum val
 |------|-------|------|-------------|
 | `reporter_attitude_types.gd` | `ReporterAttitudeTypes` | `Attitude` | `BOESE_LIEB` |
 
-**`code/stadion/`:**
+**`code/stadium/`:**
 
 | File | Class | Enum | Source table |
 |------|-------|------|-------------|
@@ -326,10 +333,10 @@ JSON saves in `user://saves/`. Each save includes: clubs (players, lineup, money
 
 ## Code Conventions
 
-- Programming language (identifiers, variables, functions, class names, comments) is **English**
+- Programming language is **English** — this applies to identifiers, variables, functions, class names, comments, and **file/directory names**
 - Static typing throughout
 - GDScript with Godot 4 syntax (`class_name`, typed signals, `@export`, etc.)
-- Snake_case for functions and variables; PascalCase for class names
+- Snake_case for functions, variables, and file names; PascalCase for class names
 - gdLinter addon is active — keep code clean to avoid editor warnings
 - No automated tests exist; test by running scenes in the editor
 - UI text visible to the player is in **German** (game is set in Germany)

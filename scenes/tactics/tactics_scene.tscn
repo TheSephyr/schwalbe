@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dv4r7mn2xqt8p"]
 
-[ext_resource type="Script" uid="uid://b9k3wqt5fhcm6" path="res://scenes/taktik/taktik_scene.gd" id="1_takt1"]
+[ext_resource type="Script" uid="uid://b9k3wqt5fhcm6" path="res://scenes/tactics/tactics_scene.gd" id="1_takt1"]
 [ext_resource type="PackedScene" uid="uid://cxsni6lwvqdvp" path="res://scenes/UI/topUi.tscn" id="2_takt2"]
 [ext_resource type="PackedScene" uid="uid://buchgtkt1j5ym" path="res://scenes/UI/bottomUi.tscn" id="3_takt3"]
 

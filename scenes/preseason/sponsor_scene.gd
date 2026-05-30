@@ -98,7 +98,7 @@ func _on_offer_submitted(demands: Dictionary) -> void:
 
 
 func _on_zuruck_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/preseason/kalkulation_scene.tscn")
+	get_tree().change_scene_to_file("res://scenes/preseason/calculation_scene.tscn")
 
 
 func _update_status() -> void:

@@ -6,7 +6,7 @@ func _ready() -> void:
 
 
 func _on_kalkulation_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/preseason/kalkulation_scene.tscn")
+	get_tree().change_scene_to_file("res://scenes/preseason/calculation_scene.tscn")
 
 
 func _on_start_season_pressed() -> void:

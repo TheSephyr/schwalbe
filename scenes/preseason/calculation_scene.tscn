@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dkm4owt0arq5s"]
 
-[ext_resource type="Script" uid="uid://ckm3nwtx8pq4r" path="res://scenes/preseason/kalkulation_scene.gd" id="1_kalk"]
+[ext_resource type="Script" uid="uid://ckm3nwtx8pq4r" path="res://scenes/preseason/calculation_scene.gd" id="1_kalk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
 bg_color = Color(0.96, 0.8, 0.0, 1)
@@ -77,6 +77,12 @@ size_flags_horizontal = 4
 text = "Sponsoren"
 theme_override_font_sizes/font_size = 14
 
+[node name="ZuschauerButton" type="Button" parent="Content/OuterVBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Zuschauer"
+theme_override_font_sizes/font_size = 14
+
 [node name="ZuruckButton" type="Button" parent="Content/OuterVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -84,4 +90,5 @@ text = "← Zurück"
 theme_override_font_sizes/font_size = 14
 
 [connection signal="pressed" from="Content/OuterVBox/SponsorsButton" to="." method="_on_sponsors_pressed"]
+[connection signal="pressed" from="Content/OuterVBox/ZuschauerButton" to="." method="_on_zuschauer_pressed"]
 [connection signal="pressed" from="Content/OuterVBox/ZuruckButton" to="." method="_on_zuruck_pressed"]

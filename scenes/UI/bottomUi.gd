@@ -19,7 +19,7 @@ func _on_line_up_button_down():
 
 
 func _on_taktik_button_down() -> void:
-	get_tree().change_scene_to_file("res://scenes/taktik/taktik_scene.tscn")
+	get_tree().change_scene_to_file("res://scenes/tactics/tactics_scene.tscn")
 
 
 func _on_club_button_down() -> void:
