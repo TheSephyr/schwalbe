@@ -34,3 +34,7 @@ Die Einstiegsszene ist `res://scenes/starting_game.tscn`.
 ## Debug
 
 Mit **Strg+S** kann während des Spiels eine Debug-Überlagerung ein- und ausgeblendet werden. Diese zeigt den aktuellen Szenennamen sowie einen Button zum Simulieren der gesamten Saison.
+
+## Discord
+
+https://discord.gg/sZuRPF8SGg

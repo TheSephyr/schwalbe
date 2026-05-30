@@ -678,6 +678,12 @@ func _serialize_club(club: Club) -> Dictionary:
 		data["trainer_birthdate"] = club.trainer.birthdate
 		data["trainer_competence"] = club.trainer.competence
 		data["trainer_reputation"] = club.trainer.reputation
+	if club.co_trainer != null:
+		data["co_trainer_lastname"] = club.co_trainer.lastname
+		data["co_trainer_firstname"] = club.co_trainer.firstname
+		data["co_trainer_birthdate"] = club.co_trainer.birthdate
+		data["co_trainer_competence"] = club.co_trainer.competence
+		data["co_trainer_reputation"] = club.co_trainer.reputation
 	if club.stadium != null:
 		data["stadium_name"] = club.stadium.name
 		data["stadium_city"] = club.stadium.city
@@ -725,6 +731,14 @@ func _deserialize_club(data: Dictionary) -> Club:
 		)
 		club.trainer.competence = data.get("trainer_competence", 0)
 		club.trainer.reputation = data.get("trainer_reputation", TrainerReputationTypes.Reputation.NONE)
+	if data.has("co_trainer_lastname"):
+		club.co_trainer = Trainer.new(
+			data["co_trainer_lastname"],
+			data["co_trainer_firstname"],
+			data.get("co_trainer_birthdate", "")
+		)
+		club.co_trainer.competence = data.get("co_trainer_competence", 0)
+		club.co_trainer.reputation = data.get("co_trainer_reputation", TrainerReputationTypes.Reputation.NONE)
 	if data.has("stadium_name"):
 		var st := Stadium.new()
 		st.name = data["stadium_name"]

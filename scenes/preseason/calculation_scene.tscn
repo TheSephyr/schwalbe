@@ -17,7 +17,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.5, 0.48, 0.38, 1)
 
-[node name="KalkulationScene" type="Control"]
+[node name="CalculationScene" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,21 +67,95 @@ layout_mode = 2
 text = "Kalkulation"
 theme_override_font_sizes/font_size = 16
 
-[node name="Spacer" type="Control" parent="Content/OuterVBox"]
+[node name="DataPanel" type="PanelContainer" parent="Content/OuterVBox"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="SponsorsButton" type="Button" parent="Content/OuterVBox"]
+[node name="DataMargin" type="MarginContainer" parent="Content/OuterVBox/DataPanel"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="DataVBox" type="VBoxContainer" parent="Content/OuterVBox/DataPanel/DataMargin"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Grid" type="GridContainer" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="SponsorsButton" type="Button" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.45
 text = "Sponsoren"
 theme_override_font_sizes/font_size = 14
 
-[node name="ZuschauerButton" type="Button" parent="Content/OuterVBox"]
+[node name="SponsorValueLabel" type="Label" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.55
+text = "—"
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+
+[node name="AttendanceButton" type="Button" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.45
 text = "Zuschauer"
 theme_override_font_sizes/font_size = 14
+
+[node name="AttendanceValueLabel" type="Label" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.55
+text = "—"
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+
+[node name="CoTrainerButton" type="Button" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.45
+text = "Co-Trainer verpflichten"
+theme_override_font_sizes/font_size = 14
+
+[node name="CoTrainerValueLabel" type="Label" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.55
+text = "—"
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+
+[node name="Separator" type="HSeparator" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TotalHBox" type="HBoxContainer" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox"]
+layout_mode = 2
+
+[node name="TotalLabel" type="Label" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/TotalHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Gesamt"
+theme_override_font_sizes/font_size = 14
+
+[node name="TotalValueLabel" type="Label" parent="Content/OuterVBox/DataPanel/DataMargin/DataVBox/TotalHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "—"
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+
+[node name="Spacer" type="Control" parent="Content/OuterVBox"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="ZuruckButton" type="Button" parent="Content/OuterVBox"]
 layout_mode = 2
@@ -89,6 +163,7 @@ size_flags_horizontal = 4
 text = "← Zurück"
 theme_override_font_sizes/font_size = 14
 
-[connection signal="pressed" from="Content/OuterVBox/SponsorsButton" to="." method="_on_sponsors_pressed"]
-[connection signal="pressed" from="Content/OuterVBox/ZuschauerButton" to="." method="_on_zuschauer_pressed"]
+[connection signal="pressed" from="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid/SponsorsButton" to="." method="_on_sponsors_pressed"]
+[connection signal="pressed" from="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid/AttendanceButton" to="." method="_on_attendance_pressed"]
+[connection signal="pressed" from="Content/OuterVBox/DataPanel/DataMargin/DataVBox/Grid/CoTrainerButton" to="." method="_on_co_trainer_pressed"]
 [connection signal="pressed" from="Content/OuterVBox/ZuruckButton" to="." method="_on_zuruck_pressed"]

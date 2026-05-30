@@ -12,6 +12,7 @@ var currentLineUpSlots: Array[String] = []
 var money: int = GameConfig.STARTING_CLUB_MONEY
 var manager: Manager = null
 var trainer: Trainer = null
+var co_trainer: Trainer = null
 var stadium: Stadium = null
 var spielstil: int = GameConfig.SPIELSTIL_AUSGEWOGEN
 var pressing: int = GameConfig.PRESSING_MITTEL
