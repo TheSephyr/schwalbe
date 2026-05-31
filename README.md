@@ -35,6 +35,10 @@ Die Einstiegsszene ist `res://scenes/starting_game.tscn`.
 
 Mit **Strg+S** kann während des Spiels eine Debug-Überlagerung ein- und ausgeblendet werden. Diese zeigt den aktuellen Szenennamen sowie einen Button zum Simulieren der gesamten Saison.
 
+## Offene Fragen
+
+- Woran erkennt man die Ligazugehörigkeit in den Land.sav Dateien?
+
 ## Roadmap
 
 Den aktuellen Entwicklungsplan mit offenen Features und Meilensteinen gibt es hier: [infos/ROADMAP.md](infos/ROADMAP.md)
