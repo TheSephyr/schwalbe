@@ -11,6 +11,7 @@ var _player_index: int = 0
 @onready var form_val: Label = $Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid/FormVal
 @onready var kondition_val: Label = $Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid/KonditionVal
 @onready var frische_val: Label = $Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid/FrischeVal
+@onready var motivation_val: Label = $Content/VBox/Middle/LeftVBox/AllgPanel/AllgVBox/AllgMargin/AllgGrid/MotivationVal
 @onready var club_name: Label = $Content/VBox/Middle/RightVBox/VeinPanel/VeinVBox/VeinMargin/ClubName
 @onready var talent_value: Label = $Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner/TalentValue
 @onready var matches_val: Label = $Content/VBox/Middle/RightVBox/TalentPanel/TalentVBox/TalentMargin/TalentInner/MatchesVal
@@ -46,6 +47,7 @@ func _load_player() -> void:
 	form_val.text = player.currentAbility
 	kondition_val.text = str(player.condition)
 	frische_val.text = str(player.freshness)
+	motivation_val.text = str(player.motivation)
 	talent_value.text = player.talent
 	matches_val.text = str(player.matches_played)
 	club_name.text = _find_player_club()

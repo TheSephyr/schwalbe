@@ -29,6 +29,8 @@ func simulateMatch() -> void:
 
 	add_match_to_player(homeTeam)
 	add_match_to_player(awayTeam)
+	_apply_motivation(homeTeam, scoreHome, scoreAway)
+	_apply_motivation(awayTeam, scoreAway, scoreHome)
 	played = true
 
 
@@ -60,3 +62,13 @@ func add_match_to_player(team: Club) -> void:
 	for player: Player in team.currentLineUp:
 		player.add_match(self)
 		team.money -= player.auflauf_praemie
+
+
+func _apply_motivation(team: Club, goals_for: int, goals_against: int) -> void:
+	var delta: int = 0
+	if goals_for > goals_against:
+		delta = 5
+	elif goals_for < goals_against:
+		delta = -5
+	for player: Player in team.currentLineUp:
+		player.motivation = clampi(player.motivation + delta, 0, 100)

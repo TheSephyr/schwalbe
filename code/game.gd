@@ -616,6 +616,7 @@ func _serialize_player(player: Player) -> Dictionary:
 		"negotiating": player.negotiating,
 		"training_skill": player.training_skill,
 		"training_progress": player.training_progress,
+		"motivation": player.motivation,
 	}
 
 
@@ -641,6 +642,7 @@ func _deserialize_player(data: Dictionary) -> Player:
 	p.negotiating = bool(data.get("negotiating", false))
 	p.training_skill = int(data.get("training_skill", 0))
 	p.training_progress = float(data.get("training_progress", 0.0))
+	p.motivation = int(data.get("motivation", 75))
 	return p
 
 

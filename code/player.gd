@@ -30,6 +30,8 @@ var squad_number: int
 var hair_style: HairStyleTypes.HairStyle
 var beard: BeardTypes.Beard
 
+var motivation: int = 75
+
 var training_skill: int = 0
 var training_progress: float = 0.0
 
@@ -74,6 +76,7 @@ func effective_strength(slot: String) -> int:
 	str_val += positive_skills.size() * 10
 	str_val -= negative_skills.size() * 10
 	str_val -= _position_penalty(slot)
+	str_val -= maxi(0, (60 - motivation) / 10)
 	return maxi(1, str_val)
 
 
