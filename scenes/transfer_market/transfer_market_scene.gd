@@ -1,8 +1,8 @@
 extends Control
 
-@onready var negotiations_list: VBoxContainer = $Content/ActivePanel/ActiveScroll/NegotiationsList
-@onready var active_count_label: Label = $Content/ActivePanel/ActiveHeader/ActiveCount
-@onready var results_list: VBoxContainer = $Content/ResultsPanel/ResultsList
+@onready var negotiations_list: VBoxContainer = $Content/ActivePanel/ActiveMargin/ActiveVBox/ActiveScroll/NegotiationsList
+@onready var active_count_label: Label = $Content/ActivePanel/ActiveMargin/ActiveVBox/ActiveHeader/ActiveCount
+@onready var results_list: VBoxContainer = $Content/ResultsPanel/ResultsMargin/ResultsVBox/ResultsList
 
 
 func _ready() -> void:

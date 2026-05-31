@@ -27,81 +27,113 @@ size_flags_horizontal = 3
 [node name="ClubsButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
 text = "Clubs"
 
 [node name="MatchdayButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Matchday"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Match"
 
 [node name="TableButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
 text = "Table"
 
 [node name="LineUp" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Line-Up"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Lineup"
 
 [node name="TaktikButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
 text = "Taktik"
 
 [node name="Club" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
 text = "Club"
 
 [node name="BalanceButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Balance"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Bilanz"
 
 [node name="KalenderButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Kalender"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Kalen."
 
 [node name="TrainingButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Training"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Train."
 
 [node name="EinzeltrainingButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Einzeltraining"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Einzel"
 
 [node name="SucheButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
 text = "Suche"
 
 [node name="TransfersButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Transfers"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Trans."
 
 [node name="StadionButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Stadion"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Stad."
 
 [node name="AusgabenButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Ausgaben"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Ausg."
 
 [node name="PersonalButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Personal"
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
+text = "Pers."
 
 [node name="MenuButton" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 0)
+theme_override_font_sizes/font_size = 10
 text = "Menü"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
