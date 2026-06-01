@@ -10,7 +10,7 @@ func setup(player: Player, club_name: String) -> void:
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 	if club_name != "Vereinslos":
-		for club: Club in Game.first_division_clubs:
+		for club: Club in Game.all_clubs:
 			if club.name == club_name:
 				_source_club = club
 				break
@@ -29,8 +29,10 @@ func setup(player: Player, club_name: String) -> void:
 	var name_text := player.lastname + ", " + player.firstname
 	if player.negotiating:
 		name_text += " [V]"
+	var nation_text := _source_club.nation if _source_club != null else ""
 	_add_lbl(hbox, name_text, true, 0)
 	_add_lbl(hbox, club_name, true, 0)
+	_add_lbl(hbox, nation_text, false, 60)
 	_add_lbl(hbox, player.position_label(), false, 44)
 	_add_lbl(hbox, _age(player.birthdate), false, 40)
 	_add_lbl(hbox, player.talent, false, 48)

@@ -7,7 +7,7 @@ var _selected_index: int = -1
 
 
 func _ready() -> void:
-	for club: Club in Game.first_division_clubs:
+	for club: Club in Game.player_league.clubs:
 		team_list.add_item(club.name)
 
 
@@ -17,7 +17,7 @@ func _on_team_list_item_selected(index: int) -> void:
 
 
 func _on_select_button_pressed() -> void:
-	Game.player_club = Game.first_division_clubs[_selected_index]
+	Game.player_club = Game.player_league.clubs[_selected_index]
 	Game.player_club.trainer = Trainer.new(
 		Game.trainer_lastname, Game.trainer_firstname, Game.trainer_birthdate
 	)

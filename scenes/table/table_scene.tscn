@@ -66,6 +66,9 @@ layout_mode = 2
 text = "Tabelle"
 theme_override_font_sizes/font_size = 13
 
+[node name="LeagueSelector" type="OptionButton" parent="Content"]
+layout_mode = 2
+
 [node name="ColHeaderPanel" type="PanelContainer" parent="Content"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
@@ -122,3 +125,5 @@ size_flags_vertical = 3
 [node name="VBoxContainerRankings" type="VBoxContainer" parent="Content/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[connection signal="item_selected" from="Content/LeagueSelector" to="." method="_on_league_selector_item_selected"]

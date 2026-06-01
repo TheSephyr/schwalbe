@@ -54,7 +54,9 @@ static func loadNationFile(nationFile: String) -> Dictionary:
 	var all_referees: Array[Referee] = []
 	var all_celebrities: Array[Celebrity] = []
 	var all_sponsors: Array[Sponsor] = []
-	var file := FileAccess.open(nationFile, FileAccess.READ)
+	var _content := EncodingHelper.read_file(nationFile)
+	var _lines := _content.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+	var _line_index: int = 0
 	var section: Section = Section.NONE
 	var line_counter: int = 0
 	var newPlayer: Player
@@ -67,8 +69,9 @@ static func loadNationFile(nationFile: String) -> Dictionary:
 	var newSponsor: Sponsor
 	var stadionLines: Array[String] = []
 
-	while !file.eof_reached():
-		var line := file.get_line()
+	while _line_index < _lines.size():
+		var line := _lines[_line_index]
+		_line_index += 1
 		if line.begins_with("%"):
 			match line:
 				PLAYER_MARKER_START:
@@ -164,7 +167,7 @@ static func loadNationFile(nationFile: String) -> Dictionary:
 					_read_sponsor_line(newSponsor, line, line_counter)
 			line_counter += 1
 
-	file.close()
+
 	return {
 		"clubs": all_clubs,
 		"reporters": all_reporters,

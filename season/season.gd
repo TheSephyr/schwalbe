@@ -1,6 +1,7 @@
 class_name Season
 
 
+var league: League
 var current_matchday: int = 1
 var matchdays: Array[Matchday] = []
 var table: Table
@@ -8,8 +9,10 @@ var finished: bool
 var start_year: int = GameConfig.SEASON_START_YEAR
 
 
-func _init(clubs: Array[Club], year: int = GameConfig.SEASON_START_YEAR) -> void:
+func _init(p_league: League, year: int = GameConfig.SEASON_START_YEAR) -> void:
+	league = p_league
 	start_year = year
+	var clubs: Array[Club] = league.clubs
 	var num_teams: int = clubs.size()
 	var num_rounds: int = num_teams - 1
 

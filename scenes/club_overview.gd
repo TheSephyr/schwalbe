@@ -1,9 +1,9 @@
 extends Control
 
-@onready var club_name: Label = $Content/ClubName
-@onready var nation_value: Label = $Content/Grid/NationValue
-@onready var squad_value: Label = $Content/Grid/SquadValue
-@onready var lineup_value: Label = $Content/Grid/LineupValue
+@onready var club_name: Label = $Content/TitlePanel/ClubName
+@onready var nation_value: Label = $Content/InfoPanel/Grid/NationValue
+@onready var squad_value: Label = $Content/InfoPanel/Grid/SquadValue
+@onready var lineup_value: Label = $Content/InfoPanel/Grid/LineupValue
 
 
 func _ready() -> void:

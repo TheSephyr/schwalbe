@@ -1,6 +1,6 @@
 # Schwalbe
 
-Ein Open-Source Fußball-Manager-Simulationsspiel basierend auf dem Spiel Anstoss, entwickelt mit Godot 4.6.
+Ein Open-Source Fußball-Manager-Simulationsspiel basierend auf dem Spiel Anstoss 3, entwickelt mit Godot 4.6.
 
 ## Über das Spiel
 
@@ -9,7 +9,7 @@ In Schwalbe übernimmst du die Rolle eines Trainers in der deutschen Liga der Sa
 ## Voraussetzungen
 
 - [Godot 4.x](https://godotengine.org/)
-- nation.sav-File eines Landes von Anstoss 3 (muss in UTF-8 umkonvertiert werden) unter dbfiles/LandDeut.sav
+- Anstoss 3
 
 ## Starten
 
@@ -38,6 +38,7 @@ Mit **Strg+S** kann während des Spiels eine Debug-Überlagerung ein- und ausgeb
 ## Offene Fragen
 
 - Woran erkennt man die Ligazugehörigkeit in den Land.sav Dateien?
+- Wie werden die Gehälter bei Spielstart generiert?
 
 ## Roadmap
 

@@ -93,7 +93,7 @@ func _calculate_delta(player: Player) -> int:
 
 
 func _on_continue_pressed() -> void:
-	var year: int = Game.current_season.start_year
+	var year: int = Game.player_season().start_year
 	var label: String = "Hinrunde %d/%02d" % [year, (year + 1) % 100]
 	for entry: Dictionary in _pending_changes:
 		var p: Player = entry["player"]

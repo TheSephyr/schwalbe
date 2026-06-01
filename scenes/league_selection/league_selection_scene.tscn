@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3 uid="uid://league_sel001"]
+
+[ext_resource type="Script" path="res://scenes/league_selection/league_selection_scene.gd" id="1_lgsel"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.96, 0.8, 0.0, 1)
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.91, 0.9, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.48, 0.38, 1)
+
+[node name="LeagueSelectionScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lgsel")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79, 0.78, 0.68, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ContentVBox" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(280, 0)
+theme_override_constants/separation = 0
+
+[node name="TitlePanel" type="PanelContainer" parent="CenterContainer/ContentVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/ContentVBox/TitlePanel"]
+layout_mode = 2
+text = "Liga wählen"
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="SelectionPanel" type="PanelContainer" parent="CenterContainer/ContentVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/ContentVBox/SelectionPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="InfoLabel" type="Label" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox"]
+layout_mode = 2
+text = "In welcher Liga möchtest du spielen?"
+theme_override_font_sizes/font_size = 12
+
+[node name="LeagueListVBox" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="WeiterButton" type="Button" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox"]
+layout_mode = 2
+text = "Weiter"
+disabled = true
+
+[connection signal="pressed" from="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/WeiterButton" to="." method="_on_weiter_pressed"]

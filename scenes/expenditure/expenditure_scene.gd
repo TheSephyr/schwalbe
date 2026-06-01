@@ -6,7 +6,7 @@ extends Control
 
 func _ready() -> void:
 	var club := Game.player_club
-	var season := Game.current_season
+	var season := Game.player_season()
 	var today := Game.current_date
 
 	var season_start := Date.new(1, 7, season.start_year)

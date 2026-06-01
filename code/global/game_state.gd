@@ -1,5 +1,6 @@
 extends Node
 
+var selected_nation_files: Array[String] = ["res://dbfiles/Data.a3/LandDeut.sav"]
 var selected_player: Player
 var selected_person: RefCounted = null
 var last_matchday: Matchday

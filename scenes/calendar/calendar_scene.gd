@@ -35,12 +35,21 @@ func _build_calendar() -> void:
 		days_grid.add_child(lbl)
 
 	var match_map: Dictionary = {}
-	for md: Matchday in Game.current_season.matchdays:
+	for md: Matchday in Game.player_season().matchdays:
 		if md.date.month == display_month and md.date.year == display_year:
 			for m: Match in md.matches:
 				if m.homeTeam == Game.player_club or m.awayTeam == Game.player_club:
 					match_map[md.date.day] = m
 					break
+
+	var other_md_days: Dictionary = {}
+	for season: Season in Game.seasons:
+		if season == Game.player_season():
+			continue
+		for md: Matchday in season.matchdays:
+			if md.date.month == display_month and md.date.year == display_year:
+				if not match_map.has(md.date.day):
+					other_md_days[md.date.day] = true
 
 	var first_weekday: int = _weekday(1, display_month, display_year)
 	var days_in_month: int = Date._days_in_month(display_month, display_year)
@@ -55,7 +64,7 @@ func _build_calendar() -> void:
 	for day: int in range(1, days_in_month + 1):
 		var m: Match = match_map.get(day, null)
 		var is_today: bool = is_current_month and day == Game.current_date.day
-		days_grid.add_child(_make_day_cell(day, m, is_today))
+		days_grid.add_child(_make_day_cell(day, m, is_today, other_md_days.has(day)))
 
 
 func _make_filler() -> Control:
@@ -65,7 +74,7 @@ func _make_filler() -> Control:
 	return spacer
 
 
-func _make_day_cell(day: int, m: Match, is_today: bool) -> Control:
+func _make_day_cell(day: int, m: Match, is_today: bool, is_other_md: bool = false) -> Control:
 	var cell := PanelContainer.new()
 	cell.custom_minimum_size = Vector2(0, 44)
 	cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -78,6 +87,8 @@ func _make_day_cell(day: int, m: Match, is_today: bool) -> Control:
 		style.bg_color = Color(0.35, 0.62, 0.38, 1)
 	elif m != null:
 		style.bg_color = Color(0.96, 0.8, 0.0, 1)
+	elif is_other_md:
+		style.bg_color = Color(0.7, 0.7, 0.6, 1)
 	else:
 		style.bg_color = Color(0.91, 0.9, 0.82, 1)
 	cell.add_theme_stylebox_override("panel", style)

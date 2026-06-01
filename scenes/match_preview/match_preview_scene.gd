@@ -11,7 +11,7 @@ extends Control
 
 
 func _ready() -> void:
-	var matchday := Game.current_season.get_current_matchday()
+	var matchday := Game.player_season().get_current_matchday()
 	title_label.text = "Spielvorschau – Spieltag %d" % matchday.matchdayNumber
 
 	var player_match := _find_player_match(matchday)

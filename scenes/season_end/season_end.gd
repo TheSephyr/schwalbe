@@ -9,7 +9,7 @@ extends Control
 
 
 func _ready() -> void:
-	var season := Game.current_season
+	var season := Game.player_season()
 	var standings := season.table.teamStandings
 	var champion := standings[0]
 	var player_standing := season.table.findByTeam(Game.player_club)

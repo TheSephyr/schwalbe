@@ -67,7 +67,7 @@ func _matches(player: Player, pos_filter: String, is_free_agent: bool) -> bool:
 	if expiring_check.button_pressed and not is_free_agent:
 		var parts := player.contract_end.split(".")
 		var end_year := int(parts[2]) if parts.size() >= 3 else 0
-		if end_year > Game.current_season.start_year + 1:
+		if end_year > Game.player_season().start_year + 1:
 			return false
 	return true
 

@@ -16,7 +16,7 @@ func _process(delta):
 	pass
 
 func update() -> void:
-	matches = Game.current_season.get_current_matchday().matches
+	matches = Game.player_season().get_current_matchday().matches
 	for m:OneMatch in oneMatchScenes:
 		matchesHBox.remove_child(m)
 		m.queue_free()

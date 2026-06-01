@@ -48,42 +48,51 @@ Registered in `project.godot` and accessible globally by name:
 |-----------|------|---------|
 | `Game` | `code/game.gd` | Central state: clubs, season, date, free agents, reporters, referees, celebrities, sponsors, sponsor contract, pending transfers, save/load, AI logic |
 | `EventBus` | `code/global/event_bus.gd` | Pub/sub signal hub — UI scenes connect here instead of to each other |
-| `GameState` | `code/global/game_state.gd` | Lightweight UI state: `selected_player`, `last_matchday`, `transfer_context`, `transfer_source_club` |
+| `GameState` | `code/global/game_state.gd` | Lightweight UI state: `selected_nation_files: Array[String]` (files chosen in nation selection), `selected_player`, `last_matchday`, `transfer_context`, `transfer_source_club` |
 | `Global` | `code/global/global.gd` | Misc utilities |
 
 ### Data Flow
 
 ```
-Game.initial_load()
-  → ReadNationFile.loadNationFile()     # parses LandDeut.sav → Dictionary{clubs, reporters, referees, celebrities, sponsors}
-  → Game.all_clubs / first_division_clubs[0..17] / reporters / referees / celebrities / sponsors
-  → Season(first_division_clubs)        # generates round-robin schedule + assigns dates
-	  → Matchday[] (each with a Date)
-	  → Match[]
-	  → Table (TeamStanding per club)
+Game.initial_load(nation_files: Array[String])
+  → ReadLaenderFile.load_nations("Laender.sav")  # parses nation list → Game.nations[0..116]
+  → for each nation_file in nation_files:
+      ReadNationFile.loadNationFile(file)         # → Dictionary{clubs, reporters, referees, …}
+      resolve club.nation integer IDs → landername via Game.nations
+      build League(name, nation, clubs[0..17])   → Game.leagues.append(league)
+      merge reporters / referees / celebrities / sponsors into Game arrays
+  → for each League → Season(league)             → Game.seasons.append(season)
+      → Matchday[] (each with a Date)
+      → Match[]
+      → Table (TeamStanding per club)
+  → Game.player_league = leagues[0]  (overridden by league_selection_scene when >1 league)
+  → Game.player_club  = player_league.clubs[0]   (overridden by team_selection)
   → Game.current_date = Date(1, 7, 1999)
-  → _generate_free_agents()            # 100 low-ability players from files/firstnames_male.txt + files/lastnames.txt
-  → UI scenes subscribe to EventBus signals and render state
+  → _generate_free_agents()   # 100 low-ability players from firstnames_male.txt + lastnames.txt
 
 On each NEXT press (game._on_next):
-  → wages deducted from player_club.money for days elapsed
-  → training applied for the week
-  → if matchday this week → navigate to match_preview_scene (two-phase flow)
+  → if all seasons finished → return
+  → if player's season finished → advance week, auto-simulate other leagues, check all-done
+  → _auto_simulate_other_leagues(7)  # other leagues: simulate if matchday falls within 7 days
+  → if player matchday this week → navigate to match_preview_scene
   → else → advance 7 days, autosave
 
 Match preview flow:
   → match_preview_scene shows lineups + attendance + ticket revenue (home games)
   → "Spieltag simulieren" → Game.confirm_matchday_simulation()
-  → simulate matchday, advance date, autosave, navigate to matchday_view
+  → simulate matchday, advance date, autosave
+  → if _all_seasons_finished() → season_end.tscn, else → matchday_view
 
 Season end:
   → season_end.tscn shown
   → "Neue Saison starten" → Game.start_new_season()
-	  → _apply_pending_transfers()     # pre-contract signings join
-	  → _ai_renew_contracts()          # AI clubs renew ~85% of expiring contracts
-	  → _remove_expired_contracts()    # remaining expired → free agents or retire
-	  → _retire_free_agents()          # old free agents age out
-	  → _ai_fill_squads()              # AI clubs below 22 players sign free agents by position
+      → _apply_pending_transfers()                    # pre-contract signings join
+      → for each league: ai_assign_sponsors(clubs)
+      → for each league: _ai_renew_contracts(year, clubs)
+      → for each league: _remove_expired_contracts(year, clubs)  # expired → free agents
+      → _retire_free_agents()                         # global free agent pool pruned
+      → for each league: _ai_fill_squads(year, clubs) # fills from shared free agent pool
+      → rebuild seasons Array (one new Season per League)
 ```
 
 ### Signal-Driven UI
@@ -100,6 +109,10 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
 **Bottom navigation buttons:** Clubs · Matchday · Table · Line-Up · Club · Balance · Kalender · Training · Einzeltraining · Suche · Transfers · Stadion · Ausgaben · Personal · Menü
 
 ### Key Data Models
+
+- `code/nation.gd` — `Nation` (RefCounted): `id: int` (0-based load order), `landername: String`, `abkuerzung: String`; loaded from `Laender.sav` by `ReadLaenderFile`; stored in `Game.nations`; used to resolve raw integer country IDs stored in `club.nation`
+
+- `code/league/league.gd` — `League` (Resource): `name: String`, `nation: String`, `clubs: Array[Club]`, `size: int`; one per loaded nation file; `name`/`nation` are resolved to the human-readable nation name (e.g. `"Deutschland"`) during `initial_load`
 
 - `code/game_config.gd` — `GameConfig`: single source of truth for all game-wide constants (no autoload, accessible via `class_name`):
   - World: `SEASON_START_YEAR=1999`, `FIRST_DIVISION_SIZE=18`
@@ -158,7 +171,7 @@ Scenes switch via `get_tree().change_scene_to_file("res://scenes/...")`. `topUi.
 
 - `code/util/date.gd` — `Date` (RefCounted): day/month/year; `add_days(n) → Date`; `days_until(other) → int` (Julian Day Number diff)
 
-- `season/season.gd` — Owns matchday schedule and `Table`; double round-robin; Bundesliga-style dates
+- `season/season.gd` — `Season`: owns matchday schedule and `Table`; double round-robin; Bundesliga-style dates; `league: League` field (set in `_init`); `_init(league: League, year: int)`; `simulate_next_matchday()`, `get_current_matchday()`, `update_table()`; `finished: bool` set when last matchday is simulated
 
 - `season/table.gd` / `season/teamStanding.gd` — League standings sorted by points then goal difference
 
@@ -181,11 +194,14 @@ Four transfer contexts stored in `GameState.transfer_context`:
 
 ### AI Season Transition (start_new_season order)
 
-1. `_apply_pending_transfers()` — pending signings join player club
-2. `_ai_renew_contracts(next_year)` — AI clubs renew ~85% of expiring contracts (1–3 yr extension, 0–15% salary bump)
-3. `_remove_expired_contracts()` — remaining expired players → free agents or retire
-4. `_retire_free_agents()` — elderly free agents age out
-5. `_ai_fill_squads()` — AI clubs with <22 players sign best available free agents by position priority (GK×2, CB×3, LB×1, RB×1, LM×1, RM×1, CM×1, ST×2 minimum; fills to max per position until 22)
+All AI functions that operate on clubs now accept a `clubs: Array[Club]` parameter and are called once per league so every loaded nation is processed:
+
+1. `_apply_pending_transfers()` — pending signings join player club (player league only)
+2. For each league: `ai_assign_sponsors(clubs)` — assigns random sponsors to AI clubs
+3. For each league: `_ai_renew_contracts(year, clubs)` — AI clubs renew ~85% of expiring contracts (1–3 yr extension, 0–15% salary bump)
+4. For each league: `_remove_expired_contracts(year, clubs)` — remaining expired → shared free agent pool or retire
+5. `_retire_free_agents(year)` — elderly free agents removed from shared pool (called once globally)
+6. For each league: `_ai_fill_squads(year, clubs)` — AI clubs below 22 players sign from shared free agent pool by position priority (GK×2, CB×3, LB×1, RB×1, LM×1, RM×1, CM×1, ST×2 min; fills to 22)
 
 ### Scenes
 
@@ -193,8 +209,11 @@ Four transfer contexts stored in `GameState.transfer_context`:
 |-------|------|-------------|
 | Starting game | `scenes/starting_game.tscn` | Entry point |
 | Main menu | `scenes/main_menu.tscn` | New game / load game |
+| Nation selection | `scenes/nation_selection/nation_selection_scene.tscn` | "Neues Spiel" lands here; scans `dbfiles/Data.a3/` for `Land*.sav` files (all checked by default); file dialog lets user pick a directory to add more; stores checked paths in `GameState.selected_nation_files` |
+| Loading | `scenes/loading/loading_scene.tscn` | Runs `Game.initial_load()` in a background `Thread`; animated "Lade Daten…" label; navigates to league selection when >1 league loaded, else directly to manager setup |
+| League selection | `scenes/league_selection/league_selection_scene.tscn` | Shown after loading when multiple leagues are present; radio buttons for each `Game.leagues` entry; sets `Game.player_league` and resets `Game.player_club` on confirm |
 | Trainer setup | `scenes/manager_setup/manager_setup_scene.tscn` | Enter trainer name + age before new game |
-| Team selection | `scenes/team_selection.tscn` | Pick your club → navigates to preseason scene |
+| Team selection | `scenes/team_selection.tscn` | Pick your club from `Game.player_league.clubs` → navigates to preseason scene |
 | Preseason | `scenes/preseason/preseason_scene.tscn` | Hub before season start; "Kalkulation" → calculation scene; "Saison starten" credits `sponsor_income` to `player_club.money` then navigates to club overview |
 | Calculation | `scenes/preseason/calculation_scene.tscn` | Financial planning hub; links to Sponsors and Attendance Revenue sub-scenes |
 | Sponsor search | `scenes/preseason/sponsor_scene.tscn` | 3 random sponsors drawn from `Game.sponsors`; accept at base price or negotiate (up to 130% base, +1 year duration, up to 150% championship bonus); result stored on `player_club` |
@@ -207,14 +226,14 @@ Four transfer contexts stored in `GameState.transfer_context`:
 | Line-up | `scenes/lineup/lineUp.tscn` | Current formation |
 | Match preview | `scenes/match_preview/match_preview_scene.tscn` | Pre-match lineups, attendance, ticket revenue |
 | Matchday view | `scenes/matchday_view.tscn` | Results of the last played matchday |
-| Table | `scenes/table/table_scene.tscn` | Live league standings |
+| Table | `scenes/table/table_scene.tscn` | Live league standings; `LeagueSelector` OptionButton shown when >1 league loaded — switches standings between leagues |
 | Balance | `scenes/balance/balance_scene.tscn` | Club finances |
 | Expenditure | `scenes/expenditure/expenditure_scene.tscn` | Season wage + bonus costs (full season vs remaining) |
-| Calendar | `scenes/calendar/calendar_scene.tscn` | Monthly calendar; matchdays highlighted |
+| Calendar | `scenes/calendar/calendar_scene.tscn` | Monthly calendar; player-league matchdays highlighted yellow; other-league matchdays highlighted in muted grey-green `Color(0.7, 0.7, 0.6)` |
 | Training | `scenes/training/training_scene.tscn` | Weekly training plan (condition vs regen); drag-and-drop per week |
 | Individual training | `scenes/individual_training/individual_training_scene.tscn` | Per-player skill training; rows show name · position · skill being learned (green) · progress bar · existing skills (green/red); click row → skill picker overlay; skills already owned are excluded; GK players see `GoalkeeperSkillTypes` skills, outfield see `PlayerSkillTypes` skills |
 | Stadium | `scenes/stadium/stadium_scene.tscn` | Stadium schematic + ticket price adjustment |
-| Player search | `scenes/player_search/player_search_scene.tscn` | Filter by position/age/talent/ability; "Nur Vereinslose" for free agents; "Vertrag läuft aus" for expiring contracts; right-click to negotiate |
+| Player search | `scenes/player_search/player_search_scene.tscn` | Filter by position/age/talent/ability; "Nur Vereinslose" for free agents; "Vertrag läuft aus" for expiring contracts; right-click to negotiate; "Liga" column shows `club.nation` (resolved nation name); searches across all leagues |
 | Settings | `scenes/settings/settings_scene.tscn` | Save/load management, main menu, quit |
 | Season end | `scenes/season_end/season_end.tscn` | Final standings; start next season |
 | Personnel directory | `scenes/personal/personal_scene.tscn` | Scrollable list of all NPCs (Manager, Trainer, Reporters, Referees, Celebrities); click row → person detail |
@@ -224,7 +243,12 @@ Four transfer contexts stored in `GameState.transfer_context`:
 
 Note: directory name has a typo (`filrereader`, not `filereader`) — do not rename it.
 
-- `read_nation_file.gd` — `ReadNationFile`: static `loadNationFile()` parses `LandDeut.sav` and returns a `Dictionary` with keys `clubs` (`Array[Club]`), `reporters` (`Array[Reporter]`), `referees` (`Array[Referee]`), `celebrities` (`Array[Celebrity]`), `sponsors` (`Array[Sponsor]`). Line counters are **0-based** and matched against field index enums (no magic numbers). Club post-manager fields are read via a separate `readingClubPost` / `lineCounterClubPost` state that activates after `%ENDSECT%STADION` within a `%SECT%VEREIN` block. `%SECT%SCHIRI` and `%SECT%ISCHIRI` are both parsed into the same referees array. `%SECT%SPONSORP` is a parent wrapper with no own fields — it is silently skipped; individual `%SECT%SPONSOR` entries inside it are parsed normally.
+- `encoding_helper.gd` — `EncodingHelper`: `read_file(path)` auto-detects UTF-8 vs ISO-8859-1 (silent `_is_valid_utf8` pre-check avoids Godot's error-emitting `get_string_from_utf8`); `read_latin1_file(path)` converts ISO-8859-1 bytes to UTF-8 via `_latin1_to_utf8(bytes)` (O(n) `PackedByteArray` build + single native decode — avoids the O(n²) `char(b)` concatenation loop). All `Land*.sav` files in `Data.a3/` are ISO-8859-1 with CRLF; `LandTuer.sav` also has bare `\r` line endings handled by double-replace in `read_nation_file.gd`.
+
+- `read_laender_file.gd` — `ReadLaenderFile`: static `load_nations(path)` parses `Laender.sav`; outer `%SECT%NATION` is a wrapper (depth 1, skipped); inner `%SECT%NATION`/`%ENDSECT%NATION` pairs (depth 2) are individual nations; field 0 = `landername`, field 2 = `abkuerzung`; `id` = 0-based append order (117 nations total).
+
+- `read_nation_file.gd` — `ReadNationFile`: static `loadNationFile(path)` parses any `Land*.sav` and returns a `Dictionary` with keys `clubs` (`Array[Club]`), `reporters` (`Array[Reporter]`), `referees` (`Array[Referee]`), `celebrities` (`Array[Celebrity]`), `sponsors` (`Array[Sponsor]`). Line counters are **0-based** and matched against field index enums (no magic numbers). Club post-manager fields are read via a separate `readingClubPost` / `lineCounterClubPost` state that activates after `%ENDSECT%STADION` within a `%SECT%VEREIN` block. `%SECT%SCHIRI` and `%SECT%ISCHIRI` are both parsed into the same referees array. `%SECT%SPONSORP` is a parent wrapper with no own fields — silently skipped. **`club.nation` field 0 stores a raw integer ID** (e.g. `"14"`) that is resolved to `nation.landername` in `Game.initial_load()` after `Laender.sav` is loaded.
+
 - `field_mappings.gd` — `FieldMappings`: lookup tables (`PackedStringArray` / `Dictionary`) and legacy `SP_*`/`VE_*`/`VP_*`/`TR_*`/`MA_*`/`ST_*`/`RE_*`/`SC_*`/`PR_*` constants. Use field index enums instead of these constants for new code.
 
 **Field index enums** (0-based integers matching each section's line offsets):
@@ -312,24 +336,26 @@ All lookup tables from `FieldMappings` have corresponding enum classes. Enum val
 
 ### Database & Data Files
 
-- `dbfiles/LandDeut.sav` — main game data; custom line-based format with `%SECT%`/`%ENDSECT%` delimiters
-  - `%SECT%SPIELER` — players
-  - `%SECT%VEREIN` — clubs (header fields + post-manager block)
-  - `%SECT%TRAINER` — coaches
-  - `%SECT%MANAGER` — managers
-  - `%SECT%STADION` — stadiums
-  - `%SECT%REPORTER` — TV reporters
-  - `%SECT%SCHIRI` / `%SECT%ISCHIRI` — referees
-  - `%SECT%PROMI` — celebrities
-  - `%SECT%SPONSORP` — parent wrapper for all sponsor entries (no own data fields; silently skipped by reader)
-  - `%SECT%SPONSOR` — individual sponsors (40 entries): field 0 = name, field 6 = income in thousands DM
-  - `%SECT%LAND` — nation data
+- `dbfiles/Data.a3/` — primary game data directory (Anstoss 3 data files, ISO-8859-1, CRLF):
+  - `Laender.sav` — 117 nations; `%SECT%NATION` outer wrapper + inner `%SECT%NATION`/`%ENDSECT%NATION` pairs; field 0 = Ländername, field 2 = Abkürzung; IDs are 0-based load order
+  - `Land*.sav` (11 files) — one per playable nation (Deut, Engl, Fran, Holl, Ital, Oest, Port, Scho, Schw, Span, Tuer); custom line-based format with `%SECT%`/`%ENDSECT%` delimiters:
+    - `%SECT%SPIELER` — players
+    - `%SECT%VEREIN` — clubs; field 0 = country ID (integer referencing `Laender.sav`)
+    - `%SECT%TRAINER` — coaches
+    - `%SECT%MANAGER` — managers
+    - `%SECT%STADION` — stadiums
+    - `%SECT%REPORTER` — TV reporters
+    - `%SECT%SCHIRI` / `%SECT%ISCHIRI` — referees
+    - `%SECT%PROMI` — celebrities
+    - `%SECT%SPONSORP` — parent wrapper (silently skipped)
+    - `%SECT%SPONSOR` — individual sponsors (40 entries): field 0 = name, field 6 = income in thousands DM
+    - `%SECT%LAND` — nation data
 - `files/firstnames_male.txt` — male first names for generated free agents (one per line)
 - `files/lastnames.txt` — last names for generated free agents (one per line)
 
 ### Save / Load
 
-JSON saves in `user://saves/`. Each save includes: clubs (players, lineup, money, stadium, trainer), current date, season state, matchday results, training plan, free agents, pending transfers, sponsor contract (`sponsor_name`, `sponsor_income`). Per-player: `training_skill`, `training_progress`. Autosave runs after each week advance and matchday confirmation.
+JSON saves in `user://saves/`. **Multi-league format** (new saves): top-level `leagues` array where each entry contains `{name, nation, season_start_year, season_current_matchday, season_finished, clubs, matchday_results}`; `player_league_index` identifies the player's league; `nation_files` stores the paths used (for reference). **Legacy format** (old single-league saves): top-level `clubs` / `season_*` / `matchday_results` keys — `_apply_save` detects `data.has("leagues")` to choose the path. Per-club: players, lineup, money, stadium, trainer, sponsor contract. Per-player: `training_skill`, `training_progress`, `motivation`. Autosave runs after each week advance and matchday confirmation.
 
 ## Code Conventions
 

@@ -1,5 +1,6 @@
 extends Control
 
+@onready var league_label: Label = $Margin/VBox/LeagueLabel
 @onready var my_team_name: Label = $Margin/VBox/ScoreRow/MyTeamName
 @onready var score_label: Label = $Margin/VBox/ScoreRow/Score
 @onready var opponent_name: Label = $Margin/VBox/ScoreRow/OpponentName
@@ -8,6 +9,8 @@ extends Control
 
 
 func _ready() -> void:
+	league_label.text = Game.player_season().league.name
+	league_label.visible = Game.leagues.size() > 1
 	var matchday: Matchday = GameState.last_matchday
 	var my_match: Match = _find_my_match(matchday)
 	if my_match == null:
@@ -43,7 +46,7 @@ func _player_label(player: Player) -> Label:
 
 
 func _on_continue_pressed() -> void:
-	if Game.current_season.current_matchday == GameConfig.WINTER_BREAK_AFTER_MD + 1:
+	if Game.player_season().current_matchday == GameConfig.WINTER_BREAK_AFTER_MD + 1:
 		get_tree().change_scene_to_file("res://scenes/player_update/player_update_scene.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/club_overview.tscn")

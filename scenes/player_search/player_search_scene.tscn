@@ -212,6 +212,12 @@ size_flags_horizontal = 3
 text = "Verein"
 theme_override_font_sizes/font_size = 11
 
+[node name="ColNation" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 0)
+text = "Liga"
+theme_override_font_sizes/font_size = 11
+
 [node name="ColPos" type="Label" parent="Content/MainHBox/RightPanel/ColHeader/ColHBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(44, 0)

@@ -2,7 +2,8 @@ extends Control
 
 
 func _ready() -> void:
-	Game.ai_assign_sponsors()
+	for league: League in Game.leagues:
+		Game.ai_assign_sponsors(league.clubs)
 
 
 func _on_kalkulation_pressed() -> void:

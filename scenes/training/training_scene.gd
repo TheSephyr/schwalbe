@@ -14,10 +14,10 @@ func _on_randomize_pressed() -> void:
 
 func _build_week_rows() -> void:
 	var row_script := load("res://scenes/training/training_week_row.gd")
-	var season_start := Date.new(1, 7, Game.current_season.start_year)
+	var season_start := Date.new(1, 7, Game.player_season().start_year)
 
 	var md_in_week: Dictionary = {}
-	for md: Matchday in Game.current_season.matchdays:
+	for md: Matchday in Game.player_season().matchdays:
 		var wk: int = season_start.days_until(md.date) / 7
 		md_in_week[wk] = md.matchdayNumber
 

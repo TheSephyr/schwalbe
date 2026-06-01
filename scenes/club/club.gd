@@ -40,7 +40,7 @@ func _populate(next_season: bool) -> void:
 
 
 func _next_season_squad() -> Array[Player]:
-	var next_year: int = Game.current_season.start_year + 1
+	var next_year: int = Game.player_season().start_year + 1
 	var squad: Array[Player] = []
 
 	for player: Player in Game.player_club.players:
