@@ -42,7 +42,11 @@ func get_first_division_clubs() -> Array[Club]:
 
 
 func player_season() -> Season:
-	return seasons[leagues.find(player_league)]
+	for season: Season in seasons:
+		if season.league == player_league:
+			return season
+	push_error("player_season: no season found for league '%s'" % (player_league.name if player_league else "null"))
+	return seasons[0]
 
 
 func _ready() -> void:
@@ -85,15 +89,19 @@ func initial_load(nation_files: Array[String] = ["res://dbfiles/LandDeut.sav"]) 
 			var resolved := _resolve_nation_name(club.nation)
 			if not resolved.is_empty():
 				club.nation = resolved
-		var league := League.new()
-		league.nation = file_clubs[0].nation if not file_clubs[0].nation.is_empty() else nation_file.get_file()
-		league.name = league.nation
-		league.size = GameConfig.FIRST_DIVISION_SIZE
-		for i in mini(GameConfig.FIRST_DIVISION_SIZE, file_clubs.size()):
-			league.clubs.append(file_clubs[i])
-		for club in league.clubs:
-			club.defaultLineUp()
-		leagues.append(league)
+		var nation_name: String = file_clubs[0].nation if not file_clubs[0].nation.is_empty() else nation_file.get_file()
+		var div_count: int = maxi(1, file_clubs.size() / GameConfig.FIRST_DIVISION_SIZE)
+		for div: int in range(div_count):
+			var league := League.new()
+			league.nation = nation_name
+			league.division = div + 1
+			league.name = nation_name if div == 0 else nation_name + " " + str(div + 1)
+			var start: int = div * GameConfig.FIRST_DIVISION_SIZE
+			for i in range(start, mini(start + GameConfig.FIRST_DIVISION_SIZE, file_clubs.size())):
+				league.clubs.append(file_clubs[i])
+			for club in league.clubs:
+				club.defaultLineUp()
+			leagues.append(league)
 	player_league = leagues[0]
 	player_club = player_league.clubs[0]
 	seasons.clear()
@@ -349,7 +357,7 @@ func confirm_matchday_simulation() -> void:
 
 
 func _pay_all_wages(days: int) -> void:
-	for club: Club in player_league.clubs:
+	for club: Club in all_clubs:
 		club.pay_wages(days)
 
 
@@ -364,7 +372,7 @@ func _init_training_plan() -> void:
 func _apply_training(week_index: int) -> void:
 	var player_type: int = training_plan[week_index] if week_index >= 0 and week_index < training_plan.size() else GameConfig.TRAINING_TYPE_NONE
 	_apply_training_to_club(player_club, player_type)
-	for club: Club in player_league.clubs:
+	for club: Club in all_clubs:
 		if club == player_club:
 			continue
 		_apply_training_to_club(club, randi_range(GameConfig.TRAINING_TYPE_CONDITION, GameConfig.TRAINING_TYPE_REGEN))
@@ -636,6 +644,7 @@ func save_game(save_name: String) -> void:
 		leagues_data.append({
 			"name": league.name,
 			"nation": league.nation,
+			"division": league.division,
 			"season_start_year": season.start_year,
 			"season_current_matchday": season.current_matchday,
 			"season_finished": season.finished,
@@ -859,11 +868,11 @@ func _apply_save(data: Dictionary) -> void:
 			var league := League.new()
 			league.name = ld.get("name", "")
 			league.nation = ld.get("nation", "")
+			league.division = int(ld.get("division", 1))
 			for cd: Dictionary in ld["clubs"]:
 				var club := _deserialize_club(cd)
 				league.clubs.append(club)
 				all_clubs.append(club)
-			league.size = league.clubs.size()
 			leagues.append(league)
 			var saved_year: int = int(ld.get("season_start_year", GameConfig.SEASON_START_YEAR))
 			var season := Season.new(league, saved_year)
@@ -896,7 +905,6 @@ func _apply_save(data: Dictionary) -> void:
 			var club := _deserialize_club(cd)
 			league.clubs.append(club)
 			all_clubs.append(club)
-		league.size = league.clubs.size()
 		leagues.append(league)
 		player_league = leagues[0]
 		var saved_year: int = int(data.get("season_start_year", GameConfig.SEASON_START_YEAR))

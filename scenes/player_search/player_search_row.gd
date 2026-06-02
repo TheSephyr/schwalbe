@@ -103,18 +103,18 @@ func _on_popup_id_pressed(id: int) -> void:
 		return
 
 	if _source_club == null:
-		GameState.transfer_context = "free"
+		GameState.transfer_context = GameState.TransferContext.FREE
 		GameState.transfer_source_club = null
 		get_tree().change_scene_to_file("res://scenes/contract/contract_scene.tscn")
 	elif _source_club == Game.player_club:
-		GameState.transfer_context = "renewal"
+		GameState.transfer_context = GameState.TransferContext.RENEWAL
 		GameState.transfer_source_club = null
 		get_tree().change_scene_to_file("res://scenes/contract/contract_scene.tscn")
 	else:
 		var days_left := _days_until_contract_end(_player)
 		GameState.transfer_source_club = _source_club
 		if days_left <= GameConfig.PRECONTRACT_WINDOW_DAYS:
-			GameState.transfer_context = "precontract"
+			GameState.transfer_context = GameState.TransferContext.PRECONTRACT
 			get_tree().change_scene_to_file("res://scenes/contract/contract_scene.tscn")
 		else:
 			get_tree().change_scene_to_file("res://scenes/transfer/transfer_scene.tscn")

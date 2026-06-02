@@ -22,7 +22,7 @@ func win(goalsForUpdate: int, goalsAgainstUpdate: int) -> void:
 	wins = wins + 1
 	update(goalsForUpdate, goalsAgainstUpdate)	
 	
-func loose(goalsForUpdate: int, goalsAgainstUpdate: int) -> void:
+func lose(goalsForUpdate: int, goalsAgainstUpdate: int) -> void:
 	losses = losses + 1
 	update(goalsForUpdate, goalsAgainstUpdate)
 	

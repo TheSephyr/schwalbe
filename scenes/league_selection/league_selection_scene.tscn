@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://league_sel001"]
+[gd_scene load_steps=5 format=3 uid="uid://league_sel001"]
 
 [ext_resource type="Script" path="res://scenes/league_selection/league_selection_scene.gd" id="1_lgsel"]
 
@@ -16,6 +16,9 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.5, 0.48, 0.38, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_divider"]
+bg_color = Color(0.5, 0.48, 0.38, 1)
 
 [node name="LeagueSelectionScene" type="Control"]
 layout_mode = 3
@@ -45,7 +48,7 @@ grow_vertical = 2
 
 [node name="ContentVBox" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(480, 0)
 theme_override_constants/separation = 0
 
 [node name="TitlePanel" type="PanelContainer" parent="CenterContainer/ContentVBox"]
@@ -78,7 +81,41 @@ layout_mode = 2
 text = "In welcher Liga möchtest du spielen?"
 theme_override_font_sizes/font_size = 12
 
-[node name="LeagueListVBox" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox"]
+[node name="ColumnsHBox" type="HBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="NationColumn" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="NationTitleLabel" type="Label" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox/NationColumn"]
+layout_mode = 2
+text = "Nation"
+theme_override_font_sizes/font_size = 11
+
+[node name="NationListVBox" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox/NationColumn"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Divider" type="PanelContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(1, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_divider")
+
+[node name="LeagueColumn" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+visible = false
+
+[node name="LeagueTitleLabel" type="Label" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox/LeagueColumn"]
+layout_mode = 2
+text = "Liga"
+theme_override_font_sizes/font_size = 11
+
+[node name="LeagueListVBox" type="VBoxContainer" parent="CenterContainer/ContentVBox/SelectionPanel/Margin/VBox/ColumnsHBox/LeagueColumn"]
 layout_mode = 2
 theme_override_constants/separation = 4
 

@@ -4,12 +4,11 @@ const LoadedDebugWindow: Resource = preload("res://scenes/debug/debug_window.tsc
 
 #show_debug_window()
 func _ready() -> void:
-	print("golobal is ready")
+	pass
 
 func show_debug_window() -> void:
 	var debug_window = LoadedDebugWindow.instantiate()
 	get_tree().root.add_child(debug_window)
-	print("test")
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -7,7 +7,7 @@ extends Control
 @onready var offer_button: Button = $Content/ButtonRow/OfferButton
 
 var player: Player
-var _context: String
+var _context: GameState.TransferContext
 var _source_club: Club
 
 var _proposed_salary: int
@@ -46,15 +46,15 @@ func _ready() -> void:
 
 func _update_left_header() -> void:
 	match _context:
-		"free":
+		GameState.TransferContext.FREE:
 			left_header_label.text = "Vereinslos"
-		"precontract":
+		GameState.TransferContext.PRECONTRACT:
 			var club_name := _source_club.name if _source_club != null else "?"
 			left_header_label.text = "Vorvertrag (%s)" % club_name
-		"negotiation":
+		GameState.TransferContext.NEGOTIATION:
 			var club_name := _source_club.name if _source_club != null else "?"
 			left_header_label.text = "Transfer von %s" % club_name
-		"transfer":
+		GameState.TransferContext.TRANSFER:
 			var club_name := _source_club.name if _source_club != null else "?"
 			left_header_label.text = "Transfer von %s" % club_name
 		_:
@@ -145,7 +145,7 @@ func _on_offer_pressed() -> void:
 		return
 
 	match _context:
-		"renewal":
+		GameState.TransferContext.RENEWAL:
 			player.salary = _proposed_salary
 			player.auflauf_praemie = _proposed_auflauf
 			player.tor_praemie = _proposed_tor
@@ -153,16 +153,16 @@ func _on_offer_pressed() -> void:
 			if parts.size() >= 3:
 				player.contract_end = "%s.%s.%d" % [parts[0], parts[1], _proposed_contract_year]
 			status_label.text = "Vertrag verlängert!"
-		"free":
+		GameState.TransferContext.FREE:
 			Game.sign_player_immediately(player, null, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year)
 			status_label.text = "Spieler sofort verpflichtet!"
-		"precontract":
+		GameState.TransferContext.PRECONTRACT:
 			Game.add_pending_transfer(player, _source_club, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year)
 			status_label.text = "Vorvertrag abgeschlossen! Spieler kommt zur neuen Saison."
-		"negotiation":
+		GameState.TransferContext.NEGOTIATION:
 			Game.start_transfer_negotiation(player, _source_club, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year, GameState.transfer_fee)
 			status_label.text = "Verhandlung gestartet! Entscheidung in 2 Wochen."
-		"transfer":
+		GameState.TransferContext.TRANSFER:
 			Game.sign_player_immediately(player, _source_club, _proposed_salary, _proposed_auflauf, _proposed_tor, _proposed_contract_year)
 			status_label.text = "Spieler wechselt sofort!"
 
@@ -170,7 +170,7 @@ func _on_offer_pressed() -> void:
 
 
 func _on_back_pressed() -> void:
-	if _context == "renewal":
+	if _context == GameState.TransferContext.RENEWAL:
 		get_tree().change_scene_to_file("res://scenes/club/club.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/player_search/player_search_scene.tscn")

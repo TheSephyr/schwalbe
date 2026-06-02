@@ -20,9 +20,9 @@ func setPlayer(player: Player) -> void:
 
 func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int):
 	if event.is_released():
-		print_debug("Released")
+		pass
 	if event.is_pressed():
-		print_debug("Clicked")
+		pass
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if not dragging and event.pressed:
 			dragging = true

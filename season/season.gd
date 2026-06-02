@@ -65,9 +65,9 @@ func update_table() -> void:
 					teamstandingAway.draw(scoreAway, scoreHome)
 				if(scoreHome > scoreAway):
 					teamstandingHome.win(scoreHome, scoreAway)
-					teamstandingAway.loose(scoreAway, scoreHome)
+					teamstandingAway.lose(scoreAway, scoreHome)
 				if(scoreAway > scoreHome):
-					teamstandingHome.loose(scoreHome, scoreAway)
+					teamstandingHome.lose(scoreHome, scoreAway)
 					teamstandingAway.win(scoreAway, scoreHome)
 	table.update()
 
@@ -77,7 +77,6 @@ func next_matchday() -> Matchday:
 		current_matchday = current_matchday + 1
 	else:
 		current_matchday = 1
-	print_debug("Current Matchday:" + str(current_matchday))
 	return matchdays[current_matchday - 1]
 
 
@@ -86,7 +85,6 @@ func previous_matchday() -> Matchday:
 		current_matchday = current_matchday - 1
 	else:
 		current_matchday = matchdays.size()
-	print_debug("Current Matchday: " + str(current_matchday))
 	return matchdays[current_matchday - 1]
 
 
@@ -97,6 +95,7 @@ func get_current_matchday() -> Matchday:
 func simulate_next_matchday() -> void:
 	var matchday: Matchday = get_current_matchday()
 	matchday.simulateMatches()
+	update_table()
 	if current_matchday < matchdays.size():
 		current_matchday = current_matchday + 1
 	else:
@@ -106,11 +105,13 @@ func simulate_next_matchday() -> void:
 func simulate_season() -> void:
 	for singleMatchday: Matchday in matchdays:
 		singleMatchday.simulateMatches()
+	update_table()
 
 
 func simulate_up_to(target_md: int) -> void:
 	for i in range(current_matchday - 1, target_md):
 		matchdays[i].simulateMatches()
+	update_table()
 	current_matchday = mini(target_md + 1, matchdays.size())
 	if target_md >= matchdays.size():
 		finished = true

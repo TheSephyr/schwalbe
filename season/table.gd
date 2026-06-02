@@ -16,11 +16,11 @@ func initTable():
 
 	
 func findByTeam(team: Club) -> TeamStanding:
-	var foundClub
-	for teamStanding in teamStandings:
-		if(teamStanding.team == team):
-			foundClub = teamStanding 
-	return foundClub
+	for teamStanding: TeamStanding in teamStandings:
+		if teamStanding.team == team:
+			return teamStanding
+	push_error("findByTeam: club '%s' not in table" % team.name)
+	return null
 		
 func update() -> void:
 	teamStandings.sort_custom(sortTeamStanding)

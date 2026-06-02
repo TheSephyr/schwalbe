@@ -16,4 +16,3 @@ func simulateMatches():
 		for singleMatch in matches:
 			singleMatch.simulateMatch()
 		played = true
-		Game.player_season().update_table()

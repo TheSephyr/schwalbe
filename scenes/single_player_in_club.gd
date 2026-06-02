@@ -67,6 +67,6 @@ func _on_popup_id_pressed(id: int) -> void:
 	if id == 0:
 		get_tree().change_scene_to_file("res://scenes/player/player_scene.tscn")
 	else:
-		GameState.transfer_context = "renewal"
+		GameState.transfer_context = GameState.TransferContext.RENEWAL
 		GameState.transfer_source_club = null
 		get_tree().change_scene_to_file("res://scenes/contract/contract_scene.tscn")

@@ -46,4 +46,6 @@ Den aktuellen Entwicklungsplan mit offenen Features und Meilensteinen gibt es hi
 
 ## Discord
 
+Jeder der mithelfen möchte, kann gerne den Discord beitreten. Egal ob Anstoss3 Veteran oder Neuling. :)
+
 https://discord.gg/sZuRPF8SGg

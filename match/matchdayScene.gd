@@ -39,6 +39,4 @@ func _on_button_button_down():
 
 
 func _on_ui_next_matchday():
-	print_debug("On Ui Next Matchday")
 	update()
-	pass # Replace with function body.
